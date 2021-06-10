@@ -8,7 +8,7 @@ In STEM education practices, we found out the most challenging part is usually n
 
 CircuitPython by Adafruit is very close. Once CircuitPython is installed on supported boards, the only thing a student needs to start a project is a text editor, which satisfies the "Zero-setup" requirement, considering almost all OSes comes with a text editor. However. that means no syntax highlighting, no serial communication for result and debugging, and no IDLE. These features are usually provided by installing the Mu Editor, but that is exactly the way we want to avoid.
 
-So I started this repository, filling the gap with a web-based online IDE that runs on any device with the Chrome browser, including Chromebooks. I will also provide other helpful features needed for any entry to median-level CircuitPython projects.
+So I started this repository, filling the gap with a web-based online IDE that runs on any device with the Chrome browser, including Chromebooks. I will also provide other helpful features needed for entry to medium-level CircuitPython projects.
 
 As an educator, I also want to include remote education tools in this IDE, which can assist the teacher in helping the student. This IDE will help students and educators alike.
 
