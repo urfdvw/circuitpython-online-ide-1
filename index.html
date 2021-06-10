@@ -34,23 +34,22 @@
                     break;
                 }
                 // value is a string.
-                // console.log(value);
+                console.log(value);
                 document.getElementById('serial_out').innerHTML += value
             }
         }
 
-
-        function download_as_code() {
-            // https://stackoverflow.com/questions/10285301/how-to-get-the-value-of-codemirror-textarea
-            download(editor.getValue(), 'main.py', 'text/plain')
+        function save_and_run() {
+            document.getElementById('serial_out').innerHTML = '';
+            writeFile(fileHandle, editor.getValue());
         }
-
     </script>
 </head>
 
 <body>
-    <input type="file" id="inputfile"><br>
-    <button onClick='download_as_code()'>Download current code</button>
+    <!-- <input type="file" id="inputfile"><br> -->
+    <button id="inputfile"> Load </button>
+    <button onClick='save_and_run()'> Save and Run</button>
     <div id="my-div"></div>
     <button onClick='connect_serial()'>Connect Device</button>
     <button onClick="document.getElementById('serial_out').innerHTML = ''">Clear</button>
@@ -60,12 +59,30 @@
 
         var editor = CodeMirror(document.querySelector('#my-div'), {
             lineNumbers: true,
-            value: 'import numpy as np',
+            value: 'print("Hello, World!")',
             tabSize: 4,
             indentUnit: 4,
             mode: 'python',
             extraKeys: { Tab: betterTab }
         });
+
+        let fileHandle;
+        var butOpenFile = document.getElementById("inputfile")
+        butOpenFile.addEventListener('click', async () => {
+            [fileHandle] = await window.showOpenFilePicker();
+            const file = await fileHandle.getFile();
+            const contents = await file.text();
+            editor.setValue(contents);
+        });
+
+        async function writeFile(fileHandle, contents) {
+            // Create a FileSystemWritableFileStream to write to.
+            const writable = await fileHandle.createWritable();
+            // Write the contents of the file to the stream.
+            await writable.write(contents);
+            // Close the file and write the contents to disk.
+            await writable.close();
+        }
 
         document.getElementById('inputfile')
             // https://www.geeksforgeeks.org/how-to-read-a-local-text-file-using-javascript/
