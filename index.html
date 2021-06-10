@@ -10,12 +10,54 @@
 
     <script type="text/javascript" src="https://codemirror.net/2/mode/python/python.js">
     </script>
+
+    <script>
+        var port
+        async function connect_serial() {
+            port = await navigator.serial.requestPort();
+            await port.open({
+                baudRate: 115200,
+                dataBits: 8,
+                stopBits: 1,
+
+            });
+            const textDecoder = new TextDecoderStream();
+            const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+            const reader = textDecoder.readable.getReader();
+
+            // Listen to data coming from the serial device.
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) {
+                    // Allow the serial port to be closed later.
+                    reader.releaseLock();
+                    break;
+                }
+                // value is a string.
+                // console.log(value);
+                document.getElementById('serial_out').innerHTML += value
+            }
+        }
+
+
+        function download_as_code() {
+            // https://stackoverflow.com/questions/10285301/how-to-get-the-value-of-codemirror-textarea
+            download(editor.getValue(), 'main.py', 'text/plain')
+        }
+
+    </script>
 </head>
 
 <body>
+    <input type="file" id="inputfile"><br>
     <button onClick='download_as_code()'>Download current code</button>
     <div id="my-div"></div>
+    <button onClick='connect_serial()'>Connect Device</button>
+    <button onClick="document.getElementById('serial_out').innerHTML = ''">Clear</button>
+    <pre id="serial_out"></pre>
+
     <script type="text/javascript">
+
         var editor = CodeMirror(document.querySelector('#my-div'), {
             lineNumbers: true,
             value: 'import numpy as np',
@@ -25,10 +67,16 @@
             extraKeys: { Tab: betterTab }
         });
 
-        function download_as_code(){
-            // https://stackoverflow.com/questions/10285301/how-to-get-the-value-of-codemirror-textarea
-            download(editor.getValue(), 'main.py', 'text/plain')
-        }
+        document.getElementById('inputfile')
+            // https://www.geeksforgeeks.org/how-to-read-a-local-text-file-using-javascript/
+            .addEventListener('change', function () {
+                var fr = new FileReader();
+                fr.onload = function () {
+                    // console.log(fr.result);
+                    editor.setValue(fr.result);
+                }
+                fr.readAsText(this.files[0]);
+            })
 
         function betterTab(cm) {
             // https://github.com/codemirror/CodeMirror/issues/988#issuecomment-14921785
@@ -58,6 +106,7 @@
                 }, 0);
             }
         }
+
     </script>
 </body>
 
