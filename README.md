@@ -1,7 +1,7 @@
-# Circuit Python online IDE
+# CircuitPython online IDE
 
 ## Goal
-- Short term goal: A complete Python IDE including
+- Short term goal: A complete CircuitPython IDE including
     - *By Github page* https://urfdvw.github.io/Circuit-Python-online-IDE/
     - Python editor with highlighting
     - Download as `main.py`
