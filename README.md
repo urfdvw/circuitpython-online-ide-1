@@ -2,7 +2,7 @@
 
 ## Goal
 - Short term goal: A complete Python IDE including
-    - *By Github page*
+    - *By Github page* https://urfdvw.github.io/Circuit-Python-online-IDE/
     - Python editor with highlighting
     - Download as `main.py`
     - Serial communication with the device
