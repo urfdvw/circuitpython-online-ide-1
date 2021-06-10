@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
+    </link>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js">
+    </script>
+
+    <script type="text/javascript" src="https://codemirror.net/2/mode/python/python.js">
+    </script>
+</head>
+
+<body>
+    <button onClick='download_as_code()'>Download current code</button>
+    <div id="my-div"></div>
+    <script type="text/javascript">
+        var editor = CodeMirror(document.querySelector('#my-div'), {
+            lineNumbers: true,
+            value: 'import numpy as np',
+            tabSize: 4,
+            indentUnit: 4,
+            mode: 'python',
+            extraKeys: { Tab: betterTab }
+        });
+
+        function download_as_code(){
+            // https://stackoverflow.com/questions/10285301/how-to-get-the-value-of-codemirror-textarea
+            download(editor.getValue(), 'main.py', 'text/plain')
+        }
+
+        function betterTab(cm) {
+            // https://github.com/codemirror/CodeMirror/issues/988#issuecomment-14921785
+            if (cm.somethingSelected()) {
+                cm.indentSelection("add");
+            } else {
+                cm.replaceSelection(cm.getOption("indentWithTabs") ? "\t" :
+                    Array(cm.getOption("tabSize") + 1).join(" "), "end", "+input");
+            }
+        }
+
+        // Function to download data to a file
+        function download(data, filename, type) {
+            var file = new Blob([data], { type: type });
+            if (window.navigator.msSaveOrOpenBlob) // IE10+
+                window.navigator.msSaveOrOpenBlob(file, filename);
+            else { // Others
+                var a = document.createElement("a"),
+                    url = URL.createObjectURL(file);
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(function () {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 0);
+            }
+        }
+    </script>
+</body>
+
+</html>
