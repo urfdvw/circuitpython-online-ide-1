@@ -13,7 +13,7 @@ We also have the perspective to include remote education tools in this project. 
 ## Timeline
 - Short-term goal (Done): A complete CircuitPython IDE By Github page including
     - Python editor with highlighting
-    - Download as `main.py`
+    - Load and save the `main.py` file
     - Serial communication with the device
         - To see the output from `print()` and system error message
 - Mid-term goal: A fullfledged website by Django that supports
@@ -25,6 +25,7 @@ We also have the perspective to include remote education tools in this project. 
         - teacher-student co-operative editing
         - class content manage
 - Long term goal: additional features
+    - Visual appeal
     - Serial IDLE
     - Serial plotter
     - CircuitPython Documents links
