@@ -36,3 +36,8 @@ As an educator, I also want to include remote education tools in this IDE, which
     - Google integration
         - login by google
         - save projects on google drive
+## Useful links
+- Index page, linked to all the following: https://circuitpython.org/
+- Circuit python download, list of all supported boards: https://circuitpython.org/downloads
+- Document page: https://circuitpython.readthedocs.io/en/latest/docs/index.html
+- Core API document, 1st go-to page: https://circuitpython.readthedocs.io/en/latest/shared-bindings/index.html
