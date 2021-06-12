@@ -5,14 +5,17 @@
 
     <head>
         <style>
+            body{
+                color: rgb(248, 248, 242);
+                background-color:rgb(39, 40, 34);
+            }
+
             .row {
                 display: flex;
             }
 
             .column {
                 flex: 50%;
-                border: 1px solid grey;
-                color: rgb(248, 248, 242);
             }
 
             .head {
@@ -26,6 +29,7 @@
             .content {
                 height: calc(100vh - 20px - 50px - 40px - 20px);
                 overflow-y: scroll;
+                border: 1px solid grey;
             }
 
             .tail {
@@ -81,8 +85,8 @@
     </script>
 </head>
 
-<body style="background-color:rgb(39, 40, 34);">
-    <div class="head" style="color:rgb(248, 248, 242);">
+<body >
+    <div class="head">
         <h1>CircuitPython Online Editor</h1>
     </div>
 
@@ -100,17 +104,17 @@
     </div>
     <div class="row">
         <div class="column content">
-            <div id="my-div" style="color:rgb(248, 248, 242);">
+            <div id="my-div">
             </div>
         </div>
         <div class="column content">
-            <pre id="serial_out" style="color:rgb(248, 248, 242);">
+            <pre id="serial_out">
             </pre>
         </div>
     </div>
     
     <div class="row">
-        <div class="column tail" style="color:rgb(248, 248, 242);">
+        <div class="column tail">
             CircuitPython API Reference:
             <button onclick="window.open('https://circuitpython.readthedocs.io/en/latest/shared-bindings/index.html#')">
                 Core Modules
@@ -122,12 +126,12 @@
                 MicroPython libraries
             </button>
         </div>
-        <div class="column tail" style="color:rgb(248, 248, 242);">
-            <button onclick="window.open('help.html')">
-                IDE Help
-            </button>
+        <div class="column tail" style="text-align: right;">
             <button onclick="window.open('https://circuitpython.org/')">
                 CircuitPython Homepage
+            </button>
+            <button onclick="window.open('help.html')">
+                IDE Help
             </button>
         </div>
     </div>
