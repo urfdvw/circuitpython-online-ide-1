@@ -73,8 +73,10 @@
                     break;
                 }
                 // value is a string.
-                console.log(value);
-                document.getElementById('serial_out').innerHTML += value
+                serial_out = document.getElementById('serial_out')
+                serial_out.innerHTML += value
+                serial_out_parent = serial_out.parentNode
+                serial_out_parent.scrollTop = serial_out_parent.scrollHeight
             }
         }
 
