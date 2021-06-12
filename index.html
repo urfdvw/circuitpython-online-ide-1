@@ -100,6 +100,9 @@
             Serial
             <button onClick='connect_serial()'> Connect </button>
             <button onClick="document.getElementById('serial_out').innerHTML = ''"> Clear </button>
+        <button onclick="window.open('help.html')" style="float: right;">
+            IDE Help
+        </button>
         </div>
     </div>
     <div class="row">
@@ -113,27 +116,20 @@
         </div>
     </div>
     
-    <div class="row">
-        <div class="column tail">
-            CircuitPython API Reference:
-            <button onclick="window.open('https://circuitpython.readthedocs.io/en/latest/shared-bindings/index.html#')">
-                Core Modules
-            </button>
-            <button onclick="window.open('https://circuitpython.readthedocs.io/projects/bundle/en/latest/drivers.html#')">
-                Sponsored Libraries and Drivers
-            </button>
-            <button onclick="window.open('https://circuitpython.readthedocs.io/en/latest/docs/library/index.html#')">
-                MicroPython libraries
-            </button>
-        </div>
-        <div class="column tail" style="text-align: right;">
-            <button onclick="window.open('https://circuitpython.org/')">
-                CircuitPython Homepage
-            </button>
-            <button onclick="window.open('help.html')">
-                IDE Help
-            </button>
-        </div>
+    <div class="row tail">
+        CircuitPython API Reference:
+        <button onclick="window.open('https://circuitpython.readthedocs.io/en/latest/shared-bindings/index.html#')">
+            Core Modules
+        </button>
+        <button onclick="window.open('https://circuitpython.readthedocs.io/projects/bundle/en/latest/drivers.html#')">
+            Sponsored Libraries and Drivers
+        </button>
+        <button onclick="window.open('https://circuitpython.readthedocs.io/en/latest/docs/library/index.html#')">
+            MicroPython libraries
+        </button>
+        <button onclick="window.open('https://circuitpython.org/')">
+            CircuitPython Homepage
+        </button>
     </div>
 
     <script type="text/javascript">
