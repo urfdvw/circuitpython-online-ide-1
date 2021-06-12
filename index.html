@@ -89,13 +89,13 @@
     <div class="row">
         <div class="column toolbar">
             Editor
-            <button id="inputfile"> Load </button>
-            <button onClick='save_and_run()'> Save and Run</button>
+            <button id="inputfile"> Open </button>
+            <button onClick='save_and_run()'> Save and Run </button>
         </div>
         <div class="column toolbar">
             Serial
-            <button onClick='connect_serial()'>Connect Device</button>
-            <button onClick="document.getElementById('serial_out').innerHTML = ''">Clear</button>
+            <button onClick='connect_serial()'> Connect </button>
+            <button onClick="document.getElementById('serial_out').innerHTML = ''"> Clear </button>
         </div>
     </div>
     <div class="row">
@@ -109,8 +109,12 @@
         </div>
     </div>
     <div class="tail" style="color:rgb(248, 248, 242);">
-        <button>Help</button>
-        <button>API Reference</button>
+        <button onclick="window.open('help.html')">
+            IDE Help
+        </button>
+        <button onclick="window.open('https://circuitpython.readthedocs.io/en/latest/shared-bindings/index.html')">
+            CircuitPython API Reference
+        </button>
     </div>
 
     <script type="text/javascript">
