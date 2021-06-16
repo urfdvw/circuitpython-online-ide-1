@@ -251,9 +251,9 @@
         <div class="column toolbar">
             Editor
             <button id="inputfile"> Open </button>
-            <button onClick='save_and_run()'> Save and Run </button>
-            <button onClick='run_all_lines()'> Run all (Ctrl-Enter)</button>
-            <button onClick='run_current_line()'> Run current line (Shift-Enter)</button>
+            <button id="save" onClick='save_and_run()'> Save and Run </button>
+            <button id="run1" onClick='run_all_lines()'> Run all (Ctrl-Enter)</button>
+            <button id="runall" onClick='run_current_line()'> Run current line (Shift-Enter)</button>
         </div>
         <div class="column toolbar">
             Serial
@@ -300,12 +300,25 @@
 
         function change_mode() {
             if (document.getElementById('mode').value == 0) {
-                sendCTRLD()
+                try{
+                    sendCTRLD()
+                }catch{}
+                document.getElementById('inputfile').style.display = "initial";
+                document.getElementById('save').style.display = "initial";
+                document.getElementById('run1').style.display = "none";
+                document.getElementById('runall').style.display = "none";
             }
             if (document.getElementById('mode').value == 1) {
-                sendCTRLC()
+                try{
+                    sendCTRLC()
+                }catch{}
+                document.getElementById('inputfile').style.display = "none";
+                document.getElementById('save').style.display = "none";
+                document.getElementById('run1').style.display = "initial";
+                document.getElementById('runall').style.display = "initial";
             }
         }
+        change_mode()
 
         var editor = CodeMirror(document.querySelector('#my-div'), {
             lineNumbers: true,
