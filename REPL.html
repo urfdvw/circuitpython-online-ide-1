@@ -307,7 +307,10 @@
 
         function run_current_line() {
             send_single_py_line(editor.getLine(editor.getCursor()["line"]))
-            if (editor.lineCount() != editor.getCursor()["line"] + 1) {
+            if (editor.lineCount() == editor.getCursor()["line"] + 1) {
+                editor.setValue(editor.getValue()+'\n')
+                editor.setCursor({line: editor.lineCount()-1})
+            } else {
                 editor.setCursor({line: editor.getCursor()["line"] + 1})
             }
         }
