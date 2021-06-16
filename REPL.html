@@ -178,7 +178,7 @@
          * Gets a writer from the output stream and send the lines to the micro:bit.
          * @param  {...string} lines lines to send to the micro:bit
          */
-         function send_multi_py_lines(lines) {
+        function send_multi_py_lines(lines) {
             // CODELAB: Write to output stream
             //console.log("Started to write")
             lines = lines.split('\n').join('\\n')
@@ -199,7 +199,7 @@
          * Gets a writer from the output stream and send the lines to the micro:bit.
          * @param  {...string} lines lines to send to the micro:bit
          */
-         function send_single_py_line(line) {
+        function send_single_py_line(line) {
             // CODELAB: Write to output stream
             //console.log("Started to write")
 
@@ -237,7 +237,6 @@
 
 
         function save_and_run() {
-            document.getElementById('serial_out').innerHTML = '';
             writeFile(fileHandle, editor.getValue());
         }
     </script>
@@ -260,6 +259,11 @@
             Serial
             <button onClick='clickConnect()'> Connect </button>
             <button onClick="document.getElementById('serial_out').innerHTML = ''"> Clear </button>
+            Mode:
+            <select id="mode" onchange="change_mode()">
+                <option value="0">File</option>
+                <option value="1">REPL</option>
+            </select>
             <button onclick="window.open('help.html')" style="float: right;">
                 IDE Help
             </button>
@@ -294,6 +298,15 @@
 
     <script type="text/javascript">
 
+        function change_mode() {
+            if (document.getElementById('mode').value == 0) {
+                sendCTRLD()
+            }
+            if (document.getElementById('mode').value == 1) {
+                sendCTRLC()
+            }
+        }
+
         var editor = CodeMirror(document.querySelector('#my-div'), {
             lineNumbers: true,
             value: 'print("Hello, World!")',
@@ -306,23 +319,30 @@
         editor.setSize(width = '100%', height = '100%')
 
         function run_current_line() {
+            if (document.getElementById('mode').value == 0) {
+                return
+            }
             send_single_py_line(editor.getLine(editor.getCursor()["line"]))
             if (editor.lineCount() == editor.getCursor()["line"] + 1) {
-                editor.setValue(editor.getValue()+'\n')
-                editor.setCursor({line: editor.lineCount()-1})
+                editor.setValue(editor.getValue() + '\n')
+                editor.setCursor({ line: editor.lineCount() - 1 })
             } else {
-                editor.setCursor({line: editor.getCursor()["line"] + 1})
+                editor.setCursor({ line: editor.getCursor()["line"] + 1 })
             }
         }
 
-        function run_all_lines(){
+        function run_all_lines() {
+            if (document.getElementById('mode').value == 0) {
+                return
+            }
             send_multi_py_lines(editor.getValue())
         }
 
         // https://stackoverflow.com/a/25104834/7037749
         var map = {
             "Shift-Enter": run_current_line,
-            "Ctrl-Enter": run_all_lines
+            "Ctrl-Enter": run_all_lines,
+            "Esc": sendCTRLC
         }
         editor.addKeyMap(map);
 
@@ -343,17 +363,6 @@
             // Close the file and write the contents to disk.
             await writable.close();
         }
-
-        document.getElementById('inputfile')
-            // https://www.geeksforgeeks.org/how-to-read-a-local-text-file-using-javascript/
-            .addEventListener('change', function () {
-                var fr = new FileReader();
-                fr.onload = function () {
-                    // console.log(fr.result);
-                    editor.setValue(fr.result);
-                }
-                fr.readAsText(this.files[0]);
-            })
 
         function betterTab(cm) {
             // https://github.com/codemirror/CodeMirror/issues/988#issuecomment-14921785
