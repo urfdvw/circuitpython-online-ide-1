@@ -86,6 +86,8 @@
             // - Wait for the port to open.
             await port.open({ baudRate: 9600 });
 
+            document.getElementById("connect").innerHTML = "connected"
+
             // CODELAB: Add code setup the output stream here.
             const encoder = new TextEncoderStream();
             outputDone = encoder.readable.pipeTo(port.writable);
@@ -102,7 +104,6 @@
             reader = inputStream.getReader();
             readLoop();
         }
-
 
         /**
          * @name disconnect
@@ -147,7 +148,6 @@
             console.log("Connected");
         }
 
-
         /**
          * @name readLoop
          * Reads data from the input stream and displays it on screen.
@@ -171,7 +171,6 @@
             }
 
         }
-
 
         /**
          * @name send_multi_py_lines
@@ -213,7 +212,6 @@
             }
         }
 
-
         /**
          * @name LineBreakTransformer
          * TransformStream to parse the stream into lines.
@@ -235,7 +233,6 @@
             }
         }
 
-
         function save_and_run() {
             writeFile(fileHandle, editor.getValue());
         }
@@ -244,7 +241,9 @@
 
 <body>
     <div class="head">
-        <h1>CircuitPython Online Editor</h1>
+        <h1>CircuitPython Online Editor
+            <button id="connect" onClick='clickConnect()'> Connect </button>
+        </h1>
     </div>
 
     <div class="row">
@@ -254,11 +253,12 @@
             <button id="save" onClick='save_and_run()'> Save and Run </button>
             <button id="run1" onClick='run_all_lines()'> Run all (Ctrl-Enter)</button>
             <button id="runall" onClick='run_current_line()'> Run current line (Shift-Enter)</button>
+            <button onclick="download(editor.getValue(), 'main.py', 'text')">Save as</button>
         </div>
         <div class="column toolbar">
             Serial
-            <button onClick='clickConnect()'> Connect </button>
             <button onClick="document.getElementById('serial_out').innerHTML = ''"> Clear </button>
+            <button onclick="savelog()">Save log</button>
             Mode:
             <select id="mode" onchange="change_mode()">
                 <option value="0">File</option>
@@ -300,18 +300,18 @@
 
         function change_mode() {
             if (document.getElementById('mode').value == 0) {
-                try{
+                try {
                     sendCTRLD()
-                }catch{}
+                } catch { }
                 document.getElementById('inputfile').style.display = "initial";
                 document.getElementById('save').style.display = "initial";
                 document.getElementById('run1').style.display = "none";
                 document.getElementById('runall').style.display = "none";
             }
             if (document.getElementById('mode').value == 1) {
-                try{
+                try {
                     sendCTRLC()
-                }catch{}
+                } catch { }
                 document.getElementById('inputfile').style.display = "none";
                 document.getElementById('save').style.display = "none";
                 document.getElementById('run1').style.display = "initial";
@@ -389,6 +389,7 @@
 
         // Function to download data to a file
         function download(data, filename, type) {
+            console.log(data)
             var file = new Blob([data], { type: type });
             if (window.navigator.msSaveOrOpenBlob) // IE10+
                 window.navigator.msSaveOrOpenBlob(file, filename);
@@ -404,6 +405,15 @@
                     window.URL.revokeObjectURL(url);
                 }, 0);
             }
+        }
+
+        function savelog() {
+            // only works out side html
+            download(
+                document.getElementById('serial_out').innerHTML.split('&gt;').join('>'),
+                'log.txt',
+                'text'
+            )
         }
 
     </script>
