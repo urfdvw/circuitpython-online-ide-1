@@ -160,7 +160,7 @@
                     document.getElementById('serial_out').innerHTML += value;
                     // removed the carriage return, for some reason CircuitPython does not need it
                     //log.innerHTML += value + '\n';
-                    log_parent = document.getElementById('serial_out').parentNode
+                    log_parent = document.getElementById('serial_out').parentNode.parentNode
                     log_parent.scrollTop = log_parent.scrollHeight;
                 }
                 if (done) {
@@ -259,7 +259,7 @@
             <button onclick="savelog()">Save log</button>
             <button onclick="sendCTRLC()">CTRL-C</button>
             <button onclick="sendCTRLD()">CTRL-D</button>
-            <button onclick="window.open('https://github.com/urfdvw/CircuitPython-online-IDE/blob/main/doc/help.md')" style="float: right;">
+            <button onclick="window.open('doc/help.html')" style="float: right;">
                 IDE Help
             </button>
         </div>
@@ -270,8 +270,12 @@
             </div>
         </div>
         <div class="column content">
-            <pre id="serial_out">
-            </pre>
+            <div id='out_frame'>
+                <div style="white-space: pre-wrap;" id="serial_out">
+                </div>
+            </div>
+            <div id="serial_in">
+            </div>
         </div>
     </div>
 
@@ -295,7 +299,7 @@
 
         var editor = CodeMirror(document.querySelector('#my-div'), {
             lineNumbers: true,
-            value: 'print("Hello, World!")',
+            value: '"""\nPlease connect the board before any operation.\n\n--- Editor Guide ---\n\nIn file mode:\nOpen an existing file\nor type then [Save as].\n\nIn REPL mode:\n[Shift]+[Enter] to run current line of code.\n[Ctrl]+[Enter] to run multiple lines of code.\n"""\nimport board',
             tabSize: 4,
             indentUnit: 4,
             mode: 'python',
@@ -303,6 +307,16 @@
             extraKeys: { Tab: betterTab },
         });
         editor.setSize(width = '100%', height = '100%')
+
+        var command = CodeMirror(document.querySelector('#serial_in'), {
+            lineNumbers: false,
+            value: 'print("In REPL mode, type single-line commands here. Press [Enter] to send")',
+            tabSize: 4,
+            indentUnit: 4,
+            mode: 'python',
+            extraKeys: { Tab: betterTab },
+        });
+        command.setSize(width = '100%', height = '100%')
 
         function run_current_line() {
             send_single_py_line(editor.getLine(editor.getCursor()["line"]))
@@ -323,13 +337,24 @@
             }
         }
 
+        function run_command() {
+            send_single_py_line(command.getLine(command.getCursor()["line"]))
+            command.setValue("")
+        }
+
         // https://stackoverflow.com/a/25104834/7037749
-        var map = {
+        editor.addKeyMap({
             "Shift-Enter": run_current_line,
             "Ctrl-Enter": run_all_lines,
-            "Esc": sendCTRLC
-        }
-        editor.addKeyMap(map);
+        });
+
+        command.addKeyMap({
+            "Shift-Enter": run_command,
+            "Ctrl-Enter": run_command,
+            "Enter": run_command
+        });
+
+
 
         let fileHandle;
         var butOpenFile = document.getElementById("inputfile")
