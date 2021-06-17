@@ -182,10 +182,17 @@
             //console.log("Started to write")
             lines = lines.split('\n').join('\\n')
 
+            // remove comments by """
+            lines = lines.split('"""')
+            for (var i = 0; i < lines.length; i++) {
+                lines.splice(i + 1, 1);
+            }
+            lines = lines.join("")
+
             if (outputStream != null) {
                 const writer = outputStream.getWriter();
                 // https://stackoverflow.com/a/60111488/7037749
-                writer.write('exec("""\n' + lines + '\n""")' + '\x0D')
+                writer.write('exec("""' + lines + '""")' + '\x0D')
                 writer.releaseLock();
             }
             else {
