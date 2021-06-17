@@ -185,7 +185,7 @@
             if (outputStream != null) {
                 const writer = outputStream.getWriter();
                 // https://stackoverflow.com/a/60111488/7037749
-                writer.write('exec("""' + lines + '""")' + '\x0D')
+                writer.write('exec("""\n' + lines + '\n""")' + '\x0D')
                 writer.releaseLock();
             }
             else {
