@@ -20,6 +20,9 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 
 *This guide assumed that CircuitPython is already installed. About how to install CircuitPython to supported devices, please check [CircuitPython Website](https://circuitpython.org/downloads).*
 
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/Z44PD-ZleAU/0.jpg)](https://www.youtube.com/watch?v=Z44PD-ZleAU)
+[](https://stackoverflow.com/a/16079387/7037749)
+
 ### First of First
 - Plugin your CircuitPython supported board, and make sure it shows up as a drive.
     - There should **NOT** be a `.uf2` file in the drive.
@@ -29,7 +32,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
             - Plug and unplug the board
 - If there is not a `code.py` or `main.py` file, create one.
     - This file can be downloaded from our IDE by click on `Save as`
-- **Open the [CircuitPython online IDE](https://urfdvw.github.io/CircuitPython-online-IDE/). Then connect your CircuitPython supported board by click the `connect` button**
+- **Open the [CircuitPython online IDE](https://urfdvw.github.io/CircuitPython-online-IDE/). Then connect your CircuitPython supported board by click the `Connect` button**
 
 ### File mode
 - Once plugin the CircuitPython supported board, the initial mode is 'File mode'.
