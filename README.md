@@ -1,43 +1,60 @@
 # CircuitPython online IDE
 Open the IDE: https://urfdvw.github.io/CircuitPython-online-IDE/
 
-## Motivation
-The goal is to build a remote educational platform that allows **Zero-setup** for CircuitPython projects.
+## Why
+The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be helpful for
+- anyone that wants to start a project quickly
+- people who are working on public computers
+- remote education where teachers don't expect students to install anything by themselves
 
-In STEM education practices, we found out the most challenging part is usually not the content itself but the setup of the coding environment. In some cases, to set up the environment for entry-level coding projects, advanced operating system and network knowledge are required. This is not a problem in labs because the teacher can set up lab computers in advance. But it not possible in remote education. In such cases, you can never expect the students to set up the environment by themselves. Plus, Chromebooks are usually the only devices they have. In a nutshell, **Zero-setup** is the must-have feature for remote STEM education.
+## Features
+- Runs on any device with the Chrome browser, including Chromebooks.
+- Code editor with Python highlighting
+- Serial communication with the device
+- Read-Evaluate-Print loop (REPL)
 
-[CircuitPython](https://circuitpython.org/) by Adafruit is very close. Once CircuitPython is installed on supported boards, the only thing a student needs to start a project is a text editor, which satisfies the "Zero-setup" requirement, considering almost all OSes comes with a text editor. However. that means no syntax highlighting, no serial communication for result and debugging, and no REPL. These features are usually provided by installing the [Mu Editor](https://codewith.mu/en/), but that is exactly the way we want to avoid.
+## Planned Features
+- Serial data plotter
 
-So I started this repository, filling the gap with a web-based online IDE that runs on any device with the Chrome browser, including Chromebooks. I will also provide other helpful features needed for entry to medium-level CircuitPython projects.
+## Workflow (a.k.a. How to use)
 
-As an educator, I also want to include remote education tools in this IDE, which can assist the teacher in helping the student. This IDE will help students and educators alike.
+*This guide assumed that CircuitPython is already installed. About how to install CircuitPython to supported devices, please check [CircuitPython Website](https://circuitpython.org/downloads).*
 
-## Plan
-- Short-term goal (Done): A complete CircuitPython IDE By Github page including
-    - Text editor with Python highlighting
-    - Loading from and saving to the `main.py` file
-    - Serial communication with the device
-        - To see the output from `print()` and system error message
-- Mid-term goal: A fullfledged website by Django that supports
-    - Accounts
-        - store code online
-        - manage code by project
-    - Classrooms
-        - group student accounts by classes
-        - teacher-student co-operative editing
-        - class content management
-- Long term goal: additional features
-    - Visual appeal
-    - Serial REPL
-    - Serial plotter
-    - CircuitPython Documents links
-        - Links to the API references
-        - Package download links
-    - Google integration
-        - login by google
-        - save projects on google drive
-## Useful links
-- Index page, linked to all the following: https://circuitpython.org/
-- Circuit python download, list of all supported boards: https://circuitpython.org/downloads
-- Document page: https://circuitpython.readthedocs.io/en/latest/docs/index.html
-- Core API document, 1st go-to page: https://circuitpython.readthedocs.io/en/latest/shared-bindings/index.html
+### First of First
+- Plugin your CircuitPython supported board, and make sure it shows up as a drive.
+    - There should **NOT** be a `.uf2` file in the drive.
+        - If so, that means you are in boot mode, where CircuitPython is installed.
+        - To exist boot mode, try:
+            - clicking the `reset` button on the board
+            - Plug and unplug the board
+- If there is not a `code.py` or `main.py` file, create one.
+    - This file can be downloaded from our IDE by click on `Save as`
+- **Open the [CircuitPython online IDE](https://urfdvw.github.io/CircuitPython-online-IDE/). Then connect your CircuitPython supported board by click the `connect` button**
+
+### File mode
+- Once plugin the CircuitPython supported board, the initial mode is 'File mode'.
+- To switch back to 'File mode' from 'REPL' mode, Click on the `CTRL-D` button on the UI (not the keyboard) to send the `0x04` signal to the board. 
+- Click on the `Open` button on the UI to open the code file on the CircuitPython supported board.
+    - Opening the file will remove everything in the Editor. Click on the `Save as` button to backup the code before opening it if necessary
+- After editing, click on `Save and Run` to save the code to the original file.
+    - This will trigger the board to reset and start to run the code.
+- If necessary, click on the `Save as` button to save the edited code as a separate file
+- command box can be used for serial communication in the 'File mode', such as feeding inputs when `input('message')` is used.
+
+### REPL
+- Click on the `CTRL-C` button on the UI (not the keyboard) to send the `0x03` signal to the board. This will start the REPL mode.
+    - You might need to click for more than one time. Stop until you see `>>>` in the terminal
+- Write one line of code in the command box. Hit `Enter` on the keyboard to run the command
+- Write one or multiple lines of code in the Editor.
+    - Hit `Shift-Enter` on the keyboard to run the current line.
+        - The cursor will move to the following line, so keep on hitting to run a sequence of lines.
+    - Select multiple lines of code, then hit `Ctrl-Enter` on the keyboard to run the selected code.
+    - If no code is selected, hit `Ctrl-Enter` on the keyboard will run all code.
+        - This is less desired than running the code in 'File mode' because no reset is done between runs, and you may get '(device) is occupied' error.
+    - Click on the `Save as` button on the UI to download the code in the Editor as a separate file.
+- Click on the `Save log` button on the UI to download the serial conversation log as a text file.
+
+## References
+This project is inspired by the following projects. Some codes are copied from them.
+- https://github.com/sensebox/circuitpython-web-ide
+- https://github.com/Mr-Coxall/CircuitPython-IDE
