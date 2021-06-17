@@ -204,7 +204,7 @@
 
             if (outputStream != null) {
                 const writer = outputStream.getWriter();
-                writer.write(line + '\x0D')
+                writer.write(line.trim() + '\x0D')
                 writer.releaseLock();
             }
             else {
@@ -348,7 +348,12 @@
             if (document.getElementById('mode').value == 0) {
                 return
             }
-            send_multi_py_lines(editor.getValue())
+            var selected = editor.getSelection()
+            if (selected) {
+                send_multi_py_lines(selected)
+            } else {
+                send_multi_py_lines(editor.getValue())
+            }
         }
 
         // https://stackoverflow.com/a/25104834/7037749
