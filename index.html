@@ -331,26 +331,22 @@
             if (selected) { // if any sellection
                 send_multi_py_lines(selected)
             } else {
-                if (editor.getLine(editor.getCursor()["line"]).trim().length == 0) { // if nothing in the line
-                    var indent = editor.getCursor()["ch"]
-                    // insert \n
-                    // https://stackoverflow.com/a/39954852/7037749
+                send_single_py_line(editor.getLine(editor.getCursor()["line"]))
+                if (editor.lineCount() == editor.getCursor()["line"] + 1) { // if last line
+                    var line = editor.getLine(editor.getCursor()["line"])
+                    var indent = line.length - line.trimLeft().length
                     var doc = editor.getDoc();
                     var cursor = doc.getCursor();
-                    console.log(indent)
-                    for (var i=0; i<indent-4; i++){
-                    console.log(cursor)
+                    for (var i = 0; i < indent - 4; i++) {
+                        console.log(cursor)
                         doc.replaceRange(' ', cursor);
                     }
                     doc.replaceRange('\n', cursor); // reversed order, because cursor not moved
                 } else {
-                    send_single_py_line(editor.getLine(editor.getCursor()["line"]))
-                    if (editor.lineCount() == editor.getCursor()["line"] + 1) {
-                        editor.setValue(editor.getValue() + '\n')
-                        editor.setCursor({ line: editor.lineCount() - 1 })
-                    } else {
-                        editor.setCursor({ line: editor.getCursor()["line"] + 1 })
-                    }
+                    editor.setCursor({
+                        line: editor.getCursor()["line"] + 1,
+                        ch: editor.getLine(editor.getCursor()["line"] + 1).length
+                    })
                 }
             }
         }
