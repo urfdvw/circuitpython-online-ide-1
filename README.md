@@ -15,6 +15,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 
 ## Planned Features
 - Multiple file editing/File tabs
+- Auto completion
 - Serial data plotter
 
 ## Workflow (a.k.a. How to use)
@@ -59,6 +60,22 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 - Click on the `Save log` button on the UI to download the serial conversation log as a text file.
 
 ## Keyboard Shortcuts
+
+Editor
+- `Shift-Enter` 
+    - when no text selected: send the current line to Console
+    - when selected text: send the selected text to Console
+- `Ctrl-Enter`
+    - when no text selected: Everything in the Editor to Console
+    - when selected text: send the selected text to Console
+- `Ctrl-S`: [Save and Run]
+
+Console
+- `Enter`: send command
+- `Up` and `Down`: Recall command history
+- `Ctrl-C`: Send `0x03`, same as [Ctrl-C] button on UI
+- `Ctrl-D`: Send `0x04`, same as [Ctrl-D] button on UI
+
 
 ## References
 This project is inspired by the following projects. Some codes are copied from them.
