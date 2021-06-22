@@ -15,6 +15,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 
 ## Planned Features
 - Multiple file editing/File tabs
+- CircuitPython specific keyword-highlighting
 - Auto completion
 - Serial data plotter
 
