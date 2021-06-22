@@ -14,6 +14,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 - Read-Evaluate-Print loop (REPL)
 
 ## Planned Features
+- Multiple file editing/File tabs
 - Serial data plotter
 
 ## Workflow (a.k.a. How to use)
@@ -56,6 +57,8 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
         - This is less desired than running the code in 'File mode' because no reset is done between runs, and you may get '(device) is occupied' error.
     - Click on the `Save as` button on the UI to download the code in the Editor as a separate file.
 - Click on the `Save log` button on the UI to download the serial conversation log as a text file.
+
+## Keyboard Shortcuts
 
 ## References
 This project is inspired by the following projects. Some codes are copied from them.

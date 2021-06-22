@@ -208,11 +208,10 @@
         function send_single_py_line(line) {
             // CODELAB: Write to output stream
             //console.log("Started to write")
-            if (line.trim().length==0){
-                return
+            if (line.trim().length != 0) {
+                cmd_hist.push(line)
+                cmd_ind = -1
             }
-            cmd_hist.push(line)
-            cmd_ind = -1
 
             if (outputStream != null) {
                 const writer = outputStream.getWriter();
@@ -369,9 +368,6 @@
         var cmd_ind = -1
         function run_command() {
             var line = command.getLine(command.getCursor()["line"])
-            if (line.trim().length==0){
-                return
-            }
             send_single_py_line(line)
             command.setValue("")
         }
