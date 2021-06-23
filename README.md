@@ -33,7 +33,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 
 ### File mode
 - Once plugin the CircuitPython supported board, the initial mode is 'File mode'.
-- To switch back to 'File mode' from 'REPL' mode, Click on the `CTRL-D` button on the UI (not the keyboard) to send the `0x04` signal to the board. 
+- To switch back to 'File mode' from 'REPL' mode, Click on the `CTRL-D` button on the UI (or on the keyboard) to send the `0x04` signal to the board. 
 - Click on the `Open` button on the UI to open the code file on the CircuitPython supported board.
     - Opening the file will remove everything in the Editor. Click on the `Save as` button to backup the code before opening it if necessary
 - After editing, click on `Save and Run` button on the UI or `Ctrl-S` on the keyboard to save the code to the original file.
