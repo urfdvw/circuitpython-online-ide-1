@@ -13,12 +13,6 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 - Serial communication with the device
 - Read-Evaluate-Print loop (REPL)
 
-## Planned Features
-- Multiple file editing/File tabs
-- CircuitPython specific keyword-highlighting
-- Auto completion
-- Serial data plotter
-
 ## Workflow (a.k.a. How to use)
 
 *This guide assumed that CircuitPython is already installed. About how to install CircuitPython to supported devices, please check [CircuitPython Website](https://circuitpython.org/downloads).*
@@ -42,22 +36,25 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 - To switch back to 'File mode' from 'REPL' mode, Click on the `CTRL-D` button on the UI (not the keyboard) to send the `0x04` signal to the board. 
 - Click on the `Open` button on the UI to open the code file on the CircuitPython supported board.
     - Opening the file will remove everything in the Editor. Click on the `Save as` button to backup the code before opening it if necessary
-- After editing, click on `Save and Run` to save the code to the original file.
+- After editing, click on `Save and Run` button on the UI or `Ctrl-S` on the keyboard to save the code to the original file.
     - This will trigger the board to reset and start to run the code.
 - If necessary, click on the `Save as` button to save the edited code as a separate file
 - command box can be used for serial communication in the 'File mode', such as feeding inputs when `input('message')` is used.
 
 ### REPL
-- Click on the `CTRL-C` button on the UI (not the keyboard) to send the `0x03` signal to the board. This will start the REPL mode.
+- Click on the `CTRL-C` button on the UI (or on the keyboard) to send the `0x03` signal to the board. This will start the REPL mode.
     - You might need to click for more than one time. Stop until you see `>>>` in the terminal
 - Write one line of code in the command box. Hit `Enter` on the keyboard to run the command
-- Write one or multiple lines of code in the Editor.
+- In the Editor: write one or multiple lines of code.
     - Hit `Shift-Enter` on the keyboard to run the current line.
         - The cursor will move to the following line, so keep on hitting to run a sequence of lines.
-    - Select multiple lines of code, then hit `Ctrl-Enter` on the keyboard to run the selected code.
-    - If no code is selected, hit `Ctrl-Enter` on the keyboard will run all code.
-        - This is less desired than running the code in 'File mode' because no reset is done between runs, and you may get '(device) is occupied' error.
-    - Click on the `Save as` button on the UI to download the code in the Editor as a separate file.
+    - Select multiple lines of code, then hit `Shift-Enter` on the keyboard to run the selected code.
+    - Hit `Ctrl-Enter` on the keyboard to run the saved `main.py` file in REPL.
+        - This function is for debugging, because variables remains in REPL after run
+        - This cannot replace running the code in 'File mode' because no reset is done between runs, and you may get '(device) is occupied' error.
+            - Manually restart REPL if you get such an error.
+- In the command box, `Up` and `Down` to recall command history.
+- Click on the `Save as` button on the UI to download the code in the Editor as a separate file.
 - Click on the `Save log` button on the UI to download the serial conversation log as a text file.
 
 ## Keyboard Shortcuts
@@ -68,11 +65,7 @@ Editor
     - when selected text: send the selected text to Console
 - `Ctrl-Enter`
     - Run the saved `main.py` file in REPL
-    - This function is for debugging
-        - because variables remains in REPL after run
-        - cannot replace the File mode
-    - This is better after saving the file and restart REPL
-- `Ctrl-S`: [Save and Run]
+- `Ctrl-S`: Save opened file, same as [Save and Run] button on UI
 
 Console
 - `Enter`: send command
@@ -80,6 +73,12 @@ Console
 - `Ctrl-C`: Send `0x03`, same as [Ctrl-C] button on UI
 - `Ctrl-D`: Send `0x04`, same as [Ctrl-D] button on UI
 
+## Planned Features
+- Comment shortcut
+- Multiple file editing/File tabs
+- CircuitPython specific keyword-highlighting
+- Auto completion
+- Serial data plotter
 
 ## References
 This project is inspired by the following projects. Some codes are copied from them.
