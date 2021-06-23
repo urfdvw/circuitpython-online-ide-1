@@ -50,6 +50,9 @@
     <script type="text/javascript" src="https://codemirror.net/mode/python/python.js">
     </script>
 
+    <script type="text/javascript" src="https://codemirror.net/addon/comment/comment.js">
+    </script>
+
     <script>
         let port;
         let reader;
@@ -374,10 +377,10 @@
             cmd += "import gc\n"
             cmd += "gc.enable()\n"
             cmd += "gc.collect()\n"
-            if (fileHandle.name == "main.py"){
+            if (fileHandle.name == "main.py") {
                 cmd += "from main import *"
             }
-            if (fileHandle.name == "code.py"){
+            if (fileHandle.name == "code.py") {
                 cmd += "from code import *"
             }
             send_multi_py_lines(cmd)
@@ -420,6 +423,7 @@
             "Shift-Enter": run_current,
             "Ctrl-Enter": run_all_lines,
             "Ctrl-S": save_and_run,
+            "Ctrl-/": function(){editor.execCommand('toggleComment')},
         });
 
         command.addKeyMap({

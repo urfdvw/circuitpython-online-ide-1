@@ -13,3 +13,6 @@
 - Feature remove
     - `Ctrl-Enter` to run selected lines is removed
     - replacement: please use `Shift-Enter` for such propose
+# 20210623
+- Add feature
+    - 'Ctrl-/' to toggle Comment

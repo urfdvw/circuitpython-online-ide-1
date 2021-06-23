@@ -74,7 +74,6 @@ Console
 - `Ctrl-D`: Send `0x04`, same as [Ctrl-D] button on UI
 
 ## Planned Features
-- Comment shortcut
 - Multiple file editing/File tabs
 - CircuitPython specific keyword-highlighting
 - Auto completion
