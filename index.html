@@ -180,7 +180,7 @@
         function send_multi_py_lines(lines) {
             // CODELAB: Write to output stream
             //console.log("Started to write")
-            lines = lines.split('\n').join('\\n')
+            lines = lines.split('\\').join('\\\\').split('\n').join('\\n')
 
             // remove comments by """
             lines = lines.split('"""')
