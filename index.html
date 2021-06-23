@@ -308,10 +308,19 @@
     </div>
 
     <script type="text/javascript">
+        var info = '"""\n'
+        info += 'Please connect the board before any operation.\n\n'
+        info += '--- Editor Keyboard Shortcuts ---\n\n'
+        info += '[Ctrl-S]: Save the file\n    This will trigger reset and run in File mode\n\n'
+        info += 'REPL Mode Specific:\n'
+        info += '[Shift-Enter] to run current line of code\n    or selected multiple lines of code.\n'
+        info += '[Ctrl-Enter] to clear existing variable(s) and run main.py.\n'
+        info += '    This is best after restart REPL and [Ctrl-S]\n'
+        info += '"""\nimport board\n'
 
         var editor = CodeMirror(document.querySelector('#my-div'), {
             lineNumbers: true,
-            value: '"""\nPlease connect the board before any operation.\n\n--- Editor Guide ---\n\nIn file mode:\nOpen an existing file\nor type then [Save as].\n\nIn REPL mode:\n[Shift]+[Enter] to run current line of code\n\tor selected multiple lines of code.\n[Ctrl]+[Enter] to run all code.\n"""\nimport board',
+            value: info,
             tabSize: 4,
             indentUnit: 4,
             mode: 'python',
@@ -356,12 +365,22 @@
         }
 
         function run_all_lines() {
-            var selected = editor.getSelection()
-            if (selected) {
-                send_multi_py_lines(selected)
-            } else {
-                send_multi_py_lines(editor.getValue())
+            cmd = "import gc\n"
+            cmd += "gc.enable()\n"
+            cmd += "import sys\nsys.modules.clear()\n"
+            cmd += "while globals():\n"
+            cmd += "    del globals()[list(globals().keys())[0]]\n"
+            cmd += "__name__ = '__main__'\n"
+            cmd += "import gc\n"
+            cmd += "gc.enable()\n"
+            cmd += "gc.collect()\n"
+            if (fileHandle.name == "main.py"){
+                cmd += "from main import *"
             }
+            if (fileHandle.name == "code.py"){
+                cmd += "from code import *"
+            }
+            send_multi_py_lines(cmd)
         }
 
         var cmd_hist = ['print("Hello CircuitPython!")'];

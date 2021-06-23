@@ -67,8 +67,11 @@ Editor
     - when no text selected: send the current line to Console
     - when selected text: send the selected text to Console
 - `Ctrl-Enter`
-    - when no text selected: Everything in the Editor to Console
-    - when selected text: send the selected text to Console
+    - Run the saved `main.py` file in REPL
+    - This function is for debugging
+        - because variables remains in REPL after run
+        - cannot replace the File mode
+    - This is better after saving the file and restart REPL
 - `Ctrl-S`: [Save and Run]
 
 Console
