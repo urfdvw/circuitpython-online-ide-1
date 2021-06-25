@@ -16,3 +16,7 @@
 # 20210623
 - Add feature
     - 'Ctrl-/' to toggle Comment
+# 20210624
+- Clean Up
+    - Moved all code to a `code.js` file
+    - Reordered the code and add some comment
