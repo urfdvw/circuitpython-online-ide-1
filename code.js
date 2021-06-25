@@ -224,11 +224,17 @@ var info = '"""\n'
 info += 'Please connect the board before any operation.\n\n'
 info += '--- Editor Keyboard Shortcuts ---\n\n'
 info += '[Ctrl-S]: Save the file\n    This will trigger reset and run in File mode\n\n'
+info += '[Ctrl-Space]: auto completion\n'
 info += 'REPL Mode Specific:\n'
 info += '[Shift-Enter] to run current line of code\n    or selected multiple lines of code.\n'
 info += '[Ctrl-Enter] to clear existing variable(s) and run main.py.\n'
 info += '    This is best after restart REPL and [Ctrl-S]\n'
 info += '"""\nimport board\n'
+
+CodeMirror.commands.autocomplete = function (cm) {
+    cm.showHint({ hint: CodeMirror.hint.any});
+    cm.showHint({ hint: CodeMirror.hint.anyword});
+}
 
 var editor = CodeMirror(document.querySelector('#my-div'), {
     lineNumbers: true,
@@ -237,7 +243,10 @@ var editor = CodeMirror(document.querySelector('#my-div'), {
     indentUnit: 4,
     mode: 'python',
     theme: 'monokai',
-    extraKeys: { Tab: betterTab },
+    extraKeys: {
+        Tab: betterTab,
+        "Ctrl-Space": "autocomplete"
+    },
 });
 editor.setSize(width = '100%', height = '100%')
 
@@ -256,7 +265,7 @@ editor.addKeyMap({
     "Shift-Enter": run_current,
     "Ctrl-Enter": run_all_lines,
     "Ctrl-S": save_and_run,
-    "Ctrl-/": function () { editor.execCommand('toggleComment') },
+    "Ctrl-/": 'toggleComment',
 });
 
 command.addKeyMap({

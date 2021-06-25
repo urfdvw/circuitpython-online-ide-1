@@ -66,6 +66,7 @@ Editor
 - `Ctrl-Enter`
     - Run the saved `main.py` file in REPL
 - `Ctrl-S`: Save opened file, same as [Save and Run] button on UI
+- `Ctrl-Space`: Autocompeletion
 
 Console
 - `Enter`: send command

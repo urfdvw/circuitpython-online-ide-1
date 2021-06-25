@@ -20,3 +20,6 @@
 - Clean Up
     - Moved all code to a `code.js` file
     - Reordered the code and add some comment
+- Add feature
+    - Auto completion by `Ctrl-Space`
+    - need more elegant way
