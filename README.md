@@ -10,6 +10,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 ## Features
 - Runs on any device with the Chrome browser, including Chromebooks.
 - Code editor with Python highlighting
+- Auto completion
 - Serial communication with the device
 - Read-Evaluate-Print loop (REPL)
 
@@ -77,7 +78,6 @@ Console
 ## Planned Features
 - Multiple file editing/File tabs
 - CircuitPython specific keyword-highlighting
-- Auto completion
 - Serial data plotter
 
 ## References
