@@ -2,7 +2,7 @@
  * info ****************************************************************
  */
 function show_alert() {
-    alert("Browser not supported!\n\nPlease use the latest Chrome browser, Chrome OS, or Chromium based browsers such as MS Edge.")
+    alert("Browser not supported!\n\nPlease use the latest version of Chrome browser, Chrome OS, or Chromium based browsers such as MS Edge.\nPlease use the desktop version of the browsers, not the android or ios version.")
 }
 
 /**
