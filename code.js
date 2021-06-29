@@ -1,4 +1,11 @@
 /**
+ * info ****************************************************************
+ */
+function show_alert() {
+    alert("Browser not supported!\n\nPlease use the latest Chrome browser, Chrome OS, or Chromium based browsers such as MS Edge.")
+}
+
+/**
  * Serial driver *******************************************************
  */
 
@@ -14,6 +21,7 @@ async function connect() {
 
     // - Request a port and open a connection.
     port = await navigator.serial.requestPort();
+
     // - Wait for the port to open.
     await port.open({ baudRate: 9600 });
 
@@ -68,8 +76,11 @@ async function clickConnect() {
     }
 
     // CODELAB: Add connect code here.
-    await connect();
-    console.log("Connected");
+    try {
+        await connect();
+    } catch {
+        show_alert();
+    }
 }
 
 async function readLoop() {
@@ -168,10 +179,15 @@ function send_single_line(line) {
 let fileHandle;
 var butOpenFile = document.getElementById("inputfile")
 butOpenFile.addEventListener('click', async () => {
-    [fileHandle] = await window.showOpenFilePicker();
-    const file = await fileHandle.getFile();
-    const contents = await file.text();
-    editor.setValue(contents);
+    try {
+        [fileHandle] = await window.showOpenFilePicker();
+        const file = await fileHandle.getFile();
+        const contents = await file.text();
+        editor.setValue(contents);
+        document.getElementById('filename').innerHTML = fileHandle.name;
+    } catch {
+        show_alert()
+    }
 });
 
 async function writeFile(fileHandle, contents) {
@@ -183,8 +199,8 @@ async function writeFile(fileHandle, contents) {
     await writable.close();
 }
 
-function save_and_run() {
-    writeFile(fileHandle, editor.getValue());
+function save_and_run(cm) {
+    writeFile(fileHandle, cm.getValue());
 }
 
 function download(data, filename, type) {
@@ -227,13 +243,13 @@ info += '[Ctrl-S]: Save the file\n    This will trigger reset and run in File mo
 info += '[Ctrl-Space]: auto completion\n\n'
 info += 'REPL Mode Specific:\n'
 info += '[Shift-Enter] to run current line of code\n    or selected multiple lines of code.\n'
-info += '[Ctrl-Enter] to clear existing variable(s) and run main.py.\n'
+info += '[Ctrl-Enter] to clear existing variable(s) and run current file.\n'
 info += '    This is best after restart REPL and [Ctrl-S]\n'
 info += '"""\nimport board\n'
 
 CodeMirror.commands.autocomplete = function (cm) {
-    cm.showHint({ hint: CodeMirror.hint.any});
-    cm.showHint({ hint: CodeMirror.hint.anyword});
+    cm.showHint({ hint: CodeMirror.hint.any });
+    cm.showHint({ hint: CodeMirror.hint.anyword });
 }
 
 var editor = CodeMirror(document.querySelector('#my-div'), {
@@ -288,16 +304,16 @@ function betterTab(cm) {
     }
 }
 
-function run_current() {
-    var selected = editor.getSelection()
+function run_current(cm) {
+    var selected = cm.getSelection()
     if (selected) { // if any sellection
         send_multiple_lines(selected)
     } else {
-        send_single_line(editor.getLine(editor.getCursor()["line"]))
-        if (editor.lineCount() == editor.getCursor()["line"] + 1) { // if last line
-            var line = editor.getLine(editor.getCursor()["line"])
+        send_single_line(cm.getLine(cm.getCursor()["line"]))
+        if (cm.lineCount() == cm.getCursor()["line"] + 1) { // if last line
+            var line = cm.getLine(cm.getCursor()["line"])
             var indent = line.length - line.trimLeft().length
-            var doc = editor.getDoc();
+            var doc = cm.getDoc();
             var cursor = doc.getCursor();
             for (var i = 0; i < indent - 4; i++) {
                 console.log(cursor)
@@ -305,9 +321,9 @@ function run_current() {
             }
             doc.replaceRange('\n', cursor); // reversed order, because cursor not moved
         } else {
-            editor.setCursor({
-                line: editor.getCursor()["line"] + 1,
-                ch: editor.getLine(editor.getCursor()["line"] + 1).length
+            cm.setCursor({
+                line: cm.getCursor()["line"] + 1,
+                ch: cm.getLine(cm.getCursor()["line"] + 1).length
             })
         }
     }
@@ -323,22 +339,17 @@ function run_all_lines() {
     cmd += "import gc\n"
     cmd += "gc.enable()\n"
     cmd += "gc.collect()\n"
-    if (fileHandle.name == "main.py") {
-        cmd += "from main import *"
-    }
-    if (fileHandle.name == "code.py") {
-        cmd += "from code import *"
-    }
+    cmd += "from " + fileHandle.name.split('.')[0] + " import *"
     send_multiple_lines(cmd)
 }
 
-function run_command() {
-    var line = command.getLine(command.getCursor()["line"])
+function run_command(cm) {
+    var line = cm.getLine(cm.getCursor()["line"])
     send_single_line(line)
-    command.setValue("")
+    cm.setValue("")
 }
 
-function hist_up() {
+function hist_up(cm) {
     if (cmd_ind == -1) {
         cmd_ind = cmd_hist.length - 1
     } else {
@@ -347,10 +358,10 @@ function hist_up() {
     if (cmd_ind < 0) {
         cmd_ind = 0
     }
-    command.setValue(cmd_hist[cmd_ind])
+    cm.setValue(cmd_hist[cmd_ind])
 }
 
-function hist_down() {
+function hist_down(cm) {
     if (cmd_ind == -1) {
         cmd_ind = cmd_hist.length - 1
     } else {
@@ -359,5 +370,5 @@ function hist_down() {
     if (cmd_ind >= cmd_hist.length) {
         cmd_ind = cmd_hist.length - 1
     }
-    command.setValue(cmd_hist[cmd_ind])
+    cm.setValue(cmd_hist[cmd_ind])
 }

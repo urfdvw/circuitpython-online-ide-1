@@ -60,8 +60,9 @@
         <div class="column toolbar">
             Editor
             <button id="inputfile"> Open </button>
-            <button id="save" onClick='save_and_run()'> Save and Run </button>
-            <button onclick="download(editor.getValue(), 'main.py', 'text')">Save as</button>
+            <button id="save" onClick='save_and_run(editor)'> Save and Run </button>
+            <button onclick="download(editor.getValue(), fileHandle.name, 'text')">Save as</button>
+            <text id="filename"></text>
         </div>
         <div class="column toolbar">
             Serial

@@ -50,7 +50,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
     - Hit `Shift-Enter` on the keyboard to run the current line.
         - The cursor will move to the following line, so keep on hitting to run a sequence of lines.
     - Select multiple lines of code, then hit `Shift-Enter` on the keyboard to run the selected code.
-    - Hit `Ctrl-Enter` on the keyboard to run the saved `main.py` file in REPL.
+    - Hit `Ctrl-Enter` on the keyboard to run the saved current file in REPL.
         - This function is for debugging, because variables remains in REPL after run
         - This cannot replace running the code in 'File mode' because no reset is done between runs, and you may get '(device) is occupied' error.
             - Manually restart REPL if you get such an error.
@@ -65,7 +65,7 @@ Editor
     - when no text selected: send the current line to Console
     - when selected text: send the selected text to Console
 - `Ctrl-Enter`
-    - Run the saved `main.py` file in REPL
+    - Run the saved current file in REPL
 - `Ctrl-S`: Save opened file, same as [Save and Run] button on UI
 - `Ctrl-Space`: Autocompeletion
 
