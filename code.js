@@ -89,6 +89,7 @@ async function readLoop() {
         const { value, done } = await reader.read();
         if (value) {
             document.getElementById('serial_out').innerHTML += value;
+            get_dir_returns();
             // removed the carriage return, for some reason CircuitPython does not need it
             //log.innerHTML += value + '\n';
             log_parent = document.getElementById('serial_out').parentNode.parentNode
@@ -372,3 +373,31 @@ function hist_down(cm) {
     }
     cm.setValue(cmd_hist[cmd_ind])
 }
+
+/**
+ * Auto completion ************************
+ */
+
+ var auto_com_words = null;
+ function get_dir_returns() {
+     // if last command is dir()
+     auto_com_words = null;
+     var last = document.getElementById('serial_out').innerHTML.split('\n&gt;&gt;&gt; ');
+     last = last[last.length - 2]
+     if(last === undefined){
+         return
+     }
+     if (last.startsWith('dir(')) {
+         // get dir result
+         last = last.split('[')
+         auto_com_words = last[last.length - 1].split(']')[0].split("'").join('').split(',')
+         auto_com_words = auto_com_words.map(function (item) {
+             return item.trim()
+         })
+         auto_com_words = auto_com_words.filter(function (item) {
+             return item.slice(0, 2) != '__'
+         })
+     }
+     console.log(auto_com_words)
+     // return auto_com_words
+ }
