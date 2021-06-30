@@ -23,3 +23,7 @@
 - Add feature
     - Auto completion by `Ctrl-Space`
     - need more elegant way
+# 20210630
+- Add feature
+    - Now support multi-line command in console
+    - The shortcuts are listed in the console info

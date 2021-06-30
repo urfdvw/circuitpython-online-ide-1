@@ -23,7 +23,7 @@ async function connect() {
     port = await navigator.serial.requestPort();
 
     // - Wait for the port to open.
-    await port.open({ baudRate: 9600 });
+    await port.open({ baudRate: 115200 });
 
     // if connected, change the button name
     document.getElementById("connect").innerHTML = "connected"
@@ -37,9 +37,6 @@ async function connect() {
     let decoder = new TextDecoderStream();
     inputDone = port.readable.pipeTo(decoder.writable);
     inputStream = decoder.readable;
-
-    // clear current log
-    document.getElementById("serial_out").innerHTML = "";
 
     reader = inputStream.getReader();
     readLoop();
@@ -92,8 +89,6 @@ async function readLoop() {
             get_dir_returns();
             // removed the carriage return, for some reason CircuitPython does not need it
             //log.innerHTML += value + '\n';
-            log_parent = document.getElementById('serial_out').parentNode.parentNode
-            log_parent.scrollTop = log_parent.scrollHeight;
         }
         if (done) {
             console.log('[readLoop] DONE', done);
@@ -103,6 +98,11 @@ async function readLoop() {
     }
 
 }
+
+// auto scroll 
+new ResizeObserver(function () {
+    out_frame.parentNode.scrollTop = out_frame.parentNode.scrollHeight;
+}).observe(out_frame)
 
 /**
  * command related functions ****************************************************
@@ -124,9 +124,18 @@ function sendCTRLC() {
     send_cmd("\x03");
 }
 
+var cmd_hist = ['print("Hello CircuitPython!")']; // command history
+var cmd_ind = -1; // command history index
+
 function send_multiple_lines(lines) {
     // send multiple lines of code to device
     // lines: str (str can contain line breaks)
+
+    // push to history
+    if (lines.trim().length != 0) {
+        cmd_hist.push(lines);
+        cmd_ind = -1;
+    }
 
     // dealing with linebreaks and '\n' in text
     lines = lines.split('\\').join('\\\\').split('\n').join('\\n')
@@ -149,9 +158,6 @@ function send_multiple_lines(lines) {
         console.log("Can not write, no connection.");
     }
 }
-
-var cmd_hist = ['print("Hello CircuitPython!")']; // command history
-var cmd_ind = -1; // command history index
 
 function send_single_line(line) {
     // send one line of code to device
@@ -269,7 +275,7 @@ editor.setSize(width = '100%', height = '100%')
 
 var command = CodeMirror(document.querySelector('#serial_in'), {
     lineNumbers: false,
-    value: 'print("In REPL mode, type single-line commands here. Press [Enter] to send")',
+    value: 'print("Hi! REPL")',
     tabSize: 4,
     indentUnit: 4,
     mode: 'python',
@@ -286,12 +292,11 @@ editor.addKeyMap({
 });
 
 command.addKeyMap({
-    "Shift-Enter": run_command,
-    "Ctrl-Enter": run_command,
+    "Shift-Enter": "newlineAndIndent",
     "Enter": run_command,
     "Up": hist_up,
     "Down": hist_down,
-    "Ctrl-C": sendCTRLC,
+    "Shift-Ctrl-C": sendCTRLC,
     "Ctrl-D": sendCTRLD,
 });
 
@@ -312,15 +317,8 @@ function run_current(cm) {
     } else {
         send_single_line(cm.getLine(cm.getCursor()["line"]))
         if (cm.lineCount() == cm.getCursor()["line"] + 1) { // if last line
-            var line = cm.getLine(cm.getCursor()["line"])
-            var indent = line.length - line.trimLeft().length
-            var doc = cm.getDoc();
-            var cursor = doc.getCursor();
-            for (var i = 0; i < indent - 4; i++) {
-                console.log(cursor)
-                doc.replaceRange(' ', cursor);
-            }
-            doc.replaceRange('\n', cursor); // reversed order, because cursor not moved
+            cm.execCommand('newlineAndIndent');
+            cm.execCommand('indentLess');
         } else {
             cm.setCursor({
                 line: cm.getCursor()["line"] + 1,
@@ -345,59 +343,73 @@ function run_all_lines() {
 }
 
 function run_command(cm) {
-    var line = cm.getLine(cm.getCursor()["line"])
-    send_single_line(line)
+    if (cm.lineCount() == 1) {
+        var line = cm.getLine(cm.getCursor()["line"]);
+        send_single_line(line);
+    } else {
+        var lines = cm.getValue();
+        send_multiple_lines(lines);
+    }
+
     cm.setValue("")
 }
 
 function hist_up(cm) {
-    if (cmd_ind == -1) {
-        cmd_ind = cmd_hist.length - 1
+    if (cm.getCursor()["line"] == 0) {
+        if (cmd_ind == -1) {
+            cmd_ind = cmd_hist.length - 1
+        } else {
+            cmd_ind -= 1
+        }
+        if (cmd_ind < 0) {
+            cmd_ind = 0
+        }
+        cm.setValue(cmd_hist[cmd_ind])
     } else {
-        cmd_ind -= 1
+        cm.setCursor({ "line": cm.getCursor()["line"] - 1, "ch": cm.getCursor()["ch"] })
     }
-    if (cmd_ind < 0) {
-        cmd_ind = 0
-    }
-    cm.setValue(cmd_hist[cmd_ind])
 }
 
 function hist_down(cm) {
-    if (cmd_ind == -1) {
-        cmd_ind = cmd_hist.length - 1
+    if (cm.getCursor()["line"] == cm.lineCount() - 1) {
+        if (cmd_ind == -1) {
+            cmd_ind = cmd_hist.length - 1
+        } else {
+            cmd_ind += 1
+        }
+        if (cmd_ind >= cmd_hist.length) {
+            cmd_ind = cmd_hist.length - 1
+        }
+        cm.setValue(cmd_hist[cmd_ind])
     } else {
-        cmd_ind += 1
+        cm.setCursor({ "line": cm.getCursor()["line"] + 1, "ch": cm.getCursor()["ch"] })
     }
-    if (cmd_ind >= cmd_hist.length) {
-        cmd_ind = cmd_hist.length - 1
-    }
-    cm.setValue(cmd_hist[cmd_ind])
 }
 
 /**
- * Auto completion ************************
+ * Auto completion (Not yet used) ************************
  */
 
- var auto_com_words = null;
- function get_dir_returns() {
-     // if last command is dir()
-     auto_com_words = null;
-     var last = document.getElementById('serial_out').innerHTML.split('\n&gt;&gt;&gt; ');
-     last = last[last.length - 2]
-     if(last === undefined){
-         return
-     }
-     if (last.startsWith('dir(')) {
-         // get dir result
-         last = last.split('[')
-         auto_com_words = last[last.length - 1].split(']')[0].split("'").join('').split(',')
-         auto_com_words = auto_com_words.map(function (item) {
-             return item.trim()
-         })
-         auto_com_words = auto_com_words.filter(function (item) {
-             return item.slice(0, 2) != '__'
-         })
-     }
-     console.log(auto_com_words)
-     // return auto_com_words
- }
+var auto_com_words = null;
+function get_dir_returns() {
+    // if last command is dir()
+    auto_com_words = null;
+    var last = document.getElementById('serial_out').innerHTML.split('\n&gt;&gt;&gt; ');
+    last = last[last.length - 2]
+    if (last === undefined) {
+        return
+    }
+    if (last.startsWith('dir(')) {
+        // get dir result
+        last = last.split('[')
+        auto_com_words = last[last.length - 1].split(']')[0].split("'").join('').split(',')
+        auto_com_words = auto_com_words.map(function (item) {
+            return item.trim()
+        })
+        auto_com_words = auto_com_words.filter(function (item) {
+            return item.slice(0, 2) != '__'
+        })
+    }
+    // console.log(auto_com_words)
+    // return auto_com_words
+}

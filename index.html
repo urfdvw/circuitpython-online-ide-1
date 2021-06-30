@@ -38,10 +38,13 @@
         </style>
     </head>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css"></link>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css"></link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
+    </link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css">
+    </link>
     <link rel="stylesheet" href="https://codemirror.net/addon/hint/show-hint.css">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
     <script type="text/javascript" src="https://codemirror.net/mode/python/python.js"></script>
     <script type="text/javascript" src="https://codemirror.net/addon/comment/comment.js"></script>
     <script type="text/javascript" src="https://codemirror.net/addon/hint/show-hint.js"></script>
@@ -84,9 +87,22 @@
         <div class="column content">
             <div id='out_frame'>
                 <div style="white-space: pre-wrap;" id="serial_out">
+*******************************************
+Serial console help
+
+Serial outputs are going to show below.
+The white textarea is for serial inputs.
+
+Keyboard shortcuts:
+[Enter] to send command(s) to the device.
+[Shift-Enter] for a newline.
+[Up] and [Down] to recall history commands.
+[Ctrl-Shift-C] to send 0x03 to the device.
+[Ctrl-D] to send 0x04 to the device.
+*******************************************
                 </div>
-            </div>
-            <div id="serial_in">
+                <div id="serial_in">
+                </div>
             </div>
         </div>
     </div>
