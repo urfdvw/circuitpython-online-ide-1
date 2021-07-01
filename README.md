@@ -43,9 +43,10 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 - command box can be used for serial communication in the 'File mode', such as feeding inputs when `input('message')` is used.
 
 ### REPL
-- Click on the `CTRL-C` button on the UI (or on the keyboard) to send the `0x03` signal to the board. This will start the REPL mode.
+- Click on the `CTRL-C` button on the UI (or `Shift-Ctrl-C` on the keyboard) to send the `0x03` signal to the board. This will start the REPL mode.
     - You might need to click for more than one time. Stop until you see `>>>` in the terminal
-- Write one line of code in the command box. Hit `Enter` on the keyboard to run the command
+- Write one or multiple lines of code in the command box. Hit `Enter` on the keyboard to run the command
+    - When writing multiple lines, use `Shift-Enter` to create a newline 
 - In the Editor: write one or multiple lines of code.
     - Hit `Shift-Enter` on the keyboard to run the current line.
         - The cursor will move to the following line, so keep on hitting to run a sequence of lines.
@@ -71,8 +72,9 @@ Editor
 
 Console
 - `Enter`: send command
+- `Shift-Enter`: newline
 - `Up` and `Down`: Recall command history
-- `Ctrl-C`: Send `0x03`, same as [Ctrl-C] button on UI
+- `Shift-Ctrl-C`: Send `0x03`, same as [Ctrl-C] button on UI
 - `Ctrl-D`: Send `0x04`, same as [Ctrl-D] button on UI
 
 ## Planned Features
