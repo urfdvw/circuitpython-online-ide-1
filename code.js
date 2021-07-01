@@ -133,7 +133,7 @@ function send_multiple_lines(lines) {
 
     // push to history
     if (lines.trim().length != 0) {
-        cmd_hist.push(lines);
+        cmd_hist.push(lines.trim());
         cmd_ind = -1;
     }
 
@@ -164,7 +164,7 @@ function send_single_line(line) {
 
     // if command not empty, push the command to history
     if (line.trim().length != 0) {
-        cmd_hist.push(line);
+        cmd_hist.push(line.trim());
         cmd_ind = -1;
     }
 
@@ -299,6 +299,25 @@ command.addKeyMap({
     "Shift-Ctrl-C": sendCTRLC,
     "Ctrl-D": sendCTRLD,
 });
+
+var enter_to_send = true;
+function change_send_key(){
+    if(enter_to_send){
+        command.addKeyMap({
+            "Enter": "newlineAndIndent",
+            "Shift-Enter": run_command,
+        });
+        document.getElementById('send_setting').innerHTML = "[Shift-Enter] to send";
+        enter_to_send = false;
+    } else {
+        command.addKeyMap({
+            "Shift-Enter": "newlineAndIndent",
+            "Enter": run_command,
+        });
+        document.getElementById('send_setting').innerHTML = "[Enter] to send";
+        enter_to_send = true;
+    }
+}
 
 function betterTab(cm) {
     // https://github.com/codemirror/CodeMirror/issues/988#issuecomment-14921785

@@ -86,7 +86,7 @@
         </div>
         <div class="column content">
             <div id='out_frame'>
-                <div style="white-space: pre-wrap; font-family: monospace;" id="serial_out" >
+                <div style="white-space: pre-wrap; font-family: monospace;" id="serial_out">
 *******************************************
 Serial console help
 
@@ -99,6 +99,9 @@ Keyboard shortcuts:
 [Up] and [Down] recall history commands
 [Ctrl-Shift-C] send 'Ctrl-C' signal
 [Ctrl-D] send 'Ctrl-D' signal
+
+The shortcut of send and newline can be 
+swapped by the button at the bottom.
 *******************************************
                 </div>
                 <div id="serial_in">
@@ -107,7 +110,7 @@ Keyboard shortcuts:
         </div>
     </div>
 
-    <div class="row tail">
+    <div class="tail">
         Ref:
         <button onclick="window.open('https://circuitpython.readthedocs.io/en/latest/docs/index.html')">
             CircuitPython API
@@ -120,6 +123,10 @@ Keyboard shortcuts:
         </button>
         <button onclick="window.open('https://circuitpython.org/')">
             CircuitPython Homepage
+        </button>
+        <button id="send_setting" onclick="change_send_key();"
+            style="float: right;">
+            Enter to send
         </button>
     </div>
 
