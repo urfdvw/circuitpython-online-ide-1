@@ -7,7 +7,7 @@
 - Add feature
     - Keyboard shortcut `Ctrl-C` and `Ctrl-D` in Console
 # 20210622
-- Feature fix
+- Bug fix
     - Problem: if file too long, `Ctrl-Enter` to send all code to REPL will explode RAM on M0 chips
     - Fix: use `from main import *`
 - Feature remove
@@ -27,3 +27,9 @@
 - Add feature
     - Now support multi-line command in console
     - The shortcuts are listed in the console info
+# 20210701
+- Add feature
+    - add shortcut switch button
+- Bug fix
+    - some serial out are read as html commands if serial_out is defined as `<div>` or anything other than `<textarea>`
+    - fix: a codemirror element is used instead of `<div>`

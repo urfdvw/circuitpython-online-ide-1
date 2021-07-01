@@ -85,7 +85,7 @@ async function readLoop() {
     while (true) {
         const { value, done } = await reader.read();
         if (value) {
-            document.getElementById('serial_out').innerHTML += value;
+            serial.setValue(serial.getValue() + value);
             get_dir_returns();
             // removed the carriage return, for some reason CircuitPython does not need it
             //log.innerHTML += value + '\n';
@@ -235,7 +235,7 @@ function download(data, filename, type) {
 function savelog() {
     // only works out side html
     download(
-        document.getElementById('serial_out').innerHTML.split('&gt;').join('>'),
+        serial.getValue(),
         'log.txt',
         'text'
     )
@@ -245,16 +245,16 @@ function savelog() {
  * Code mirrow Related ***************************************************************************
  */
 
-var info = '"""\n'
-info += 'Please connect the board before any operation.\n\n'
-info += '--- Editor Keyboard Shortcuts ---\n\n'
-info += '[Ctrl-S]: Save the file\n    This will trigger reset and run in File mode\n'
-info += '[Ctrl-Space]: auto completion\n\n'
-info += 'REPL Mode Specific:\n'
-info += '[Shift-Enter] to run current line of code\n    or selected multiple lines of code.\n'
-info += '[Ctrl-Enter] to clear existing variable(s) and run current file.\n'
-info += '    This is best after restart REPL and [Ctrl-S]\n'
-info += '"""\nimport board\n'
+var editor_info = '"""\n' +
+    'Please connect the board before any operation.\n\n' +
+    '--- Editor Keyboard Shortcuts ---\n\n' +
+    '[Ctrl-S]: Save the file\n    This will trigger reset and run in File mode\n' +
+    '[Ctrl-Space]: auto completion\n\n' +
+    'REPL Mode Specific:\n' +
+    '[Shift-Enter] to run current line of code\n    or selected multiple lines of code.\n' +
+    '[Ctrl-Enter] to clear existing variable(s) and run current file.\n' +
+    '    This is best after restart REPL and [Ctrl-S]\n' +
+    '"""\nimport board\n'
 
 CodeMirror.commands.autocomplete = function (cm) {
     cm.showHint({ hint: CodeMirror.hint.any });
@@ -263,7 +263,7 @@ CodeMirror.commands.autocomplete = function (cm) {
 
 var editor = CodeMirror(document.querySelector('#my-div'), {
     lineNumbers: true,
-    value: info,
+    value: editor_info,
     tabSize: 4,
     indentUnit: 4,
     mode: 'python',
@@ -272,16 +272,43 @@ var editor = CodeMirror(document.querySelector('#my-div'), {
         Tab: betterTab,
         "Ctrl-Space": "autocomplete"
     },
+    lineWrapping: true,
 });
 editor.setSize(width = '100%', height = '100%')
 
-var command = CodeMirror(document.querySelector('#serial_in'), {
+var serial_info = "\
+Serial console help\n\n\
+Serial outputs are going to show below.\n\
+The white textarea is for serial inputs.\n\n\
+Keyboard shortcuts:\n\
+[Enter] send command(s)\n\
+[Shift-Enter] newline\n\
+[Up] and [Down] recall history commands\n\
+[Ctrl-Shift-C] send 'Ctrl-C' signal\n\
+[Ctrl-D] send 'Ctrl-D' signal\n\n\
+The shortcut of send and newline can be\n\
+swapped by the button at the bottom.\n\
+*******************************************\n\
+"
+
+var serial = CodeMirror(document.querySelector('#serial_R'), {
+    lineNumbers: false,
+    value: serial_info,
+    theme: 'monokai',
+    mode: 'text',
+    readOnly: true,
+    lineWrapping: true,
+});
+serial.setSize(width = '100%', height = '100%')
+
+var command = CodeMirror(document.querySelector('#serial_T'), {
     lineNumbers: false,
     value: 'help()',
     tabSize: 4,
     indentUnit: 4,
     mode: 'python',
     extraKeys: { Tab: betterTab },
+    lineWrapping: true,
 });
 command.setSize(width = '100%', height = '100%')
 
@@ -350,16 +377,17 @@ function run_current(cm) {
 }
 
 function run_all_lines() {
-    cmd = "import gc\n"
-    cmd += "gc.enable()\n"
-    cmd += "import sys\nsys.modules.clear()\n"
-    cmd += "while globals():\n"
-    cmd += "    del globals()[list(globals().keys())[0]]\n"
-    cmd += "__name__ = '__main__'\n"
-    cmd += "import gc\n"
-    cmd += "gc.enable()\n"
-    cmd += "gc.collect()\n"
-    cmd += "from " + fileHandle.name.split('.')[0] + " import *"
+    cmd = "import gc\n" +
+        "gc.enable()\n" +
+        "import sys\nsys.modules.clear()\n" +
+        "while globals():\n" +
+        "    del globals()[list(globals().keys())[0]]\n" +
+        "__name__ = '__main__'\n" +
+        "import gc\n" +
+        "gc.enable()\n" +
+        "gc.collect()\n" +
+        "from " +
+        fileHandle.name.split('.')[0] + " import *"
     send_multiple_lines(cmd)
 }
 
@@ -416,7 +444,7 @@ var auto_com_words = null;
 function get_dir_returns() {
     // if last command is dir()
     auto_com_words = null;
-    var last = document.getElementById('serial_out').innerHTML.split('\n&gt;&gt;&gt; ');
+    var last = serial.getValue().split('\n>>> ');
     last = last[last.length - 2]
     if (last === undefined) {
         return
