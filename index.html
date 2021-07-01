@@ -65,11 +65,12 @@
             <button id="inputfile"> Open </button>
             <button id="save" onClick='save_and_run(editor)'> Save and Run </button>
             <button onclick="download(editor.getValue(), fileHandle.name, 'text')">Save as</button>
+            <button onclick="new_tab()">New tab</button>
             <text id="filename"></text>
         </div>
         <div class="column toolbar">
             Serial
-            <button onClick="document.getElementById('serial_out').innerHTML = ''"> Clear </button>
+            <button onClick="serial.setValue('')"> Clear </button>
             <button onclick="savelog()">Save log</button>
             <button onclick="sendCTRLC()">CTRL-C</button>
             <button onclick="sendCTRLD()">CTRL-D</button>

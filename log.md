@@ -33,3 +33,6 @@
 - Bug fix
     - some serial out are read as html commands if serial_out is defined as `<div>` or anything other than `<textarea>`
     - fix: a codemirror element is used instead of `<div>`
+- Add feature
+    - Multiple tab support
+    - Will change tab label to file name

@@ -1,6 +1,9 @@
 /**
  * info ****************************************************************
  */
+
+document.title = 'CPy IDE'
+
 function show_alert() {
     alert("Browser not supported!\n\nPlease use the latest version of Chrome browser, Chrome OS, or Chromium based browsers such as MS Edge.\nPlease use the desktop version of the browsers, not the android or ios version.")
 }
@@ -194,6 +197,7 @@ butOpenFile.addEventListener('click', async () => {
         const contents = await file.text();
         editor.setValue(contents);
         document.getElementById('filename').innerHTML = fileHandle.name;
+        document.title = fileHandle.name
     } catch {
         show_alert()
     }
@@ -434,6 +438,26 @@ function hist_down(cm) {
     } else {
         cm.setCursor({ "line": cm.getCursor()["line"] + 1, "ch": cm.getCursor()["ch"] })
     }
+}
+
+/**
+ * tab control ************************
+ */
+
+// a handle of the new window that othe functions can operate
+var tablist = []
+
+// auto close child window on mother window close
+window.addEventListener("beforeunload", function (e) {
+    // Do something
+    for(var i=0;i<tablist.length;i++){
+        tablist[i].close()
+    }
+}, false);
+
+// create new window and set style
+function new_tab() {
+    tablist.push(window.open('tab.html'))
 }
 
 /**
