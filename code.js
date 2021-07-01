@@ -127,15 +127,19 @@ function sendCTRLC() {
 var cmd_hist = ['print("Hello CircuitPython!")']; // command history
 var cmd_ind = -1; // command history index
 
+function push_to_cmd_hist(str) {
+    if (str.trim().length != 0) {
+        cmd_hist.push(str.trim());
+    }
+}
+
 function send_multiple_lines(lines) {
     // send multiple lines of code to device
     // lines: str (str can contain line breaks)
 
     // push to history
-    if (lines.trim().length != 0) {
-        cmd_hist.push(lines.trim());
-        cmd_ind = -1;
-    }
+    push_to_cmd_hist(lines);
+    cmd_ind = -1;
 
     // dealing with linebreaks and '\n' in text
     lines = lines.split('\\').join('\\\\').split('\n').join('\\n')
@@ -163,10 +167,8 @@ function send_single_line(line) {
     // send one line of code to device
 
     // if command not empty, push the command to history
-    if (line.trim().length != 0) {
-        cmd_hist.push(line.trim());
-        cmd_ind = -1;
-    }
+    push_to_cmd_hist(line);
+    cmd_ind = -1;
 
     // send the command to device
     if (outputStream != null) {
@@ -275,7 +277,7 @@ editor.setSize(width = '100%', height = '100%')
 
 var command = CodeMirror(document.querySelector('#serial_in'), {
     lineNumbers: false,
-    value: 'print("Hi! REPL")',
+    value: 'help()',
     tabSize: 4,
     indentUnit: 4,
     mode: 'python',
@@ -301,8 +303,8 @@ command.addKeyMap({
 });
 
 var enter_to_send = true;
-function change_send_key(){
-    if(enter_to_send){
+function change_send_key() {
+    if (enter_to_send) {
         command.addKeyMap({
             "Enter": "newlineAndIndent",
             "Shift-Enter": run_command,
@@ -373,12 +375,14 @@ function run_command(cm) {
     cm.setValue("")
 }
 
+var temp_cmd = '';
 function hist_up(cm) {
     if (cm.getCursor()["line"] == 0) {
         if (cmd_ind == -1) {
             cmd_ind = cmd_hist.length - 1
+            temp_cmd = cm.getValue();
         } else {
-            cmd_ind -= 1
+            cmd_ind -= 1;
         }
         if (cmd_ind < 0) {
             cmd_ind = 0
@@ -392,14 +396,13 @@ function hist_up(cm) {
 function hist_down(cm) {
     if (cm.getCursor()["line"] == cm.lineCount() - 1) {
         if (cmd_ind == -1) {
-            cmd_ind = cmd_hist.length - 1
+        } else if (cmd_ind == cmd_hist.length - 1) {
+            cm.setValue(temp_cmd);
+            cmd_ind = -1;
         } else {
             cmd_ind += 1
+            cm.setValue(cmd_hist[cmd_ind])
         }
-        if (cmd_ind >= cmd_hist.length) {
-            cmd_ind = cmd_hist.length - 1
-        }
-        cm.setValue(cmd_hist[cmd_ind])
     } else {
         cm.setCursor({ "line": cm.getCursor()["line"] + 1, "ch": cm.getCursor()["ch"] })
     }
