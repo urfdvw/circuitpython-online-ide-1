@@ -14,6 +14,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 - Serial communication with the device
 - Read-Evaluate-Print loop (REPL)
 - Multiple file editing/File tabs
+- CircuitPython specific keyword-highlighting
 
 ## Workflow (a.k.a. How to use)
 
@@ -79,7 +80,6 @@ Console
 - `Ctrl-D`: Send `0x04`, same as [Ctrl-D] button on UI
 
 ## Planned Features
-- CircuitPython specific keyword-highlighting
 - Serial data plotter
 
 ## References

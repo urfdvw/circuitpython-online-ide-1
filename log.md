@@ -36,3 +36,6 @@
 - Add feature
     - Multiple tab support
     - Will change tab label to file name
+# 20210702
+- Add feature
+    - CircuitPython keywords highlighting
