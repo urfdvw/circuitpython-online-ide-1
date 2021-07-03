@@ -236,6 +236,14 @@ function download(data, filename, type) {
     }
 }
 
+function save_code() {
+    try{
+        download(editor.getValue(), fileHandle.name, 'text')
+    }catch{
+        download(editor.getValue(), 'main.py', 'text')
+    }
+}
+
 function savelog() {
     // only works out side html
     download(
