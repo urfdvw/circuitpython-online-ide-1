@@ -401,6 +401,7 @@ function run_all_lines() {
         "from " +
         fileHandle.name.split('.')[0] + " import *"
     send_multiple_lines(cmd)
+    cmd_hist.pop();
 }
 
 function run_command(cm) {
