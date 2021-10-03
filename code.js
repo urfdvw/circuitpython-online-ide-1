@@ -75,12 +75,14 @@ async function clickConnect() {
     await connect();
 }
 
+var serial_value_text = "";
 async function readLoop() {
     // Reads data from the input stream and displays it in the console.
     while (true) {
         const { value, done } = await reader.read();
         if (value) {
-            serial.setValue((serial.getValue() + value).slice(- 79 * 100));
+            serial_value_text += value;
+            serial.setValue(serial_value_text);
             get_dir_returns();
             // removed the carriage return, for some reason CircuitPython does not need it
             //log.innerHTML += value + '\n';
