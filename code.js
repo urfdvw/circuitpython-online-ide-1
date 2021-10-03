@@ -4,10 +4,6 @@
 
 document.title = 'CPy IDE'
 
-function show_alert() {
-    alert("Browser not supported!\n\nPlease use the latest version of Chrome browser, Chrome OS, or Chromium based browsers such as MS Edge.\nPlease use the desktop version of the browsers, not the android or ios version.")
-}
-
 /**
  * Serial driver *******************************************************
  */
@@ -76,11 +72,7 @@ async function clickConnect() {
     }
 
     // CODELAB: Add connect code here.
-    try {
-        await connect();
-    } catch {
-        show_alert();
-    }
+    await connect();
 }
 
 async function readLoop() {
@@ -88,7 +80,7 @@ async function readLoop() {
     while (true) {
         const { value, done } = await reader.read();
         if (value) {
-            serial.setValue(serial.getValue() + value);
+            serial.setValue((serial.getValue() + value).slice(- 79 * 100));
             get_dir_returns();
             // removed the carriage return, for some reason CircuitPython does not need it
             //log.innerHTML += value + '\n';
@@ -191,16 +183,12 @@ function send_single_line(line) {
 let fileHandle;
 var butOpenFile = document.getElementById("inputfile")
 butOpenFile.addEventListener('click', async () => {
-    try {
-        [fileHandle] = await window.showOpenFilePicker();
-        const file = await fileHandle.getFile();
-        const contents = await file.text();
-        editor.setValue(contents);
-        document.getElementById('filename').innerHTML = fileHandle.name;
-        document.title = fileHandle.name
-    } catch {
-        show_alert()
-    }
+    [fileHandle] = await window.showOpenFilePicker();
+    const file = await fileHandle.getFile();
+    const contents = await file.text();
+    editor.setValue(contents);
+    document.getElementById('filename').innerHTML = fileHandle.name;
+    document.title = fileHandle.name
 });
 
 async function writeFile(fileHandle, contents) {
@@ -237,9 +225,9 @@ function download(data, filename, type) {
 }
 
 function save_code() {
-    try{
+    try {
         download(editor.getValue(), fileHandle.name, 'text')
-    }catch{
+    } catch {
         download(editor.getValue(), 'main.py', 'text')
     }
 }
@@ -459,7 +447,7 @@ var tablist = []
 // auto close child window on mother window close
 window.addEventListener("beforeunload", function (e) {
     // Do something
-    for(var i=0;i<tablist.length;i++){
+    for (var i = 0; i < tablist.length; i++) {
         tablist[i].close()
     }
 }, false);
