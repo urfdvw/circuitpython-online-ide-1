@@ -81,6 +81,7 @@ Console
 
 ## Planned Features
 - Serial data plotter
+- unsaved indicator
 
 ## References
 This project is inspired by the following projects. Some codes are copied from them.
