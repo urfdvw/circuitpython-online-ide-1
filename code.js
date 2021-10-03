@@ -93,7 +93,6 @@ async function readLoop() {
             break;
         }
     }
-
 }
 
 // auto scroll 
