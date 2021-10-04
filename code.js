@@ -82,7 +82,6 @@ async function readLoop() {
         const { value, done } = await reader.read();
         if (value) {
             serial_value_text += value;
-            serial.setValue(serial_value_text);
             get_dir_returns();
             // removed the carriage return, for some reason CircuitPython does not need it
             //log.innerHTML += value + '\n';
@@ -236,7 +235,7 @@ function save_code() {
 function savelog() {
     // only works out side html
     download(
-        serial.getValue(),
+        serial_value_text,
         'log.txt',
         'text'
     )
@@ -291,6 +290,7 @@ The shortcut of send and newline can be\n\
 swapped by the button at the bottom.\n\
 *******************************************\n\
 "
+serial_value_text = serial_info;
 
 var serial = CodeMirror(document.querySelector('#serial_R'), {
     lineNumbers: false,
@@ -301,6 +301,15 @@ var serial = CodeMirror(document.querySelector('#serial_R'), {
     lineWrapping: true,
 });
 serial.setSize(width = '100%', height = '100%')
+
+function serial_disp_loop() {
+    var rand = Math.round(Math.random() * 10) + 90;
+    receiving_timer = setTimeout(function () {
+        serial.setValue(serial_value_text.slice(end=-10000));
+        serial_disp_loop();
+    }, rand);
+}
+serial_disp_loop();
 
 var command = CodeMirror(document.querySelector('#serial_T'), {
     lineNumbers: false,
