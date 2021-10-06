@@ -257,7 +257,7 @@ var editor_info = '"""\n' +
     '"""\nimport board\n'
 
 CodeMirror.commands.autocomplete = function (cm) {
-    cm.showHint({ hint: CodeMirror.hint.any });
+    // cm.showHint({ hint: CodeMirror.hint.any });
     cm.showHint({ hint: CodeMirror.hint.anyword });
 }
 
