@@ -261,7 +261,7 @@ CodeMirror.commands.autocomplete = function (cm) {
     cm.showHint({ hint: CodeMirror.hint.anyword });
 }
 
-var editor = CodeMirror(document.querySelector('#my-div'), {
+var editor = CodeMirror(document.querySelector('#my_div'), {
     lineNumbers: true,
     value: editor_info,
     tabSize: 4,
@@ -274,7 +274,12 @@ var editor = CodeMirror(document.querySelector('#my-div'), {
     },
     lineWrapping: true,
 });
-editor.setSize(width = '100%', height = '100%')
+editor.setSize(width = '100%', height = my_div.parentNode.clientHeight)
+
+// auto resize
+new ResizeObserver(function () {
+    editor.setSize(width = '100%', height = my_div.parentNode.clientHeight)
+}).observe(my_div.parentNode)
 
 var serial_info = "\
 Serial console help\n\n\
