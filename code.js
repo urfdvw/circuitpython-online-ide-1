@@ -246,6 +246,7 @@ function savelog() {
  */
 
 var editor_info = '"""\n' +
+    'This IDE supports Chrome or Chromium-based browsers such as MS Edge.\n\n' +
     'Please connect the board before any operation.\n\n' +
     '--- Editor Keyboard Shortcuts ---\n\n' +
     '[Ctrl-S]: Save the file\n    This will trigger reset and run in File mode\n' +
