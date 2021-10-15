@@ -308,10 +308,15 @@ var serial = CodeMirror(document.querySelector('#serial_R'), {
 });
 serial.setSize(width = '100%', height = '100%')
 
+var serial_disp_text = serial_value_text.slice(end=-10000);
 function serial_disp_loop() {
     var rand = Math.round(Math.random() * 10) + 90;
     receiving_timer = setTimeout(function () {
-        serial.setValue(serial_value_text.slice(end=-10000));
+        var serial_disp_text_now = serial_value_text.slice(end=-10000);
+        if (serial_disp_text_now != serial_disp_text){
+            serial_disp_text = serial_disp_text_now;
+            serial.setValue(serial_disp_text);
+        }
         serial_disp_loop();
     }, rand);
 }
