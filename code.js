@@ -201,7 +201,6 @@ async function writeFile(fileHandle, contents) {
 }
 
 async function save_and_run(cm) {
-
     var serial_out_len = serial_value_text.length;
     await writeFile(fileHandle, cm.getValue());
     console.log('file saved');
@@ -215,7 +214,7 @@ async function save_and_run(cm) {
                 sendCTRLD();
             }, 50);
         }
-    }, 1000);
+    }, 1500);
 }
 
 function download(data, filename, type) {
