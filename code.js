@@ -97,9 +97,6 @@ async function readLoop() {
 // auto scroll 
 new ResizeObserver(function () {
     out_frame.parentNode.scrollTop = out_frame.parentNode.scrollHeight;
-    if (document.getElementById("plot").style.display == "") {
-        plot_refresh();
-    }
 }).observe(out_frame)
 
 /**
@@ -332,6 +329,10 @@ function serial_disp_loop() {
         if (serial_disp_text_now != serial_disp_text) {
             serial_disp_text = serial_disp_text_now;
             serial.setValue(serial_disp_text);
+        }
+        // if plot on, refresh plot
+        if (document.getElementById("plot").style.display == "") {
+            plot_refresh();
         }
         serial_disp_loop();
     }, rand);
