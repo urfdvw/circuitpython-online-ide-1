@@ -97,6 +97,9 @@ async function readLoop() {
 // auto scroll 
 new ResizeObserver(function () {
     out_frame.parentNode.scrollTop = out_frame.parentNode.scrollHeight;
+    if (document.getElementById("plot").style.display == "") {
+        plot_refresh();
+    }
 }).observe(out_frame)
 
 /**
@@ -490,6 +493,73 @@ window.addEventListener("beforeunload", function (e) {
 function new_tab() {
     tablist.push(window.open('tab.html'))
 }
+
+/**
+ * Plot
+ */
+
+function text_to_data_xy(text) {
+    lines = text.split('\n');
+    for (var i = 0; i < lines.length; i++) {
+        lines[i] = lines[i].trim().split(' ');
+    }
+    return lines;
+}
+
+function plot_lines_find_end(lines) {
+    var start = 1; // first line is title
+    var end = lines.length - 1;
+    while (start + 1 < end) {
+        var mid = parseInt((start + end) / 2)
+        if (isNaN(parseFloat(lines[mid][0]))) {
+            end = mid;
+        } else {
+            start = mid;
+        }
+    }
+    return start;
+}
+
+function transpose(array) {
+    return array[0].map((_, colIndex) => array.map(row => parseFloat(row[colIndex])));
+}
+
+function plot_refresh() {
+    var data = [];
+    try {
+        var plot_raw_list = serial_value_text.split('plot:').slice(1,);
+        var plot_raw_text = plot_raw_list.at(-1);
+        var plot_raw_lines = text_to_data_xy(plot_raw_text);
+        var plot_lables = plot_raw_lines[0];
+        var plot_data_lines = plot_raw_lines.slice(1, plot_lines_find_end(plot_raw_lines) + 1);
+        var plot_data = transpose(plot_data_lines);
+
+        for (var i = 1; i < plot_lables.length; i++) {
+            var curve = {};
+            curve['x'] = plot_data[0];
+            curve['y'] = plot_data[i];
+            curve['name'] = plot_lables[i];
+            curve['type'] = 'scatter';
+            data.push(curve);
+        }
+    } catch { }
+    Plotly.newPlot('plot', data, { scrollZoom: true });
+}
+
+function plot_main() {
+    if (document.getElementById("plot").style.display == "") {
+        document.getElementById("plot").style.display = "none"
+        return
+    }
+    if (document.getElementById("plot").style.display == "none") {
+        document.getElementById("plot").style.display = ""
+
+        plot_refresh();
+        return
+    }
+}
+
+
 
 /**
  * Auto completion (Not yet used) ************************

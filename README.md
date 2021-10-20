@@ -15,6 +15,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 - Read-Evaluate-Print loop (REPL)
 - Multiple file editing/File tabs
 - CircuitPython specific keyword-highlighting
+- Serial data plotter
 
 ## Workflow (a.k.a. How to use)
 
@@ -61,6 +62,30 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 - Click on the `Save as` button on the UI to download the code in the Editor as a separate file.
 - Click on the `Save log` button on the UI to download the serial conversation log as a text file.
 
+### Plot
+*(currently Beta)*
+- Click on the [Plot] button to toggle plot window
+- You need to start the plot by serial output `startplot: xname y1name y2name ...`, separated by space.
+- Each line of data should contain `xdata y1data y2data ...`, separated by space.
+- Plot can be real-time or off-line.
+- Only the lastest plot data will be plotted.
+- If the plot update gets slow, use the [Clear] button to clean history data.
+- Example code for plotting:
+
+```python
+import math
+import random
+from time import sleep
+from time import monotonic as time
+print('startplot:', 't' , 'sin(t)', 'cos(t)')
+time_start = time()
+for i in range(100):
+    sleep(random.uniform(0, 0.1))
+    x = time() - time_start
+    print(x, math.sin(3 * x), math.cos(3 * x))
+print('This is the end of the plot data')
+```
+
 ## Keyboard Shortcuts
 
 Editor
@@ -80,7 +105,6 @@ Console
 - `Ctrl-D`: Send `0x04`, same as [Ctrl-D] button on UI
 
 ## Planned Features
-- Serial data plotter
 - unsaved indicator
 
 ## References
