@@ -329,10 +329,10 @@ function serial_disp_loop() {
         if (serial_disp_text_now != serial_disp_text) {
             serial_disp_text = serial_disp_text_now;
             serial.setValue(serial_disp_text);
-        }
-        // if plot on, refresh plot
-        if (document.getElementById("plot").style.display == "") {
-            plot_refresh();
+            // if plot on, refresh plot
+            if (document.getElementById("plot").style.display == "") {
+                plot_refresh();
+            }
         }
         serial_disp_loop();
     }, rand);
@@ -544,7 +544,13 @@ function plot_refresh() {
             data.push(curve);
         }
     } catch { }
-    Plotly.newPlot('plot', data, { scrollZoom: true });
+    var layout = {
+        showlegend: true,
+        xaxis: {
+            title: plot_lables[0],
+        }
+    };
+    Plotly.newPlot('plot', data, layout);
 }
 
 function plot_main() {
