@@ -527,19 +527,21 @@ function transpose(array) {
 
 function plot_refresh() {
     var data = [];
+    var xlabel = '';
     try {
         var plot_raw_list = serial_value_text.split('plot:').slice(1,);
         var plot_raw_text = plot_raw_list.at(-1);
         var plot_raw_lines = text_to_data_xy(plot_raw_text);
-        var plot_lables = plot_raw_lines[0];
+        var plot_labels = plot_raw_lines[0];
         var plot_data_lines = plot_raw_lines.slice(1, plot_lines_find_end(plot_raw_lines) + 1);
         var plot_data = transpose(plot_data_lines);
+        xlabel = plot_labels[0];
 
-        for (var i = 1; i < plot_lables.length; i++) {
+        for (var i = 1; i < plot_labels.length; i++) {
             var curve = {};
             curve['x'] = plot_data[0];
             curve['y'] = plot_data[i];
-            curve['name'] = plot_lables[i];
+            curve['name'] = plot_labels[i];
             curve['type'] = 'scatter';
             data.push(curve);
         }
@@ -547,7 +549,7 @@ function plot_refresh() {
     var layout = {
         showlegend: true,
         xaxis: {
-            title: plot_lables[0],
+            title: xlabel,
         }
     };
     Plotly.newPlot('plot', data, layout);
