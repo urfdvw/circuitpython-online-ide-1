@@ -9,13 +9,13 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 
 ## Features
 - Runs on any device with the Chrome browser, including Chromebooks.
-- Code editor with Python highlighting
-- Auto completion
-- Serial communication with the device
-- Read-Evaluate-Print loop (REPL)
-- Multiple file editing/File tabs
-- CircuitPython specific keyword-highlighting
+- Serial Console for communication and Read-Evaluate-Print loop (REPL)
 - Serial data plotter
+- Code editor with CircuitPython highlighting
+- History command recall
+- [Shift-Enter] to send Editor line(s) to REPL
+- Auto completion
+- Multiple file tabs
 
 ## Workflow (a.k.a. How to use)
 
@@ -99,13 +99,14 @@ Editor
     - when no text is selected: send the current line to Console
     - when selected text: send the selected text to Console
 - `Ctrl-Enter`
-    - Run the saved current file in REPL
-- `Ctrl-S`: Save the opened file, same as [Save and Run] button on UI
+    - Run the saved current file in REPL (for debugging)
+- `Ctrl-S`: Save the opened file, same as [Save and Run] button on the UI
 - `Ctrl-Space`: Autocompletion
 
-Console
+Serial Console command window
 - `Enter`: send command
 - `Shift-Enter`: newline
+    - *Functions of these two shortcuts above can be switched by clicking on the button `[Enter] to send` in the UI*
 - `Up` and `Down`: Recall command history
 - `Shift-Ctrl-C`: Send `0x03`, same as [Ctrl-C] button on UI
 - `Ctrl-D`: Send `0x04`, same as [Ctrl-D] button on UI
