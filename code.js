@@ -499,7 +499,7 @@ function new_tab() {
  * Plot
  */
 
-function text_to_data_xy(text) {
+function text_to_data(text) {
     lines = text.split('\n');
     for (var i = 0; i < lines.length; i++) {
         lines[i] = lines[i].trim().split(' ');
@@ -527,24 +527,36 @@ function transpose(array) {
 
 function plot_refresh() {
     var data = [];
-    var xlabel = '';
+    var xlabel = 'index';
     try {
-        var plot_raw_list = serial_value_text.split('plot:').slice(1,);
+        var plot_raw_list = serial_value_text.split('startplot:').slice(1,);
         var plot_raw_text = plot_raw_list.at(-1);
-        var plot_raw_lines = text_to_data_xy(plot_raw_text);
+        var plot_raw_lines = text_to_data(plot_raw_text);
         var plot_labels = plot_raw_lines[0];
         var plot_data_lines = plot_raw_lines.slice(1, plot_lines_find_end(plot_raw_lines) + 1);
         var plot_data = transpose(plot_data_lines);
-        xlabel = plot_labels[0];
 
-        for (var i = 1; i < plot_labels.length; i++) {
-            var curve = {};
-            curve['x'] = plot_data[0];
-            curve['y'] = plot_data[i];
-            curve['name'] = plot_labels[i];
-            curve['type'] = 'scatter';
-            data.push(curve);
+        if (document.getElementById("x-axis").checked) {
+            xlabel = plot_labels[0];
+            for (var i = 1; i < plot_labels.length; i++) {
+                var curve = {};
+                curve['x'] = plot_data[0];
+                curve['y'] = plot_data[i];
+                curve['name'] = plot_labels[i];
+                curve['type'] = 'scatter';
+                data.push(curve);
+            }
+        } else {
+            for (var i = 0; i < plot_labels.length; i++) {
+                var curve = {};
+                curve['x'] = i;
+                curve['y'] = plot_data[i];
+                curve['name'] = plot_labels[i];
+                curve['type'] = 'scatter';
+                data.push(curve);
+            }
         }
+
     } catch { }
     var layout = {
         showlegend: true,
