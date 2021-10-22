@@ -35,7 +35,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
     - This file can be downloaded from our IDE by click on `Save as`
 - **Open the [CircuitPython online IDE](https://urfdvw.github.io/CircuitPython-online-IDE/). Then connect your CircuitPython supported board by click the `Connect` button**
 
-### File mode
+### Script File mode
 - Once plugin the CircuitPython supported board, the initial mode is 'File mode'.
 - To switch back to 'File mode' from 'REPL' mode, Click on the `CTRL-D` button on the UI (or on the keyboard) to send the `0x04` signal to the board. 
 - Click on the `Open` button on the UI to open the code file on the CircuitPython supported board.
@@ -65,37 +65,43 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 ### Plot
 *(currently Beta)*
 - Click on the [Plot] button to toggle plot window
-- You need to start the plot by serial output `startplot: xname y1name y2name ...`, separated by space.
-- Each line of data should contain `xdata y1data y2data ...`, separated by space.
+- You need to start the plot by **serial output** `startplot: xname y1name y2name ...`, separated by space.
+    - In python, this is done by `print("startplot:", "xname", "y1name", "y2name")`.
+- Plot data should immediately follow the start line in the **serial output**. Each line should contain the data of one timestep, `xdata y1data y2data ...`, separated by space.
+    - In python, this is done by `print(xdata, y1data, y2data)`, where `xdata` and alike are `int` or `float` variables.
+- Check the box [x-axis] in the IDE to use the first dimension as the x-axis.
+Otherwise, all dimensions of the data are considered as paralleled y-axes,
+and the x-axis on the figure is going to be the index.
 - Plot can be real-time or off-line.
-- Only the lastest plot data will be plotted.
-- If the plot update gets slow, use the [Clear] button to clean history data.
-- Example code for plotting:
+- Example **python** code for plotting:
 
 ```python
 import math
 import random
 from time import sleep
 from time import monotonic as time
+# the start indicator and labels
+# separated by `,` in `print()`
 print('startplot:', 't' , 'sin(t)', 'cos(t)')
 time_start = time()
 for i in range(100):
     sleep(random.uniform(0, 0.1))
-    x = time() - time_start
-    print(x, math.sin(3 * x), math.cos(3 * x))
-print('This is the end of the plot data')
+    t = time() - time_start
+    # print the data for plotting
+    # dimensions separated by `,` in `print()`
+    print(t, math.sin(t), math.cos(t))
 ```
 
 ## Keyboard Shortcuts
 
 Editor
 - `Shift-Enter` 
-    - when no text selected: send the current line to Console
+    - when no text is selected: send the current line to Console
     - when selected text: send the selected text to Console
 - `Ctrl-Enter`
     - Run the saved current file in REPL
-- `Ctrl-S`: Save opened file, same as [Save and Run] button on UI
-- `Ctrl-Space`: Autocompeletion
+- `Ctrl-S`: Save the opened file, same as [Save and Run] button on UI
+- `Ctrl-Space`: Autocompletion
 
 Console
 - `Enter`: send command
@@ -105,7 +111,7 @@ Console
 - `Ctrl-D`: Send `0x04`, same as [Ctrl-D] button on UI
 
 ## Planned Features
-- unsaved indicator
+- change unsaved indicator
 
 ## References
 This project is inspired by the following projects. Some codes are copied from them.
