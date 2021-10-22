@@ -536,7 +536,7 @@ function plot_refresh() {
         var plot_data_lines = plot_raw_lines.slice(1, plot_lines_find_end(plot_raw_lines) + 1);
         var plot_data = transpose(plot_data_lines);
 
-        if (document.getElementById("x-axis").checked) {
+        if (document.getElementById("x-axis").checked & plot_labels.length > 1) {
             xlabel = plot_labels[0];
             for (var i = 1; i < plot_labels.length; i++) {
                 var curve = {};
