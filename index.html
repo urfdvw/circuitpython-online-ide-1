@@ -57,29 +57,58 @@
     </div>
     <div class="head">
         <h1>CircuitPython Online IDE
-            <button id="connect" onClick='clickConnect()'> Connect </button>
+            <span title="Connect the IDE to the microcontroller.">
+                <button id="connect" onClick='clickConnect()'> Connect </button>
+            </span>
         </h1>
     </div>
 
     <div class="row">
         <div class="column toolbar">
             Editor
-            <text id="filename"></text>
-            <button id="inputfile"> Open </button>
-            <button id="save" onClick='save_and_run(editor)'> Save and Run </button>
-            <button onclick="save_code()">Save as</button>
-            <button onclick="new_tab()">New tab</button>
+            <span title="The script file you are currently working on.">
+                <text id="filename"></text>
+            </span>
+            <span title="Open a python script file on the microcontroller. Usually `code.py` or `main.py`.">
+                <button id="inputfile"> Open </button>
+            </span>
+            <span title="Save changes to the opened script file. 
+This will trigger a `soft rebot` on the microcontroller, and run the saved script immediately.">
+                <button id="save" onClick='save_and_run(editor)'> Save and Run </button>
+            </span>
+            <span title="Download Editor content as a Python script file.">
+                <button onclick="save_code()">Save as</button>
+            </span>
+            <span title="Open a new Editor Tab in the browser.
+This will allow you to work on multiple script files at the same time.">
+                <button onclick="new_tab()">New tab</button>
+            </span>
         </div>
         <div class="column toolbar">
             Serial
-            <button onClick="serial_value_text=''; serial.setValue('')"> Clear </button>
-            <button onclick="savelog()">Save log</button>
+            <span title="Remove all data from the Serial Console">
+                <button onClick="serial_value_text=''; serial.setValue('')"> Clear </button>
+            </span>
+            <span title="Download data in the Serial Console as text file.">
+                <button onclick="savelog()">Save log</button>
+            </span>
             [
-            <button onclick="plot_main()">Plot</button>
-            x-axis<input type="checkbox" id="x-axis" onchange="plot_refresh()">
+            <span title="Show/hide the plot.
+How to plot? See the `IDE Help` on the bottom left corner!">
+                <button onclick="plot_main()">Plot</button>
+            </span>
+            <span title="If this box is checked, the first dimension of the data is considered as the x-axis.
+Otherwise, all dimensions of the data are considered as paralleled y-axes,
+and the x-axis on the figure is going to be the index.">
+                x-axis<input type="checkbox" id="x-axis" onchange="plot_refresh()">
+            </span>
             ]
-            <button onclick="sendCTRLC()">CTRL-C</button>
-            <button onclick="sendCTRLD()">CTRL-D</button>
+            <span title="Send a `Ctrl-C` signal to the microcontroller">
+                <button onclick="sendCTRLC()">CTRL-C</button>
+            </span>
+            <span title="Send a `Ctrl-D` signal to the microcontroller">
+                <button onclick="sendCTRLD()">CTRL-D</button>
+            </span>
         </div>
     </div>
     <div class="row">
@@ -92,28 +121,39 @@
                 <div id="serial_R"></div>
                 <div id="plot" style="display:none"></div>
                 <div id="serial_T" style="border: 1px solid grey; position:relative">
-                    <button onclick="run_command(command);" style="position: absolute; bottom: 0; right: 0; z-index: 10">
-                        Send
-                    </button>
+                    <span title="Send command(s) to the microcontroller.">
+                        <button onclick="run_command(command);"
+                            style="position: absolute; bottom: 0; right: 0; z-index: 10">
+                            Send
+                        </button>
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="tail">
-        <button onclick="window.open('https://circuitpython.org/')">
-            CircuitPython Homepage
-        </button>
-        <button onclick="window.open('https://github.com/urfdvw/CircuitPython-online-IDE#workflow-aka-how-to-use')">
-            IDE Help
-        </button>
-        <button
-            onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdupiJIRViFwPpuQC1hMp8gRvhxACLoAjgepm_-IRZumwK7Cg/viewform?usp=sf_link')">
-            Feedback
-        </button>
-        <button id="send_setting" onclick="change_send_key();" style="float: right;">
-            [Enter] to send
-        </button>
+        <span title="Tutorials, downloads, API documents, libraries, forums and a lot more.">
+            <button onclick="window.open('https://circuitpython.org/')">
+                CircuitPython Homepage
+            </button>
+        </span>
+        <span title="Documents and Source code of this IDE on Github">
+            <button onclick="window.open('https://github.com/urfdvw/CircuitPython-online-IDE#workflow-aka-how-to-use')">
+                IDE Help
+            </button>
+        </span>
+        <span title="Bugs? Feature suggestions?">
+            <button
+                onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdupiJIRViFwPpuQC1hMp8gRvhxACLoAjgepm_-IRZumwK7Cg/viewform?usp=sf_link')">
+                Feedback
+            </button>
+        </span>
+        <span title="Click on this button will change the keyboard shortcut for sending command(s).">
+            <button id="send_setting" onclick="change_send_key();" style="float: right;">
+                [Enter] to send
+            </button>
+        </span>
     </div>
 
     <script type="text/javascript" src="code.js">
