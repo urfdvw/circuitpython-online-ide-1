@@ -58,11 +58,6 @@
     <div class="head">
         <h1>CircuitPython Online IDE
             <button id="connect" onClick='clickConnect()'> Connect </button>
-            <button
-                onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdupiJIRViFwPpuQC1hMp8gRvhxACLoAjgepm_-IRZumwK7Cg/viewform?usp=sf_link')"
-                style="float: right;">
-                Feedback
-            </button>
         </h1>
     </div>
 
@@ -77,19 +72,14 @@
         </div>
         <div class="column toolbar">
             Serial
-            <button onclick="plot_main()">Plot (Beta)</button>
             <button onClick="serial_value_text=''; serial.setValue('')"> Clear </button>
             <button onclick="savelog()">Save log</button>
+            [
+            <button onclick="plot_main()">Plot</button>
+            x-axis<input type="checkbox" id="x-axis">
+            ]
             <button onclick="sendCTRLC()">CTRL-C</button>
             <button onclick="sendCTRLD()">CTRL-D</button>
-            <button onclick="window.open('https://github.com/urfdvw/CircuitPython-online-IDE#workflow-aka-how-to-use')"
-                style="float: right;">
-                IDE Help
-            </button>
-            <button onclick="window.open('https://github.com/urfdvw/CircuitPython-online-IDE#plot')"
-                style="float: right;">
-                Plot Help
-            </button>
         </div>
     </div>
     <div class="row">
@@ -101,27 +91,25 @@
             <div id='out_frame'>
                 <div id="serial_R"></div>
                 <div id="plot" style="display:none"></div>
-                <div id="serial_T" style="border: 1px solid grey"></div>
+                <div id="serial_T" style="border: 1px solid grey; position:relative">
+                    <button onclick="run_command(command);" style="position: absolute; bottom: 0; right: 0; z-index: 1">
+                        Send
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="tail">
-        Ref:
-        <button onclick="window.open('https://circuitpython.readthedocs.io/en/latest/docs/index.html')">
-            CircuitPython API
-        </button>
-        <button onclick="window.open('https://circuitpython.readthedocs.io/projects/bundle/en/latest/')">
-            Sponsored Libraries and Drivers
-        </button>
-        <button onclick="window.open('https://circuitpython.readthedocs.io/en/latest/docs/library/index.html')">
-            MicroPython libraries
-        </button>
         <button onclick="window.open('https://circuitpython.org/')">
             CircuitPython Homepage
         </button>
-        <button onclick="run_command(command);" style="float: right;">
-            Send
+        <button onclick="window.open('https://github.com/urfdvw/CircuitPython-online-IDE#workflow-aka-how-to-use')">
+            IDE Help
+        </button>
+        <button
+            onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdupiJIRViFwPpuQC1hMp8gRvhxACLoAjgepm_-IRZumwK7Cg/viewform?usp=sf_link')">
+            Feedback
         </button>
         <button id="send_setting" onclick="change_send_key();" style="float: right;">
             [Enter] to send
