@@ -77,19 +77,19 @@ and the x-axis on the figure is going to be the index.
 
 ```python
 import math
-import random
 from time import sleep
 from time import monotonic as time
 # the start indicator and labels
 # separated by `,` in `print()`
-print('startplot:', 't' , 'sin(t)', 'cos(t)')
+print('startplot:', 't*cos(t)', 't*sin(t)')
 time_start = time()
 for i in range(100):
-    sleep(random.uniform(0, 0.1))
+    sleep(0.1)
     t = time() - time_start
     # print the data for plotting
     # dimensions separated by `,` in `print()`
-    print(t, math.sin(t), math.cos(t))
+    print(t*math.cos(t), t*math.sin(t))
+# please check and uncheck the [x-axis] box to see the difference.
 ```
 
 ## Keyboard Shortcuts
