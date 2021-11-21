@@ -149,6 +149,12 @@ and the x-axis on the figure is going to be the index.">
                 Feedback
             </button>
         </span>
+        <span title="开发环境的中文版本">
+            <button
+                onclick="window.open('index_zh.html')">
+                中文
+            </button>
+        </span>
         <span title="Click on this button will change the keyboard shortcut for sending command(s).">
             <button id="send_setting" onclick="change_send_key();" style="float: right;">
                 [Enter] to send
@@ -160,7 +166,7 @@ and the x-axis on the figure is going to be the index.">
     </script>
 
     <script>
-        var editor_info = '"""\n' +
+        var editor_info = '""" <<< Editor help >>>\n\n' +
             'This IDE supports Chrome or Chromium-based browsers such as MS Edge.\n\n' +
             'Please connect the board before any operation.\n\n' +
             '--- Editor Keyboard Shortcuts ---\n\n' +
