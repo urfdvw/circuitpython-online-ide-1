@@ -25,7 +25,7 @@ async function connect() {
     await port.open({ baudRate: 115200 });
 
     // if connected, change the button name
-    document.getElementById("connect").innerHTML = "connected"
+    document.getElementById("connect").innerHTML = connected_info;
 
     // setup the output stream.
     const encoder = new TextEncoderStream();
@@ -350,14 +350,14 @@ function change_send_key() {
             "Enter": "newlineAndIndent",
             "Shift-Enter": run_command,
         });
-        document.getElementById('send_setting').innerHTML = "[Shift-Enter] to send";
+        document.getElementById('send_setting').innerHTML = shift_enter_to_send_info;
         enter_to_send = false;
     } else {
         command.addKeyMap({
             "Shift-Enter": "newlineAndIndent",
             "Enter": run_command,
         });
-        document.getElementById('send_setting').innerHTML = "[Enter] to send";
+        document.getElementById('send_setting').innerHTML = enter_to_send_info;
         enter_to_send = true;
     }
 }
