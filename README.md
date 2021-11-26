@@ -17,6 +17,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 - [Ctrl-Enter] to send Editor Code cell to REPL
 - Auto completion
 - Multiple file tabs
+- 中文界面
 
 ## Workflow (a.k.a. How to use)
 
@@ -81,12 +82,12 @@ from time import sleep
 from time import monotonic as time
 
 #%% set
-# the start indicator and labels
-# separated by `,` in `print()`
-print('startplot:', 't*cos(t)', 't*sin(t)')
 time_start = time()
 
 #%% loop
+# the start indicator and labels
+# separated by `,` in `print()`
+print('startplot:', 't*cos(t)', 't*sin(t)')
 for i in range(100):
     sleep(0.1)
     t = time() - time_start
@@ -117,6 +118,7 @@ Command window
 
 ## Planned Features
 - change unsaved indicator
+- 中文帮助
 
 ## References
 This project is inspired by the following projects. Some codes are copied from them.
