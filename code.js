@@ -313,7 +313,7 @@ function serial_disp_loop() {
 serial_disp_loop();
 
 var command = CodeMirror(document.querySelector('#serial_T'), {
-    lineNumbers: false,
+    lineNumbers: true,
     value: 'help()',
     tabSize: 4,
     indentUnit: 4,
@@ -326,10 +326,10 @@ command.setSize(width = '100%', height = '100%')
 // https://stackoverflow.com/a/25104834/7037749
 editor.addKeyMap({
     "Shift-Enter": run_current,
-    "Ctrl-Enter": run_all_lines,
+    "Ctrl-Enter": run_cell,
     "Ctrl-S": save_and_run,
     "Ctrl-/": 'toggleComment',
-    "Cmd-Enter": run_all_lines,
+    "Cmd-Enter": run_cell,
     "Cmd-S": save_and_run,
     "Cmd-/": 'toggleComment',
 });
@@ -402,8 +402,39 @@ function run_all_lines() {
         "gc.collect()\n" +
         "from " +
         fileHandle.name.split('.')[0] + " import *"
-    send_multiple_lines(cmd)
+    send_multiple_lines(cmd);
     cmd_hist.pop();
+}
+
+function run_cell(){
+    var current_line = editor.getCursor().line;
+    var topline = current_line; // included
+    while(true) {
+        if (topline == 0) {
+            break;
+        }
+        if (editor.getLine(topline).startsWith('#%%')){
+            break;
+        }
+        topline -= 1;
+    }
+    var bottonline = current_line; // not included
+    while(true) {
+        bottonline += 1
+        if (bottonline == editor.lineCount()) {
+            editor.setCursor({line: editor.lineCount()});
+            break;
+        }
+        if (editor.getLine(bottonline).startsWith('#%%')){
+            editor.setCursor({line: bottonline});
+            break;
+        }
+    }
+    var cell = editor.getValue().split('\n').slice(topline, bottonline).join('\n');
+
+    console.log(cell);
+
+    send_multiple_lines(cell);
 }
 
 function run_command(cm) {
