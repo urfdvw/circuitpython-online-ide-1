@@ -25,6 +25,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/Z44PD-ZleAU/0.jpg)](https://www.youtube.com/watch?v=Z44PD-ZleAU)
 [](https://stackoverflow.com/a/16079387/7037749)
+This video is already dated. Many new features have been added there ever since that video. For the latest updates about this IDE, please follow the youtube channel called ***CircuitPythonic*** here: https://youtube.com/playlist?list=PLlxgbFPR1ZNTaQ8KqnEwyLay1SagBHW1H
 
 ### First of First
 - Plugin your CircuitPython supported board, and make sure it shows up as a drive.
