@@ -166,30 +166,59 @@ and the x-axis on the figure is going to be the index.">
     </script>
 
     <script>
+        var major_key;
+        var minor_key;
+        if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
+            major_key = 'Cmd';
+            minor_key = 'Option';
+        } else { // if windows
+            major_key = 'Ctrl';
+            minor_key = 'Alt';
+        }
         var editor_info = '""" <<< Editor help >>>\n\n' +
             'This IDE supports Chrome or Chromium-based browsers such as MS Edge.\n\n' +
             'Please connect the board before any operation.\n\n' +
             '--- Editor Keyboard Shortcuts ---\n\n' +
-            'On Macs, [Cmd] can be used instead of [Ctrl].\n\n' +
-            '[Ctrl-S]: Save the file\n    This will trigger reset and run the saved Script\n' +
+            '[' + major_key + '-S]: Save the file\n    This will trigger reset and run the saved Script\n' +
             '[Ctrl-Space]: auto completion\n\n' +
             'REPL Mode Specific:\n' +
-            '[Shift-Enter] to run the current line of code\n    or to run the selected lines of code\n' +
-            '[Ctrl-Enter] to run the current Cell\n' +
-            '    Cells are multiple lines of codes starts with `#%%`\n' +
-            '"""\nimport board\n';
+            '[' + major_key + '-Enter] RUN the current Cell\n' +
+            '    Cells are multiple lines of codes start with `#%%`\n' +
+            '[Shift-Enter] RUN the current line of code\n' +
+            '    or selected lines of code\n' +
+            '[' + minor_key + '-Enter] RUN and REMOVED the current line of code\n' +
+            '    or selected lines of code\n' +
+            '[' + minor_key + '-Up] and [' + minor_key + '-Down] RECALL Command Window history\n' +
+            '[' + minor_key + '-Shift-Enter] GRAB Command Window content to Editor\n\n' +
+            'System Related:\n';
+        if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
+            editor_info += '[Ctrl-C] Send "ctrl-c" signal to microcontroller\n' +
+            '[Ctrl-D] Send "ctrl-d" signal to microcontroller\n'
+        } else { // if windows
+            editor_info += '[Ctrl-Shift-C] Send "ctrl-c" signal to microcontroller\n' +
+            '[Ctrl-Shift-D] Send "ctrl-d" signal to microcontroller\n'
+        }
+        editor_info += '"""\nimport board\n'
         editor.setValue(editor_info);
 
         var serial_info = '<<< Serial console help >>>\n\n' +
             'Serial outputs are going to show below.\n' +
             'The white textarea is the Command Window for serial inputs.\n\n' +
-            'Command Window Keyboard shortcuts:\n' +
+            'Command Window Keyboard shortcuts:\n'
+        if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
+            serial_info += '[Ctrl-C] Send "ctrl-c" signal to microcontroller\n' +
+            '[Ctrl-D] Send "ctrl-d" signal to microcontroller\n'
+        } else { // if windows
+            serial_info += '[Ctrl-Shift-C] Send "ctrl-c" signal to microcontroller\n' +
+            '[Ctrl-Shift-D] Send "ctrl-d" signal to microcontroller\n'
+        }
+        serial_info += 
+            '[Up] and [Down] recall history commands\n' +
             '[Enter] send command(s)\n' +
             '[Shift-Enter] newline\n' +
-            '[Up] and [Down] recall history commands\n\n' +
             'The shortcut of send and newline can be\n' +
-            'swapped by the button at the bottom.\n\n' +
-            '*******************************************\n'
+            'swapped by the button at the bottom.\n' +
+            '\n*******************************************\n'
         serial.setValue(serial_info);
         serial_value_text = serial_info;
         

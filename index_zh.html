@@ -155,29 +155,57 @@
     </script>
 
     <script>
+    var major_key;
+        var minor_key;
+        if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
+            major_key = 'Cmd';
+            minor_key = 'Option';
+        } else { // if windows
+            major_key = 'Ctrl';
+            minor_key = 'Alt';
+        }
         var editor_info = '""" <<< 编辑器帮助 >>> \n\n' +
             '这个开发环境支持 Chrome 浏览器或者 Chromium 内核的浏览器，比如微软的 Edge。\n\n' +
             '在做任何操作以前，请先联接单片机。\n\n' +
-            '--- 编辑器快捷键 ---\n\n' +
-            '在 Mac 上, 您可以使用 [Cmd] 来替代 [Ctrl].\n\n' +
-            '[Ctrl-S]: [保存并执行]\n' +
+            '--- 编辑器快捷键 ---\n' +
+            '[' + major_key + '-S]: [保存并执行]\n' +
             '[Ctrl-Space]: 自动补全\n\n' +
-            'REPL 模式下特有的快捷键:\n\n' +
-            '[Shift-Enter] 运行当前一行代码\n    或者选取多行代码，运行选取的代码\n' +
-            '[Ctrl-Enter] 运行当前的 Cell\n' +
+            'REPL 模式下特有的快捷键:\n' +
+            '[' + major_key + '-Enter] 运行当前的 Cell\n' +
             '    Cell 是以 `#%%` 开头的多行代码\n' +
-            '"""\nimport board\n';
+            '[Shift-Enter] 运行当前一行代码，或者选中的多行代码\n' +
+            '[' + minor_key + '-Enter] 运行并移除当前一行代码，或者选中的多行代码\n' +
+            '[' + minor_key + '-Up] 与 [' + minor_key + '-Down] 命令窗中回溯历史记录\n' +
+            '[' + minor_key + '-Shift-Enter] 抓取命令窗中的内容到编辑器\n\n' +
+            '系统相关快捷键:\n';
+        if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
+            editor_info += '[Ctrl-C] 发送 "ctrl-c" 信号到单片机\n' +
+            '[Ctrl-D] 发送 "ctrl-d" 信号到单片机\n'
+        } else { // if windows
+            editor_info += '[Ctrl-Shift-C] 发送 "ctrl-c" 信号到单片机\n' +
+            '[Ctrl-Shift-D] 发送 "ctrl-d" 信号到单片机\n'
+        }
+        editor_info += '"""\nimport board\n'
         editor.setValue(editor_info);
+
 
         var serial_info = '<<< 串口控制台帮助 >>>\n\n' +
             '所有串口输出都会显示在下方黑色的区域。\n' +
             '下方白色的区域为`命令窗`，用于串口命令的输入。\n\n' +
-            '--- 命令窗的快捷键 ---\n\n' +
+            '--- 命令窗的快捷键 ---\n'
+        if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
+            serial_info += '[Ctrl-C] 发送 "ctrl-c" 信号到单片机\n' +
+            '[Ctrl-D] 发送 "ctrl-d" 信号到单片机\n'
+        } else { // if windows
+            serial_info += '[Ctrl-Shift-C] 发送 "ctrl-c" 信号到单片机\n' +
+            '[Ctrl-Shift-D] 发送 "ctrl-d" 信号到单片机\n'
+        }
+        serial_info += 
+            '[Up]与[Down] 回溯历史记录\n' +
             '[Enter] 发送命令\n' +
             '[Shift-Enter] 换行\n' +
-            '方向键 [Up]，[Down] 命令历史记录\n\n' +
             '点击右下角的按钮可以切换`换行`和`发送命令`的快捷键\n\n' +
-            '*******************************************\n';
+            '\n*******************************************\n'
         serial.setValue(serial_info);
         serial_value_text = serial_info;
         

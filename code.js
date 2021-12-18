@@ -200,9 +200,9 @@ async function writeFile(fileHandle, contents) {
     await writable.close();
 }
 
-async function save_and_run(cm) {
+async function save_and_run() {
     var serial_out_len = serial_value_text.length;
-    await writeFile(fileHandle, cm.getValue());
+    await writeFile(fileHandle, editor.getValue());
     console.log('file saved');
     setTimeout(function () {
         // wait for 1s, if nothing changed in the serial out, 
@@ -324,24 +324,42 @@ var command = CodeMirror(document.querySelector('#serial_T'), {
 command.setSize(width = '100%', height = '100%')
 
 // https://stackoverflow.com/a/25104834/7037749
+// windows
 editor.addKeyMap({
     "Shift-Enter": run_current,
     "Ctrl-Enter": run_cell,
+    "Alt-Enter": run_current_and_del,
+    "Shift-Alt-Enter": append_command_to_editor,
+    "Alt-Up": hist_up,
+    "Alt-Down": hist_down,
     "Ctrl-S": save_and_run,
     "Ctrl-/": 'toggleComment',
-    "Cmd-Enter": run_cell,
-    "Cmd-S": save_and_run,
-    "Cmd-/": 'toggleComment',
+    "Shift-Ctrl-C": sendCTRLC,
+    "Shift-Ctrl-D": sendCTRLD,
 });
-
 command.addKeyMap({
     "Shift-Enter": "newlineAndIndent",
     "Enter": run_command,
     "Up": hist_up,
     "Down": hist_down,
     "Shift-Ctrl-C": sendCTRLC,
-    "Ctrl-D": sendCTRLD,
+    "Shift-Ctrl-D": sendCTRLD,
 });
+
+if (navigator.userAgent.indexOf('Mac OS X') != -1) {
+    editor.addKeyMap({
+        "Shift-Enter": run_current,
+        "Cmd-Enter": run_cell,
+        "Cmd-S": save_and_run,
+        "Cmd-/": 'toggleComment',
+        "Ctrl-C": sendCTRLC,
+        "Ctrl-D": sendCTRLD,
+    });
+    command.addKeyMap({
+        "Ctrl-C": sendCTRLC,
+        "Ctrl-D": sendCTRLD,
+    });
+}
 
 var enter_to_send = true;
 function change_send_key() {
@@ -372,21 +390,39 @@ function betterTab(cm) {
     }
 }
 
-function run_current(cm) {
-    var selected = cm.getSelection()
+function run_current_and_del() {
+    run_current_raw(true);
+}
+
+function run_current() {
+    run_current_raw(false);
+}
+
+function run_current_raw(del) {
+    var selected = editor.getSelection()
     if (selected) { // if any sellection
         send_multiple_lines(selected)
-    } else {
-        send_single_line(cm.getLine(cm.getCursor()["line"]))
-        if (cm.lineCount() == cm.getCursor()["line"] + 1) { // if last line
-            cm.execCommand('newlineAndIndent');
-            cm.execCommand('indentLess');
-        } else {
-            cm.setCursor({
-                line: cm.getCursor()["line"] + 1,
-                ch: cm.getLine(cm.getCursor()["line"] + 1).length
-            })
+        if (del) {
+            command.setValue('')
+            editor.execCommand('deleteLine');
         }
+    } else {
+        send_single_line(editor.getLine(editor.getCursor()["line"]))
+        if (del) {
+            command.setValue('')
+            editor.execCommand('deleteLine');
+        } else {
+            if (editor.lineCount() == editor.getCursor()["line"] + 1) { // if last line
+                editor.execCommand('newlineAndIndent');
+                editor.execCommand('indentLess');
+            } else {
+                editor.setCursor({
+                    line: editor.getCursor()["line"] + 1,
+                    ch: 0
+                })
+            }
+        }
+
     }
 }
 
@@ -406,27 +442,27 @@ function run_all_lines() {
     cmd_hist.pop();
 }
 
-function run_cell(){
+function run_cell() {
     var current_line = editor.getCursor().line;
     var topline = current_line; // included
-    while(true) {
+    while (true) {
         if (topline == 0) {
             break;
         }
-        if (editor.getLine(topline).startsWith('#%%')){
+        if (editor.getLine(topline).startsWith('#%%')) {
             break;
         }
         topline -= 1;
     }
     var bottonline = current_line; // not included
-    while(true) {
+    while (true) {
         bottonline += 1
         if (bottonline == editor.lineCount()) {
-            editor.setCursor({line: editor.lineCount()});
+            editor.setCursor({ line: editor.lineCount() });
             break;
         }
-        if (editor.getLine(bottonline).startsWith('#%%')){
-            editor.setCursor({line: bottonline});
+        if (editor.getLine(bottonline).startsWith('#%%')) {
+            editor.setCursor({ line: bottonline });
             break;
         }
     }
@@ -437,48 +473,59 @@ function run_cell(){
     send_multiple_lines(cell);
 }
 
-function run_command(cm) {
-    if (cm.lineCount() == 1) {
-        var line = cm.getLine(cm.getCursor()["line"]);
+function append_command_to_editor() {
+    // https://stackoverflow.com/a/22610266/7037749
+    var doc = editor.getDoc();
+    var current_line = editor.getLine(editor.getCursor()["line"]);
+    if (current_line.length == 0){
+        doc.replaceRange(command.getValue(), editor.getCursor()); 
+    } else {
+        doc.replaceRange('\n' + command.getValue(), editor.getCursor());
+    }
+    command.setValue("")
+}
+
+function run_command() {
+    if (command.lineCount() == 1) {
+        var line = command.getLine(command.getCursor()["line"]);
         send_single_line(line);
     } else {
-        var lines = cm.getValue();
+        var lines = command.getValue();
         send_multiple_lines(lines);
     }
-
-    cm.setValue("")
+    command.setValue("")
 }
 
 var temp_cmd = '';
-function hist_up(cm) {
-    if (cm.getCursor()["line"] == 0) {
+function hist_up() {
+    if (command.getCursor()["line"] == 0) {
         if (cmd_ind == -1) {
             cmd_ind = cmd_hist.length - 1
-            temp_cmd = cm.getValue();
+            temp_cmd = command.getValue();
         } else {
             cmd_ind -= 1;
         }
         if (cmd_ind < 0) {
             cmd_ind = 0
         }
-        cm.setValue(cmd_hist[cmd_ind])
+        command.setValue(cmd_hist[cmd_ind])
     } else {
-        cm.setCursor({ "line": cm.getCursor()["line"] - 1, "ch": cm.getCursor()["ch"] })
+        command.setCursor({ "line": command.getCursor()["line"] - 1, "ch": command.getCursor()["ch"] })
     }
 }
 
-function hist_down(cm) {
-    if (cm.getCursor()["line"] == cm.lineCount() - 1) {
+function hist_down() {
+    if (command.getCursor()["line"] == command.lineCount() - 1) {
         if (cmd_ind == -1) {
         } else if (cmd_ind == cmd_hist.length - 1) {
-            cm.setValue(temp_cmd);
+            command.setValue(temp_cmd);
             cmd_ind = -1;
         } else {
             cmd_ind += 1
-            cm.setValue(cmd_hist[cmd_ind])
+            command.setValue(cmd_hist[cmd_ind])
         }
     } else {
-        cm.setCursor({ "line": cm.getCursor()["line"] + 1, "ch": cm.getCursor()["ch"] })
+        command.setCursor({ "line": command.getCursor()["line"] + 1, "ch": command.getCursor()["ch"] })
     }
 }
 

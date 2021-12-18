@@ -12,10 +12,10 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 - Serial Console for communication and Read-Evaluate-Print loop (REPL)
 - Serial data plotter
 - Code editor with CircuitPython highlighting
+- Editor's REPL mode shortcuts
 - History command recall
-- [Shift-Enter] to send Editor line(s) to REPL
-- [Ctrl-Enter] to send Editor Code cell to REPL
 - Auto completion
+- Auto change shortcuts in MacOS
 - Multiple file tabs
 - 中文界面
 
@@ -99,23 +99,33 @@ for i in range(100):
 ```
 
 ## Keyboard Shortcuts
+*MacOS shortcuts in `()`*
+### Editor
+- [Ctrl-S] ([Cmd-S]): Save the file
+    - This will trigger reset and run the saved Script
+- [Ctrl-Space]: auto completion
 
-Editor
-- `Shift-Enter` 
-    - when no text is selected: send the current line to Console
-    - when selected text: send the selected text to Console
-- `Ctrl-Enter`
-    - Run the current code cell
-- `Ctrl-S`: Save the opened file, same as [Save and Run] button on the UI
-- `Ctrl-Space`: Autocompletion
+REPL Mode Specific:
+- [Ctrl-Enter] ([Cmd-Enter]) RUN the current Cell
+    - Cells are multiple lines of codes start with `#%%`
+- [Shift-Enter] RUN the current line of code
+    - or selected lines of code
+- [Alt-Enter] ([Option-Enter]) RUN and REMOVED the current line of code
+    - or selected lines of code
+- [Alt-Up] and [Alt-Down] ([Option-Up] and [Option-Down]) RECALL Command Window history
+- [Alt-Shift-Enter] ([Option-Shift-Enter]) GRAB Command Window content to Editor
 
-Command window
-- `Enter`: send command
-- `Shift-Enter`: newline
-    - *Functions of these two shortcuts above can be switched by clicking on the button `[Enter] to send` in the UI*
-- `Up` and `Down`: Recall command history
-- `Shift-Ctrl-C`: Send `0x03`, same as [Ctrl-C] button on UI
-- `Ctrl-D`: Send `0x04`, same as [Ctrl-D] button on UI
+System Related:
+- [Ctrl-Shift-C] ([Ctrl-C]) Send "ctrl-c" signal to microcontroller
+- [Ctrl-Shift-D] ([Ctrl-D]) Send "ctrl-d" signal to microcontroller
+
+### Command window
+- [Ctrl-Shift-C] ([Ctrl-C]) Send "ctrl-c" signal to microcontroller
+- [Ctrl-Shift-D] ([Ctrl-D]) Send "ctrl-d" signal to microcontroller
+- [Up] and [Down] recall history commands
+- [Enter] send command(s)
+- [Shift-Enter] newline
+    - The shortcut of send and newline can be swapped by the button at the bottom.
 
 ## Planned Features
 - change unsaved indicator
