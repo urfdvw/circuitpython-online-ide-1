@@ -44,11 +44,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css">
     </link>
     <link rel="stylesheet" href="https://codemirror.net/addon/hint/show-hint.css">
+    <link rel="stylesheet" href="https://codemirror.net/addon/dialog/dialog.css">
+    <link rel="stylesheet" href="https://codemirror.net/addon/search/matchesonscrollbar.css">
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
     <script type="text/javascript" src="python.js"></script>
     <script type="text/javascript" src="https://codemirror.net/addon/comment/comment.js"></script>
     <script type="text/javascript" src="https://codemirror.net/addon/hint/show-hint.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/search/searchcursor.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/dialog/dialog.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/search/search.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/scroll/annotatescrollbar.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/search/jump-to-line.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/search/matchesonscrollbar.js"></script>
     <script src="https://codemirror.net/addon/hint/anyword-hint.js" id=anyword></script>
     <script src='https://cdn.plot.ly/plotly-2.4.2.min.js'></script>
 </head>
@@ -150,8 +158,7 @@ and the x-axis on the figure is going to be the index.">
             </button>
         </span>
         <span title="开发环境的中文版本">
-            <button
-                onclick="window.open('index_zh.html')">
+            <button onclick="window.open('index_zh.html')">
                 中文
             </button>
         </span>
@@ -193,10 +200,10 @@ and the x-axis on the figure is going to be the index.">
             'System Related:\n';
         if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
             editor_info += '[Ctrl-C] Send "ctrl-c" signal to microcontroller\n' +
-            '[Ctrl-D] Send "ctrl-d" signal to microcontroller\n'
+                '[Ctrl-D] Send "ctrl-d" signal to microcontroller\n'
         } else { // if windows
             editor_info += '[Ctrl-Shift-C] Send "ctrl-c" signal to microcontroller\n' +
-            '[Ctrl-Shift-D] Send "ctrl-d" signal to microcontroller\n'
+                '[Ctrl-Shift-D] Send "ctrl-d" signal to microcontroller\n'
         }
         editor_info += '"""\nimport board\n'
         editor.setValue(editor_info);
@@ -207,12 +214,12 @@ and the x-axis on the figure is going to be the index.">
             'Command Window Keyboard shortcuts:\n'
         if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
             serial_info += '[Ctrl-C] Send "ctrl-c" signal to microcontroller\n' +
-            '[Ctrl-D] Send "ctrl-d" signal to microcontroller\n'
+                '[Ctrl-D] Send "ctrl-d" signal to microcontroller\n'
         } else { // if windows
             serial_info += '[Ctrl-Shift-C] Send "ctrl-c" signal to microcontroller\n' +
-            '[Ctrl-Shift-D] Send "ctrl-d" signal to microcontroller\n'
+                '[Ctrl-Shift-D] Send "ctrl-d" signal to microcontroller\n'
         }
-        serial_info += 
+        serial_info +=
             '[Up] and [Down] recall history commands\n' +
             '[Enter] send command(s)\n' +
             '[Shift-Enter] newline\n' +
@@ -221,7 +228,7 @@ and the x-axis on the figure is going to be the index.">
             '\n*******************************************\n'
         serial.setValue(serial_info);
         serial_value_text = serial_info;
-        
+
         var connected_info = "connected";
         var shift_enter_to_send_info = "[Shift-Enter] to send";
         var enter_to_send_info = "[Enter] to send";

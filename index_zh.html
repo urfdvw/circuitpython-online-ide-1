@@ -44,11 +44,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css">
     </link>
     <link rel="stylesheet" href="https://codemirror.net/addon/hint/show-hint.css">
+    <link rel="stylesheet" href="https://codemirror.net/addon/dialog/dialog.css">
+    <link rel="stylesheet" href="https://codemirror.net/addon/search/matchesonscrollbar.css">
     <script type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
     <script type="text/javascript" src="python.js"></script>
     <script type="text/javascript" src="https://codemirror.net/addon/comment/comment.js"></script>
     <script type="text/javascript" src="https://codemirror.net/addon/hint/show-hint.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/search/searchcursor.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/dialog/dialog.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/search/search.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/scroll/annotatescrollbar.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/search/jump-to-line.js"></script>
+    <script type="text/javascript" src="https://codemirror.net/addon/search/matchesonscrollbar.js"></script>
     <script src="https://codemirror.net/addon/hint/anyword-hint.js" id=anyword></script>
     <script src='https://cdn.plot.ly/plotly-2.4.2.min.js'></script>
 </head>
@@ -155,7 +163,7 @@
     </script>
 
     <script>
-    var major_key;
+        var major_key;
         var minor_key;
         if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
             major_key = 'Cmd';
@@ -180,10 +188,10 @@
             '系统相关快捷键:\n';
         if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
             editor_info += '[Ctrl-C] 发送 "ctrl-c" 信号到单片机\n' +
-            '[Ctrl-D] 发送 "ctrl-d" 信号到单片机\n'
+                '[Ctrl-D] 发送 "ctrl-d" 信号到单片机\n'
         } else { // if windows
             editor_info += '[Ctrl-Shift-C] 发送 "ctrl-c" 信号到单片机\n' +
-            '[Ctrl-Shift-D] 发送 "ctrl-d" 信号到单片机\n'
+                '[Ctrl-Shift-D] 发送 "ctrl-d" 信号到单片机\n'
         }
         editor_info += '"""\nimport board\n'
         editor.setValue(editor_info);
@@ -195,12 +203,12 @@
             '--- 命令窗的快捷键 ---\n'
         if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
             serial_info += '[Ctrl-C] 发送 "ctrl-c" 信号到单片机\n' +
-            '[Ctrl-D] 发送 "ctrl-d" 信号到单片机\n'
+                '[Ctrl-D] 发送 "ctrl-d" 信号到单片机\n'
         } else { // if windows
             serial_info += '[Ctrl-Shift-C] 发送 "ctrl-c" 信号到单片机\n' +
-            '[Ctrl-Shift-D] 发送 "ctrl-d" 信号到单片机\n'
+                '[Ctrl-Shift-D] 发送 "ctrl-d" 信号到单片机\n'
         }
-        serial_info += 
+        serial_info +=
             '[Up]与[Down] 回溯历史记录\n' +
             '[Enter] 发送命令\n' +
             '[Shift-Enter] 换行\n' +
@@ -208,7 +216,7 @@
             '\n*******************************************\n'
         serial.setValue(serial_info);
         serial_value_text = serial_info;
-        
+
         var connected_info = "已连接";
         var shift_enter_to_send_info = "当前：按[Shift-Enter]发送命令";
         var enter_to_send_info = "当前：按[Enter]发送命令";
