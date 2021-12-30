@@ -2,53 +2,28 @@
 <html>
 
 <head>
+    <title>Editor tab</title>
 
-    <head>
-        <style>
-            body {
-                color: rgb(248, 248, 242);
-                background-color: rgb(39, 40, 34);
-            }
+    <style>
+        body {
+            color: rgb(248, 248, 242);
+            background-color: rgb(39, 40, 34);
+        }
 
-            .row {
-                display: flex;
-            }
+        .toolbar {
+            height: 20px;
+        }
 
-            .column {
-                flex: 50%;
-            }
+        #editor {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: calc(100vh - 60px)
+        }
+    </style> 
 
-            .head {
-                height: 50px;
-            }
-
-            .toolbar {
-                height: 20px;
-            }
-
-            .content {
-                height: calc(100vh - 20px - 50px - 40px - 20px);
-                overflow-y: scroll;
-                border: 1px solid grey;
-            }
-
-            .tail {
-                height: 20px;
-            }
-        </style>
-    </head>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
-    </link>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css">
-    </link>
-    <link rel="stylesheet" href="https://codemirror.net/addon/hint/show-hint.css">
-    <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
-    <script type="text/javascript" src="python.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/comment/comment.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/hint/show-hint.js"></script>
-    <script src="https://codemirror.net/addon/hint/anyword-hint.js" id=anyword></script>
+    <script src="https://pagecdn.io/lib/ace/1.4.13/ace.js" type="text/javascript" charset="utf-8"></script>
 
 </head>
 
@@ -61,9 +36,7 @@
         Python highlight:
         <input id="is_python" type="checkbox" checked=true onchange="toggle_highlight(this)"></checkbox>
     </div>
-    <div id="my-div">
-    </div>
-
+    <div id="editor"></div>
     <script type="text/javascript" src="tab_code.js">
     </script>
 </body>

@@ -1,5 +1,30 @@
+/**
+ * Ace Related ***************************************************************************
+ */
 
-document.title = 'CPy IDE new tab'
+var editor = ace.edit("editor");
+editor.setTheme("ace/theme/monokai");
+editor.session.setMode("ace/mode/python");
+editor.session.setTabSize(4);
+editor.session.setUseSoftTabs(true);
+editor.session.setUseWrapMode(true);
+
+function toggle_highlight(elem) {
+    if(elem.checked){
+        editor.session.setMode("ace/mode/python");
+    } else {
+        editor.session.setMode("ace/mode/text");
+    }
+}
+
+editor.commands.addCommand({
+    name: 'myCommand',
+    bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
+    exec: function(editor) {
+        save_and_run(editor);
+    },
+});
+
 /**
  * File related functions *********************************************************
  */
@@ -7,22 +32,18 @@ document.title = 'CPy IDE new tab'
 let fileHandle;
 var butOpenFile = document.getElementById("inputfile")
 butOpenFile.addEventListener('click', async () => {
-    try {
-        [fileHandle] = await window.showOpenFilePicker();
-        const file = await fileHandle.getFile();
-        const contents = await file.text();
-        editor.setValue(contents);
-        document.getElementById('filename').innerHTML = fileHandle.name;
-        document.title = fileHandle.name
-        if(fileHandle.name.endsWith('.py') | fileHandle.name.endsWith('.PY')){
-            is_python.checked = true;
-        } else {
-            is_python.checked = false;
-        }
-        toggle_highlight(is_python)
-    } catch {
-        show_alert()
+    [fileHandle] = await window.showOpenFilePicker();
+    const file = await fileHandle.getFile();
+    const contents = await file.text();
+    editor.setValue(contents);
+    document.getElementById('filename').innerHTML = fileHandle.name;
+    document.title = fileHandle.name
+    if (fileHandle.name.endsWith('.py') | fileHandle.name.endsWith('.PY')) {
+        is_python.checked = true;
+    } else {
+        is_python.checked = false;
     }
+    toggle_highlight(is_python)
 });
 
 async function writeFile(fileHandle, contents) {
@@ -34,8 +55,8 @@ async function writeFile(fileHandle, contents) {
     await writable.close();
 }
 
-function save_and_run(cm) {
-    writeFile(fileHandle, cm.getValue());
+function save_and_run() {
+    writeFile(fileHandle, editor.getValue());
 }
 
 function download(data, filename, type) {
@@ -59,64 +80,9 @@ function download(data, filename, type) {
 }
 
 function save_code() {
-    try{
+    try {
         download(editor.getValue(), fileHandle.name, 'text')
-    }catch{
+    } catch {
         download(editor.getValue(), 'main.py', 'text')
-    }
-}
-
-/**
- * Code mirrow Related ***************************************************************************
- */
-
-var editor_info = '"""\n' +
-    'Open and edit an existing file in this tab.\n\n' +
-    '--- Editor Keyboard Shortcuts ---\n\n' +
-    '[Ctrl-S]: Save the file\n' +
-    '[Ctrl-Space]: auto completion\n' +
-    '"""\n\n'
-
-CodeMirror.commands.autocomplete = function (cm) {
-    cm.showHint({ hint: CodeMirror.hint.any });
-    cm.showHint({ hint: CodeMirror.hint.anyword });
-}
-
-var editor = CodeMirror(document.querySelector('#my-div'), {
-    lineNumbers: true,
-    value: editor_info,
-    tabSize: 4,
-    indentUnit: 4,
-    mode: 'python',
-    theme: 'monokai',
-    extraKeys: {
-        Tab: betterTab,
-        "Ctrl-Space": "autocomplete"
-    },
-    lineWrapping: true,
-});
-editor.setSize(width = '100%', height = '100%')
-
-// https://stackoverflow.com/a/25104834/7037749
-editor.addKeyMap({
-    "Ctrl-S": save_and_run,
-    "Ctrl-/": 'toggleComment',
-});
-
-function betterTab(cm) {
-    // https://github.com/codemirror/CodeMirror/issues/988#issuecomment-14921785
-    if (cm.somethingSelected()) {
-        cm.indentSelection("add");
-    } else {
-        cm.replaceSelection(cm.getOption("indentWithTabs") ? "\t" :
-            Array(cm.getOption("tabSize") + 1).join(" "), "end", "+input");
-    }
-}
-
-function toggle_highlight(elem) {
-    if(elem.checked){
-        editor.setOption("mode", 'python')
-    } else {
-        editor.setOption("mode", 'text')
     }
 }
