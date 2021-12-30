@@ -83,6 +83,6 @@ function save_code() {
     try {
         download(editor.getValue(), fileHandle.name, 'text')
     } catch {
-        download(editor.getValue(), 'main.py', 'text')
+        download(editor.getValue(), 'code.py', 'text')
     }
 }
