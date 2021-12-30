@@ -1,13 +1,23 @@
 /**
  * Ace Related ***************************************************************************
+ * https://ace.c9.io/demo/keyboard_shortcuts.html
  */
 
+
+ace.require("ace/ext/language_tools");
 var editor = ace.edit("editor");
 editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/python");
 editor.session.setTabSize(4);
 editor.session.setUseSoftTabs(true);
 editor.session.setUseWrapMode(true);
+
+// auto completion
+// https://stackoverflow.com/a/19730470/7037749
+editor.setOptions({
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true
+});
 
 function toggle_highlight(elem) {
     if(elem.checked){
