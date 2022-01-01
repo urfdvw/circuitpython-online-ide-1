@@ -201,8 +201,7 @@
 
         var chromeOS = /(CrOS)/.test(navigator.userAgent);
         if (chromeOS) {
-            minor_key = 'Shift-Ctrl';
-            editor_info += '[' + minor_key + '-Up] 与 [' + minor_key + '-Down] 命令窗中回溯历史记录\n\n'
+            editor_info += '[' + minor_key + '-,] 与 [' + minor_key + '-.] 命令窗中回溯历史记录\n\n'
         } else {
             editor_info += '[' + minor_key + '-Up] 与 [' + minor_key + '-Down] 命令窗中回溯历史记录\n\n'
         }

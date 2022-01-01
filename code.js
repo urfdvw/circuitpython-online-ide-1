@@ -357,8 +357,8 @@ var chromeOS = /(CrOS)/.test(navigator.userAgent);
 var hist_up_key = '';
 var hist_down_key = '';
 if (chromeOS) {
-    hist_up_key = 'Shift-Ctrl-Up';
-    hist_down_key = 'Shift-Ctrl-Down';
+    hist_up_key = 'Alt-,';
+    hist_down_key = 'Alt-.';
 } else {
     hist_up_key = 'Alt-Up';
     hist_down_key = 'Alt-Down';

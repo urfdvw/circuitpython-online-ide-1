@@ -212,8 +212,7 @@ and the x-axis on the figure is going to be the index.">
 
         var chromeOS = /(CrOS)/.test(navigator.userAgent);
         if (chromeOS) {
-            minor_key = 'Shift-Ctrl';
-            editor_info += '[' + minor_key + '-Up] and [' + minor_key + '-Down] RECALL Command Window history\n\n'
+            editor_info += '[' + minor_key + '-,] and [' + minor_key + '-.] RECALL Command Window history\n\n'
         } else {
             editor_info += '[' + minor_key + '-Up] and [' + minor_key + '-Down] RECALL Command Window history\n\n'
         }
