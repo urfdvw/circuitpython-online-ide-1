@@ -11,7 +11,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 - Runs on any device with the Chrome browser, including Chromebooks, or Chromium based browsers such as MS Edge
 - Serial Console for communication and Read-Evaluate-Print loop (REPL)
 - Serial data plotter
-- Code editor with CircuitPython highlighting
+- Code editor with Python highlighting
 - Editor's REPL mode shortcuts
 - History command recall
 - Auto completion

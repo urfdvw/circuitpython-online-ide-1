@@ -34,30 +34,38 @@
             border: 1px solid grey;
         }
 
+        #editor {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: calc(100vh - 20px - 50px - 40px - 20px);
+        }
+
+        #serial {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 100%;
+        }
+
+        #command {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 100%;
+        }
+
         .tail {
             height: 20px;
         }
     </style>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
-    </link>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css">
-    </link>
-    <link rel="stylesheet" href="https://codemirror.net/addon/hint/show-hint.css">
-    <link rel="stylesheet" href="https://codemirror.net/addon/dialog/dialog.css">
-    <link rel="stylesheet" href="https://codemirror.net/addon/search/matchesonscrollbar.css">
-    <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
-    <script type="text/javascript" src="python.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/comment/comment.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/hint/show-hint.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/search/searchcursor.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/dialog/dialog.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/search/search.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/scroll/annotatescrollbar.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/search/jump-to-line.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/search/matchesonscrollbar.js"></script>
-    <script src="https://codemirror.net/addon/hint/anyword-hint.js" id=anyword></script>
+
+    <script src="https://pagecdn.io/lib/ace/1.4.13/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://pagecdn.io/lib/ace/1.4.13/ext-language_tools.js"></script>
     <script src='https://cdn.plot.ly/plotly-2.4.2.min.js'></script>
 </head>
 
@@ -121,14 +129,17 @@
     </div>
     <div class="row">
         <div class="column content">
-            <div id="my_div">
+            <div id="editor">
             </div>
         </div>
         <div class="column content" style='overflow-y: scroll'>
             <div id='out_frame'>
-                <div id="serial_R"></div>
+                <div id="serial_R">
+                    <div id="serial"></div>
+                </div>
                 <div id="plot" style="display:none"></div>
                 <div id="serial_T" style="border: 1px solid grey; position:relative">
+                    <div id="command"></div>
                     <span title="将指令发送到单片机">
                         <button onclick="run_command(command);"
                             style="position: absolute; bottom: 0; right: 0; z-index: 10">
@@ -159,6 +170,8 @@
         </span>
     </div>
 
+    <script type="text/javascript" src="code_basic.js">
+    </script>
     <script type="text/javascript" src="code.js">
     </script>
 
@@ -176,8 +189,9 @@
             '这个开发环境支持 Chrome 浏览器或者 Chromium 内核的浏览器，比如微软的 Edge。\n\n' +
             '在做任何操作以前，请先联接单片机。\n\n' +
             '--- 编辑器快捷键 ---\n' +
-            '[' + major_key + '-S]: [保存并执行]\n' +
-            '[Ctrl-Space]: 自动补全\n\n' +
+            '通用快捷键请见\n' +
+            'https://ace.c9.io/demo/keyboard_shortcuts.html\n\n' +
+            '[' + major_key + '-S]: [保存并执行]\n\n' +
             'REPL 模式下特有的快捷键:\n' +
             '[' + major_key + '-Enter] 运行当前的 Cell\n' +
             '    Cell 是以 `#%%` 开头的多行代码\n' +
@@ -194,7 +208,7 @@
                 '[Ctrl-Shift-D] 发送 "ctrl-d" 信号到单片机\n'
         }
         editor_info += '"""\nimport board\n'
-        editor.setValue(editor_info);
+        editor.setValue(editor_info, 1);
 
 
         var serial_info = '<<< 串口控制台帮助 >>>\n\n' +
@@ -214,7 +228,7 @@
             '[Shift-Enter] 换行\n' +
             '点击右下角的按钮可以切换`换行`和`发送命令`的快捷键\n\n' +
             '\n*******************************************\n'
-        serial.setValue(serial_info);
+        serial.setValue(serial_info, 1);
         serial_value_text = serial_info;
 
         var connected_info = "已连接";

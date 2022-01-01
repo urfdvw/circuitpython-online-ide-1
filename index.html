@@ -34,30 +34,37 @@
             border: 1px solid grey;
         }
 
+        #editor {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: calc(100vh - 20px - 50px - 40px - 20px);
+        }
+        
+        #serial {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 100%;
+        }
+
+        #command {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 100%;
+        }
+
         .tail {
             height: 20px;
         }
     </style>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css">
-    </link>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css">
-    </link>
-    <link rel="stylesheet" href="https://codemirror.net/addon/hint/show-hint.css">
-    <link rel="stylesheet" href="https://codemirror.net/addon/dialog/dialog.css">
-    <link rel="stylesheet" href="https://codemirror.net/addon/search/matchesonscrollbar.css">
-    <script type="text/javascript"
-        src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"></script>
-    <script type="text/javascript" src="python.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/comment/comment.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/hint/show-hint.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/search/searchcursor.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/dialog/dialog.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/search/search.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/scroll/annotatescrollbar.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/search/jump-to-line.js"></script>
-    <script type="text/javascript" src="https://codemirror.net/addon/search/matchesonscrollbar.js"></script>
-    <script src="https://codemirror.net/addon/hint/anyword-hint.js" id=anyword></script>
+    
+    <script src="https://pagecdn.io/lib/ace/1.4.13/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://pagecdn.io/lib/ace/1.4.13/ext-language_tools.js"></script>
     <script src='https://cdn.plot.ly/plotly-2.4.2.min.js'></script>
 </head>
 
@@ -121,14 +128,17 @@ and the x-axis on the figure is going to be the index.">
     </div>
     <div class="row">
         <div class="column content">
-            <div id="my_div">
+            <div id="editor">
             </div>
         </div>
         <div class="column content" style='overflow-y: scroll'>
             <div id='out_frame'>
-                <div id="serial_R"></div>
+                <div id="serial_R">
+                    <div id="serial"></div>
+                </div>
                 <div id="plot" style="display:none"></div>
                 <div id="serial_T" style="border: 1px solid grey; position:relative">
+                    <div id="command"></div>
                     <span title="Send command(s) to the microcontroller.">
                         <button onclick="run_command(command);"
                             style="position: absolute; bottom: 0; right: 0; z-index: 10">
@@ -169,6 +179,8 @@ and the x-axis on the figure is going to be the index.">
         </span>
     </div>
 
+    <script type="text/javascript" src="code_basic.js">
+    </script>
     <script type="text/javascript" src="code.js">
     </script>
 
@@ -186,8 +198,9 @@ and the x-axis on the figure is going to be the index.">
             'This IDE supports Chrome or Chromium-based browsers such as MS Edge.\n\n' +
             'Please connect the board before any operation.\n\n' +
             '--- Editor Keyboard Shortcuts ---\n\n' +
-            '[' + major_key + '-S]: Save the file\n    This will trigger reset and run the saved Script\n' +
-            '[Ctrl-Space]: auto completion\n\n' +
+            'General Editor Shortcuts:\n' +
+            'https://ace.c9.io/demo/keyboard_shortcuts.html\n\n' +
+            '[' + major_key + '-S]: Save the file\n    This will trigger reset and run the saved Script\n\n' +
             'REPL Mode Specific:\n' +
             '[' + major_key + '-Enter] RUN the current Cell\n' +
             '    Cells are multiple lines of codes start with `#%%`\n' +
@@ -206,7 +219,7 @@ and the x-axis on the figure is going to be the index.">
                 '[Ctrl-Shift-D] Send "ctrl-d" signal to microcontroller\n'
         }
         editor_info += '"""\nimport board\n'
-        editor.setValue(editor_info);
+        editor.setValue(editor_info, 1);
 
         var serial_info = '<<< Serial console help >>>\n\n' +
             'Serial outputs are going to show below.\n' +
@@ -226,7 +239,7 @@ and the x-axis on the figure is going to be the index.">
             'The shortcut of send and newline can be\n' +
             'swapped by the button at the bottom.\n' +
             '\n*******************************************\n'
-        serial.setValue(serial_info);
+        serial.setValue(serial_info, 1);
         serial_value_text = serial_info;
 
         var connected_info = "connected";

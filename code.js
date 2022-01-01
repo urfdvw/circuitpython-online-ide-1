@@ -1,10 +1,4 @@
 /**
- * info ****************************************************************
- */
-
-// document.title = 'CPy IDE'
-
-/**
  * Serial driver *******************************************************
  */
 
@@ -82,7 +76,6 @@ async function readLoop() {
         const { value, done } = await reader.read();
         if (value) {
             serial_value_text += value;
-            get_dir_returns();
             // removed the carriage return, for some reason CircuitPython does not need it
             //log.innerHTML += value + '\n';
         }
@@ -176,75 +169,6 @@ function send_single_line(line) {
     }
 }
 
-/**
- * File related functions *********************************************************
- */
-
-let fileHandle;
-var butOpenFile = document.getElementById("inputfile")
-butOpenFile.addEventListener('click', async () => {
-    [fileHandle] = await window.showOpenFilePicker();
-    const file = await fileHandle.getFile();
-    const contents = await file.text();
-    editor.setValue(contents);
-    document.getElementById('filename').innerHTML = ': ' + fileHandle.name;
-    document.title = fileHandle.name
-});
-
-async function writeFile(fileHandle, contents) {
-    // Create a FileSystemWritableFileStream to write to.
-    const writable = await fileHandle.createWritable();
-    // Write the contents of the file to the stream.
-    await writable.write(contents);
-    // Close the file and write the contents to disk.
-    await writable.close();
-}
-
-async function save_and_run() {
-    var serial_out_len = serial_value_text.length;
-    await writeFile(fileHandle, editor.getValue());
-    console.log('file saved');
-    setTimeout(function () {
-        // wait for 1s, if nothing changed in the serial out, 
-        // then send command to force run the saved script
-        if (serial_out_len == serial_value_text.length) {
-            console.log('save did not trigger run, manually run instead');
-            sendCTRLC();
-            setTimeout(function () {
-                sendCTRLD();
-            }, 50);
-        }
-    }, 1500);
-}
-
-function download(data, filename, type) {
-    // Function to download data to a file
-    console.log(data)
-    var file = new Blob([data], { type: type });
-    if (window.navigator.msSaveOrOpenBlob) // IE10+
-        window.navigator.msSaveOrOpenBlob(file, filename);
-    else { // Others
-        var a = document.createElement("a"),
-            url = URL.createObjectURL(file);
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(function () {
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }, 0);
-    }
-}
-
-function save_code() {
-    try {
-        download(editor.getValue(), fileHandle.name, 'text')
-    } catch {
-        download(editor.getValue(), 'main.py', 'text')
-    }
-}
-
 function savelog() {
     // only works out side html
     download(
@@ -255,44 +179,197 @@ function savelog() {
 }
 
 /**
- * Code mirrow Related ***************************************************************************
+ * Ace related
  */
 
-CodeMirror.commands.autocomplete = function (cm) {
-    // cm.showHint({ hint: CodeMirror.hint.any });
-    cm.showHint({ hint: CodeMirror.hint.anyword });
+ace.require("ace/ext/language_tools");
+
+// serial console prints
+var serial = ace.edit("serial");
+serial.setOptions({
+    // https://stackoverflow.com/a/13579233/7037749
+    maxLines: Infinity
+});
+serial.setTheme("ace/theme/monokai");
+serial.setReadOnly(true);
+serial.session.setUseWrapMode(true);
+serial.renderer.setShowGutter(false);
+
+// serial console commands
+var command = ace.edit("command");
+command.setOptions({
+    maxLines: Infinity
+});
+command.container.style.lineHeight = 2
+command.renderer.updateFontSize()
+command.session.setMode("ace/mode/python")
+command.session.setUseWrapMode(true);
+
+command.commands.addCommand({
+    name: 'sendCTRLC',
+    bindKey: { win: 'Shift-Ctrl-C', mac: 'Ctrl-C' },
+    exec: function (command) {
+        console.log('sendCTRLC')
+        sendCTRLC(command);
+    },
+});
+
+command.commands.addCommand({
+    name: 'sendCTRLD',
+    bindKey: { win: 'Shift-Ctrl-D', mac: 'Ctrl-D' },
+    exec: function (command) {
+        console.log('sendCTRLD')
+        sendCTRLD(command);
+    },
+});
+
+command.commands.addCommand({
+    name: 'hist_up',
+    bindKey: { win: 'Up', mac: 'Up' },
+    exec: function (editor) {
+        console.log('hist_up')
+        hist_up(editor);
+    },
+});
+
+command.commands.addCommand({
+    name: 'hist_down',
+    bindKey: { win: 'Down', mac: 'Down' },
+    exec: function (editor) {
+        console.log('hist_down')
+        hist_down(editor);
+    },
+});
+
+// command newline and send
+var enter_to_send = true;
+function set_send_key() {
+    if (enter_to_send) {
+        command.commands.addCommand({
+            name: 'newlineAndIndent',
+            bindKey: { win: 'Shift-Enter', mac: 'Shift-Enter' },
+            exec: function (command) {
+                console.log('newlineAndIndent')
+                command.insert("\n");
+            },
+        });
+        command.commands.addCommand({
+            name: 'run_command',
+            bindKey: { win: 'Enter', mac: 'Enter' },
+            exec: function (command) {
+                console.log('run_command')
+                run_command(command);
+            },
+        });
+    } else {
+        command.commands.addCommand({
+            name: 'newlineAndIndent',
+            bindKey: { win: 'Enter', mac: 'Enter' },
+            exec: function (command) {
+                console.log('newlineAndIndent')
+                command.insert("\n");
+            },
+        });
+        command.commands.addCommand({
+            name: 'run_command',
+            bindKey: { win: 'Shift-Enter', mac: 'Shift-Enter' },
+            exec: function (command) {
+                console.log('run_command')
+                run_command(command);
+            },
+        });
+    }
+}
+set_send_key();
+
+function change_send_key() {
+    if (enter_to_send) {
+        document.getElementById('send_setting').innerHTML = shift_enter_to_send_info;
+        enter_to_send = false;
+    } else {
+        document.getElementById('send_setting').innerHTML = enter_to_send_info;
+        enter_to_send = true;
+    }
+    set_send_key();
 }
 
-var editor = CodeMirror(document.querySelector('#my_div'), {
-    lineNumbers: true,
-    value: "",
-    tabSize: 4,
-    indentUnit: 4,
-    mode: 'python',
-    theme: 'monokai',
-    extraKeys: {
-        Tab: betterTab,
-        "Ctrl-Space": "autocomplete",
-        "Cmd-Space": "autocomplete"
+// editor
+
+editor.commands.addCommand({
+    name: 'run_current',
+    bindKey: { win: 'Shift-Enter', mac: 'Shift-Enter' },
+    exec: function (editor) {
+        console.log('run_current')
+        run_current(editor);
     },
-    lineWrapping: true,
 });
-editor.setSize(width = '100%', height = my_div.parentNode.clientHeight)
 
-// auto resize
-new ResizeObserver(function () {
-    editor.setSize(width = '100%', height = my_div.parentNode.clientHeight)
-}).observe(my_div.parentNode)
-
-var serial = CodeMirror(document.querySelector('#serial_R'), {
-    lineNumbers: false,
-    value: "",
-    theme: 'monokai',
-    mode: 'text',
-    readOnly: true,
-    lineWrapping: true,
+editor.commands.addCommand({
+    name: 'run_cell',
+    bindKey: { win: 'Ctrl-Enter', mac: 'Cmd-Enter' },
+    exec: function (editor) {
+        console.log('run_cell')
+        run_cell(editor);
+    },
 });
-serial.setSize(width = '100%', height = '100%')
+
+editor.commands.addCommand({
+    name: 'run_current_and_del',
+    bindKey: { win: 'Alt-Enter', mac: 'Alt-Enter' },
+    exec: function (editor) {
+        console.log('run_current_and_del')
+        run_current_and_del(editor);
+    },
+});
+
+editor.commands.addCommand({
+    name: 'append_command_to_editor',
+    bindKey: { win: 'Shift-Alt-Enter', mac: 'Shift-Alt-Enter' },
+    exec: function (editor) {
+        console.log('append_command_to_editor')
+        append_command_to_editor(editor);
+    },
+});
+
+editor.commands.addCommand({
+    name: 'hist_up',
+    bindKey: { win: 'Alt-Up', mac: 'Alt-Up' },
+    exec: function (editor) {
+        console.log('hist_up')
+        hist_up(editor);
+    },
+});
+
+editor.commands.addCommand({
+    name: 'hist_down',
+    bindKey: { win: 'Alt-Down', mac: 'Alt-Down' },
+    exec: function (editor) {
+        console.log('hist_down')
+        hist_down(editor);
+    },
+});
+
+editor.commands.addCommand({
+    name: 'sendCTRLC',
+    bindKey: { win: 'Shift-Ctrl-C', mac: 'Ctrl-C' },
+    exec: function (editor) {
+        console.log('sendCTRLC')
+        sendCTRLC(editor);
+    },
+});
+
+editor.commands.addCommand({
+    name: 'sendCTRLD',
+    bindKey: { win: 'Shift-Ctrl-D', mac: 'Ctrl-D' },
+    exec: function (editor) {
+        console.log('sendCTRLD')
+        sendCTRLD(editor);
+    },
+});
+
+/**
+ * Serial Prints related
+ */
 
 var serial_disp_text = serial_value_text.slice(end = -10000);
 function serial_disp_loop() {
@@ -301,7 +378,8 @@ function serial_disp_loop() {
         var serial_disp_text_now = serial_value_text.slice(end = -10000);
         if (serial_disp_text_now != serial_disp_text) {
             serial_disp_text = serial_disp_text_now;
-            serial.setValue(serial_disp_text);
+            // https://stackoverflow.com/a/18629202/7037749
+            serial.setValue(serial_disp_text, 1);
             // if plot on, refresh plot
             if (document.getElementById("plot").style.display == "") {
                 plot_refresh();
@@ -312,83 +390,6 @@ function serial_disp_loop() {
 }
 serial_disp_loop();
 
-var command = CodeMirror(document.querySelector('#serial_T'), {
-    lineNumbers: true,
-    value: 'help()',
-    tabSize: 4,
-    indentUnit: 4,
-    mode: 'python',
-    extraKeys: { Tab: betterTab },
-    lineWrapping: true,
-});
-command.setSize(width = '100%', height = '100%')
-
-// https://stackoverflow.com/a/25104834/7037749
-// windows
-editor.addKeyMap({
-    "Shift-Enter": run_current,
-    "Ctrl-Enter": run_cell,
-    "Alt-Enter": run_current_and_del,
-    "Shift-Alt-Enter": append_command_to_editor,
-    "Alt-Up": hist_up,
-    "Alt-Down": hist_down,
-    "Ctrl-S": save_and_run,
-    "Ctrl-/": 'toggleComment',
-    "Shift-Ctrl-C": sendCTRLC,
-    "Shift-Ctrl-D": sendCTRLD,
-});
-command.addKeyMap({
-    "Shift-Enter": "newlineAndIndent",
-    "Enter": run_command,
-    "Up": hist_up,
-    "Down": hist_down,
-    "Shift-Ctrl-C": sendCTRLC,
-    "Shift-Ctrl-D": sendCTRLD,
-});
-
-if (navigator.userAgent.indexOf('Mac OS X') != -1) {
-    editor.addKeyMap({
-        "Shift-Enter": run_current,
-        "Cmd-Enter": run_cell,
-        "Cmd-S": save_and_run,
-        "Cmd-/": 'toggleComment',
-        "Ctrl-C": sendCTRLC,
-        "Ctrl-D": sendCTRLD,
-    });
-    command.addKeyMap({
-        "Ctrl-C": sendCTRLC,
-        "Ctrl-D": sendCTRLD,
-    });
-}
-
-var enter_to_send = true;
-function change_send_key() {
-    if (enter_to_send) {
-        command.addKeyMap({
-            "Enter": "newlineAndIndent",
-            "Shift-Enter": run_command,
-        });
-        document.getElementById('send_setting').innerHTML = shift_enter_to_send_info;
-        enter_to_send = false;
-    } else {
-        command.addKeyMap({
-            "Shift-Enter": "newlineAndIndent",
-            "Enter": run_command,
-        });
-        document.getElementById('send_setting').innerHTML = enter_to_send_info;
-        enter_to_send = true;
-    }
-}
-
-function betterTab(cm) {
-    // https://github.com/codemirror/CodeMirror/issues/988#issuecomment-14921785
-    if (cm.somethingSelected()) {
-        cm.indentSelection("add");
-    } else {
-        cm.replaceSelection(cm.getOption("indentWithTabs") ? "\t" :
-            Array(cm.getOption("tabSize") + 1).join(" "), "end", "+input");
-    }
-}
 
 function run_current_and_del() {
     run_current_raw(true);
@@ -399,57 +400,35 @@ function run_current() {
 }
 
 function run_current_raw(del) {
-    var selected = editor.getSelection()
+    var currline = editor.getSelectionRange().start.row;
+    var selected = editor.getSelectedText();
     if (selected) { // if any sellection
         send_multiple_lines(selected)
         if (del) {
-            command.setValue('')
-            editor.execCommand('deleteLine');
+            editor.insert('\n')
         }
     } else {
-        send_single_line(editor.getLine(editor.getCursor()["line"]))
+        var line_text = editor.session.getLine(currline);
+        send_single_line(line_text)
         if (del) {
-            command.setValue('')
-            editor.execCommand('deleteLine');
-        } else {
-            if (editor.lineCount() == editor.getCursor()["line"] + 1) { // if last line
-                editor.execCommand('newlineAndIndent');
-                editor.execCommand('indentLess');
-            } else {
-                editor.setCursor({
-                    line: editor.getCursor()["line"] + 1,
-                    ch: 0
-                })
-            }
+            editor.session.replace(new ace.Range(
+                currline, 0, currline + 1, -1
+            ), "\n");
         }
-
     }
+    editor.gotoLine(currline + 1, 0, true);
+    command.setValue('')
 }
 
-function run_all_lines() {
-    cmd = "import gc\n" +
-        "gc.enable()\n" +
-        "import sys\nsys.modules.clear()\n" +
-        "while globals():\n" +
-        "    del globals()[list(globals().keys())[0]]\n" +
-        "__name__ = '__main__'\n" +
-        "import gc\n" +
-        "gc.enable()\n" +
-        "gc.collect()\n" +
-        "from " +
-        fileHandle.name.split('.')[0] + " import *"
-    send_multiple_lines(cmd);
-    cmd_hist.pop();
-}
 
 function run_cell() {
-    var current_line = editor.getCursor().line;
+    var current_line = editor.getSelectionRange().start.row;
     var topline = current_line; // included
     while (true) {
         if (topline == 0) {
             break;
         }
-        if (editor.getLine(topline).startsWith('#%%')) {
+        if (editor.session.getLine(topline).startsWith('#%%')) {
             break;
         }
         topline -= 1;
@@ -457,12 +436,12 @@ function run_cell() {
     var bottonline = current_line; // not included
     while (true) {
         bottonline += 1
-        if (bottonline == editor.lineCount()) {
-            editor.setCursor({ line: editor.lineCount() });
+        if (bottonline == editor.session.getLength()) {
+            editor.gotoLine(editor.session.getLength(), 0, true);
             break;
         }
-        if (editor.getLine(bottonline).startsWith('#%%')) {
-            editor.setCursor({ line: bottonline });
+        if (editor.session.getLine(bottonline).startsWith('#%%')) {
+            editor.gotoLine(bottonline + 1, 0, true);
             break;
         }
     }
@@ -474,23 +453,15 @@ function run_cell() {
 }
 
 function append_command_to_editor() {
-    // https://stackoverflow.com/a/22610266/7037749
-    var doc = editor.getDoc();
-    var current_line = editor.getLine(editor.getCursor()["line"]);
-    if (current_line.length == 0){
-        doc.replaceRange(command.getValue(), editor.getCursor()); 
-    } else {
-        doc.replaceRange('\n' + command.getValue(), editor.getCursor());
-    }
+    editor.insert(command.getValue())
     command.setValue("")
 }
 
 function run_command() {
-    if (command.lineCount() == 1) {
-        var line = command.getLine(command.getCursor()["line"]);
+    var line = command.getValue().trim();
+    if (command.session.getLength() == 1) {
         send_single_line(line);
     } else {
-        var lines = command.getValue();
         send_multiple_lines(lines);
     }
     command.setValue("")
@@ -498,7 +469,7 @@ function run_command() {
 
 var temp_cmd = '';
 function hist_up() {
-    if (command.getCursor()["line"] == 0) {
+    if (command.getSelectionRange().start.row == 0) {
         if (cmd_ind == -1) {
             cmd_ind = cmd_hist.length - 1
             temp_cmd = command.getValue();
@@ -508,24 +479,32 @@ function hist_up() {
         if (cmd_ind < 0) {
             cmd_ind = 0
         }
-        command.setValue(cmd_hist[cmd_ind])
+        command.setValue(cmd_hist[cmd_ind], 1)
     } else {
-        command.setCursor({ "line": command.getCursor()["line"] - 1, "ch": command.getCursor()["ch"] })
+        command.gotoLine(
+            command.getSelectionRange().start.row,
+            command.getSelectionRange().start.column,
+            true,
+        )
     }
 }
 
 function hist_down() {
-    if (command.getCursor()["line"] == command.lineCount() - 1) {
+    if (command.getSelectionRange().start.row == command.session.getLength() - 1) {
         if (cmd_ind == -1) {
         } else if (cmd_ind == cmd_hist.length - 1) {
-            command.setValue(temp_cmd);
+            command.setValue(temp_cmd, -1);
             cmd_ind = -1;
         } else {
             cmd_ind += 1
-            command.setValue(cmd_hist[cmd_ind])
+            command.setValue(cmd_hist[cmd_ind], -1)
         }
     } else {
-        command.setCursor({ "line": command.getCursor()["line"] + 1, "ch": command.getCursor()["ch"] })
+        command.gotoLine(
+            command.getSelectionRange().start.row + 2,
+            command.getSelectionRange().start.column,
+            true,
+        )
     }
 }
 
@@ -549,9 +528,9 @@ function new_tab() {
     tablist.push(window.open('tab.html'))
 }
 
-/**
- * Plot
- */
+// /**
+//  * Plot
+//  */
 
 function text_to_data(text) {
     lines = text.split('\n');
@@ -610,7 +589,6 @@ function plot_refresh() {
                 data.push(curve);
             }
         }
-
     } catch { }
     var layout = {
         showlegend: true,
@@ -628,38 +606,7 @@ function plot_main() {
     }
     if (document.getElementById("plot").style.display == "none") {
         document.getElementById("plot").style.display = ""
-
         plot_refresh();
         return
     }
-}
-
-
-
-/**
- * Auto completion (Not yet used) ************************
- */
-
-var auto_com_words = null;
-function get_dir_returns() {
-    // if last command is dir()
-    auto_com_words = null;
-    var last = serial.getValue().split('\n>>> ');
-    last = last[last.length - 2]
-    if (last === undefined) {
-        return
-    }
-    if (last.startsWith('dir(')) {
-        // get dir result
-        last = last.split('[')
-        auto_com_words = last[last.length - 1].split(']')[0].split("'").join('').split(',')
-        auto_com_words = auto_com_words.map(function (item) {
-            return item.trim()
-        })
-        auto_com_words = auto_com_words.filter(function (item) {
-            return item.slice(0, 2) != '__'
-        })
-    }
-    // console.log(auto_com_words)
-    // return auto_com_words
 }

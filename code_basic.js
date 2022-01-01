@@ -45,15 +45,14 @@ butOpenFile.addEventListener('click', async () => {
     [fileHandle] = await window.showOpenFilePicker();
     const file = await fileHandle.getFile();
     const contents = await file.text();
-    editor.setValue(contents);
+    editor.setValue(contents, -1);
     document.getElementById('filename').innerHTML = fileHandle.name;
     document.title = fileHandle.name
     if (fileHandle.name.endsWith('.py') | fileHandle.name.endsWith('.PY')) {
-        is_python.checked = true;
+        editor.session.setMode("ace/mode/python");
     } else {
-        is_python.checked = false;
+        editor.session.setMode("ace/mode/text");
     }
-    toggle_highlight(is_python)
 });
 
 async function writeFile(fileHandle, contents) {
@@ -65,7 +64,7 @@ async function writeFile(fileHandle, contents) {
     await writable.close();
 }
 
-function save_and_run() {
+function save_and_run(editor) {
     writeFile(fileHandle, editor.getValue());
 }
 
