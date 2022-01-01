@@ -357,11 +357,11 @@ var chromeOS = /(CrOS)/.test(navigator.userAgent);
 var hist_up_key = '';
 var hist_down_key = '';
 if (chromeOS) {
-    hist_up_key = 'Alt-Up';
-    hist_down_key = 'Alt-Down';
-} else {
     hist_up_key = 'Shift-Ctrl-Up';
     hist_down_key = 'Shift-Ctrl-Down';
+} else {
+    hist_up_key = 'Alt-Up';
+    hist_down_key = 'Alt-Down';
 }
 
 editor.commands.addCommand({
