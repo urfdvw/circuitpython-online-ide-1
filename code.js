@@ -353,9 +353,20 @@ editor.commands.addCommand({
     },
 });
 
+var chromeOS = /(CrOS)/.test(navigator.userAgent);
+var hist_up_key = '';
+var hist_down_key = '';
+if (chromeOS) {
+    hist_up_key = 'Ctrl-Up';
+    hist_down_key = 'Ctrl-Down';
+} else {
+    hist_up_key = 'Alt-Up';
+    hist_down_key = 'Alt-Down';
+}
+
 editor.commands.addCommand({
     name: 'hist_up',
-    bindKey: { win: 'Alt-Up', mac: 'Alt-Up' },
+    bindKey: { win: hist_up_key, mac: 'Alt-Up' },
     exec: function (editor) {
         console.log('hist_up')
         hist_up(editor);
@@ -364,7 +375,7 @@ editor.commands.addCommand({
 
 editor.commands.addCommand({
     name: 'hist_down',
-    bindKey: { win: 'Alt-Down', mac: 'Alt-Down' },
+    bindKey: { win: hist_down_key, mac: 'Alt-Down' },
     exec: function (editor) {
         console.log('hist_down')
         hist_down(editor);

@@ -208,8 +208,14 @@ and the x-axis on the figure is going to be the index.">
             '    or selected lines of code\n' +
             '[' + minor_key + '-Enter] RUN and REMOVED the current line of code\n' +
             '    or selected lines of code\n' +
-            '[' + minor_key + '-Up] and [' + minor_key + '-Down] RECALL Command Window history\n' +
-            '[' + minor_key + '-Shift-Enter] GRAB Command Window content to Editor\n\n' +
+            '[' + minor_key + '-Shift-Enter] GRAB Command Window content to Editor\n'
+            
+            var chromeOS = /(CrOS)/.test(navigator.userAgent);
+            if (chromeOS) {
+                minor_key = 'Ctrl'
+            }
+
+            editor_info += '[' + minor_key + '-Up] and [' + minor_key + '-Down] RECALL Command Window history\n\n' +
             'System Related:\n';
         if (navigator.userAgent.indexOf('Mac OS X') != -1) { // if mac
             editor_info += '[Ctrl-C] Send "ctrl-c" signal to microcontroller\n' +
