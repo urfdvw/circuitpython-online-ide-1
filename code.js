@@ -1,4 +1,26 @@
 /**
+ * file relared
+ */
+
+async function save_and_run() {
+    // over ride
+    var serial_out_len = serial_value_text.length;
+    await writeFile(fileHandle, editor.getValue());
+    console.log('file saved');
+    setTimeout(function () {
+        // wait for 1s, if nothing changed in the serial out, 
+        // then send command to force run the saved script
+        if (serial_out_len == serial_value_text.length) {
+            console.log('save did not trigger run, manually run instead');
+            sendCTRLC();
+            setTimeout(function () {
+                sendCTRLD();
+            }, 50);
+        }
+    }, 1500);
+}
+
+/**
  * Serial driver *******************************************************
  */
 
