@@ -525,7 +525,7 @@ function run_command() {
     if (command.session.getLength() == 1) {
         send_single_line(line);
     } else {
-        send_multiple_lines(lines);
+        send_multiple_lines(line);
     }
     command.setValue("")
 }
