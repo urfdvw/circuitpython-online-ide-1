@@ -226,6 +226,15 @@ command.container.style.lineHeight = 2
 command.renderer.updateFontSize()
 command.session.setMode("ace/mode/python")
 command.session.setUseWrapMode(true);
+command.session.setTabSize(4);
+command.session.setUseSoftTabs(true);
+
+// auto completion
+// https://stackoverflow.com/a/19730470/7037749
+command.setOptions({
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true
+});
 
 command.commands.addCommand({
     name: 'sendCTRLC',
