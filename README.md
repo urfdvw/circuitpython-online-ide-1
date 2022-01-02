@@ -23,7 +23,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 
 *This guide assumes that CircuitPython is already installed. About how to install CircuitPython to supported devices, please check [CircuitPython Website](https://circuitpython.org/downloads).*
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/Z44PD-ZleAU/0.jpg)](https://www.youtube.com/watch?v=Z44PD-ZleAU)
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/QL8hLER7wAg/0.jpg)](https://www.youtube.com/watch?v=QL8hLER7wAg)
 [](https://stackoverflow.com/a/16079387/7037749)
 This video is already dated. Many new features have been added there ever since that video. For the latest updates about this IDE, please follow the youtube channel called ***CircuitPythonic*** here: https://youtube.com/playlist?list=PLlxgbFPR1ZNTaQ8KqnEwyLay1SagBHW1H
 
