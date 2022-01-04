@@ -486,10 +486,12 @@ function run_current_raw(del) {
             editor.session.replace(new ace.Range(
                 currline, 0, currline + 1, -1
             ), "\n");
+        } else {
+            editor.gotoLine(currline + 1, -1, true);
+            editor.insert('\n')
         }
+        command.setValue('')
     }
-    editor.gotoLine(currline + 1, 0, true);
-    command.setValue('')
 }
 
 
