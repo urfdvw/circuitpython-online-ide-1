@@ -487,7 +487,9 @@ function run_current_raw(del) {
                 currline, 0, currline + 1, -1
             ), "\n");
         } else {
-            editor.gotoLine(currline + 1, -1, true);
+            editor.gotoLine(currline + 1,
+                editor.session.getLine(currline).length,
+                true);
             editor.insert('\n')
         }
         command.setValue('')
