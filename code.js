@@ -477,7 +477,7 @@ function run_current_raw(del) {
     if (selected) { // if any sellection
         send_multiple_lines(selected)
         if (del) {
-            editor.insert('\n')
+            editor.insert('')
         }
     } else {
         var line_text = editor.session.getLine(currline);
@@ -490,10 +490,16 @@ function run_current_raw(del) {
                 editor.session.getLine(currline).length,
                 true);
         } else {
-            editor.gotoLine(currline + 1,
-                editor.session.getLine(currline).length,
-                true);
-            editor.insert('\n')
+            if (currline == editor.session.getLength() - 1) {
+                editor.gotoLine(currline + 1,
+                    editor.session.getLine(currline).length,
+                    true);
+                editor.insert('\n')
+            } else {
+                editor.gotoLine(currline + 2,
+                    editor.session.getLine(currline + 1).length,
+                    true);
+            }
         }
         command.setValue('')
     }
