@@ -485,7 +485,7 @@ function run_current_raw(del) {
         if (del) {
             editor.session.replace(new ace.Range(
                 currline, 0, currline + 1, -1
-            ), "\n");
+            ), "");
         } else {
             editor.gotoLine(currline + 1,
                 editor.session.getLine(currline).length,
