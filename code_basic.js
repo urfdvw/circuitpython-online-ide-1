@@ -35,6 +35,28 @@ editor.commands.addCommand({
     },
 });
 
+editor.commands.addCommand({
+    name: 'MyOutdent',
+    bindKey: { win: 'Ctrl-[', mac: 'Cmd-[' },
+    exec: function (editor) {
+        console.log('MyOutdent')
+        editor.blockOutdent();
+    },
+    multiSelectAction: "forEach",
+    scrollIntoView: "selectionPart"
+});
+
+editor.commands.addCommand({
+    name: 'MyIntdent',
+    bindKey: { win: 'Ctrl-]', mac: 'Cmd-]' },
+    exec: function (editor) {
+        console.log('MyIntdent')
+        editor.blockIndent();
+    },
+    multiSelectAction: "forEach",
+    scrollIntoView: "selectionPart"
+});
+
 /**
  * File related functions *********************************************************
  */
