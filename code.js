@@ -233,7 +233,7 @@ command.session.setUseSoftTabs(true);
 // https://stackoverflow.com/a/19730470/7037749
 command.setOptions({
     enableBasicAutocompletion: true,
-    enableLiveAutocompletion: true
+    enableLiveAutocompletion: false,
 });
 
 command.commands.addCommand({
