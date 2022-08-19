@@ -64,8 +64,8 @@
     </style>
 
 
-    <script src="https://pagecdn.io/lib/ace/1.4.13/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://pagecdn.io/lib/ace/1.4.13/ext-language_tools.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ext-language_tools.js"></script>
     <script src='https://cdn.plot.ly/plotly-2.4.2.min.js'></script>
 </head>
 
@@ -88,7 +88,7 @@
             <span title="打开一个代码文件。一般是 `code.py` o或者 `main.py`。">
                 <button id="inputfile"> 打开 </button>
             </span>
-            <span title="将修改过的内容保存到打开的文件。 
+            <span title="将修改过的内容保存到打开的文件。
 这会触发单片机的软重启（soft rebot）并立即执行保存的代码。">
                 <button id="save" onClick='save_and_run(editor)'> 保存并执行 </button>
             </span>
