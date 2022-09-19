@@ -109,6 +109,32 @@ async function readLoop() {
     }
 }
 
+// serial state observer
+
+new ResizeObserver(function () {
+    var repl_indicator = serial_value_text.lastIndexOf('\n>>>');
+    var script_indicator = Math.max(
+        serial_value_text.lastIndexOf('code.py output:'),
+        serial_value_text.lastIndexOf('main.py output:'),
+    )
+    var wait_indicator = serial_value_text.lastIndexOf('Press any key to enter the REPL. Use CTRL-D to reload.')
+    var latest_indicator = Math.max(
+        repl_indicator,
+        script_indicator,
+        wait_indicator
+    )
+
+    if (latest_indicator == latest_indicator) {
+        document.getElementById('serial_state').innerHTML = 'REPL';
+    }
+    if (script_indicator == latest_indicator) {
+        document.getElementById('serial_state').innerHTML = 'Script';
+    }
+    if (wait_indicator == latest_indicator) {
+        document.getElementById('serial_state').innerHTML = 'Waiting';
+    }
+}).observe(out_frame)
+
 // auto scroll 
 new ResizeObserver(function () {
     out_frame.parentNode.scrollTop = out_frame.parentNode.scrollHeight;
