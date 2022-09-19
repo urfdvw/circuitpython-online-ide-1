@@ -57,6 +57,11 @@ editor.commands.addCommand({
     scrollIntoView: "selectionPart"
 });
 
+editor.getSession().on('change', function() {
+    file_diff = true;
+    set_tab_name();
+});
+
 /**
  * File related functions *********************************************************
  */
@@ -68,14 +73,24 @@ butOpenFile.addEventListener('click', async () => {
     const file = await fileHandle.getFile();
     const contents = await file.text();
     editor.setValue(contents, -1);
-    document.getElementById('filename').innerHTML = fileHandle.name;
-    document.title = fileHandle.name
+    file_diff = false;
+    set_tab_name();
     if (fileHandle.name.endsWith('.py') | fileHandle.name.endsWith('.PY')) {
         editor.session.setMode("ace/mode/python");
     } else {
         editor.session.setMode("ace/mode/text");
     }
 });
+
+function set_tab_name() {
+    var name = '';
+    if (file_diff) { 
+        name += '* ';
+    }
+    name += fileHandle.name;
+    document.getElementById('filename').innerHTML = name;
+    document.title = name
+}
 
 async function writeFile(fileHandle, contents) {
     // Create a FileSystemWritableFileStream to write to.
@@ -86,8 +101,10 @@ async function writeFile(fileHandle, contents) {
     await writable.close();
 }
 
-function save_and_run(editor) {
-    writeFile(fileHandle, editor.getValue());
+async function save_and_run(editor) {
+    await writeFile(fileHandle, editor.getValue());
+    file_diff = false;
+    set_tab_name();
 }
 
 function download(data, filename, type) {
@@ -117,3 +134,5 @@ function save_code() {
         download(editor.getValue(), 'code.py', 'text')
     }
 }
+
+var file_diff = false;
