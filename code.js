@@ -18,6 +18,9 @@ async function save_and_run() {
             }, 50);
         }
     }, 1500);
+
+    file_diff = false;
+    set_tab_name();
 }
 
 /**

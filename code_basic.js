@@ -59,7 +59,11 @@ editor.commands.addCommand({
 
 editor.getSession().on('change', function() {
     file_diff = true;
-    set_tab_name();
+    try {
+        set_tab_name();
+    } catch {
+        console.log('set_tab_name failed');
+    }
 });
 
 /**
