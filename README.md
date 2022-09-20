@@ -3,20 +3,21 @@ Open the IDE: https://urfdvw.github.io/CircuitPython-online-IDE/
 
 ## Why
 The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be helpful for
-- anyone that wants to start a project quickly
+- anyone that wants to start/work on a project quickly
 - people who are working on public computers
-- remote education where teachers don't expect students to install anything by themselves
+- teachers don't expect students to install anything by themselves
 
 ## Features
 - Runs on any device with the Chrome browser, including Chromebooks, or Chromium based browsers such as MS Edge
 - Serial Console for communication and Read-Evaluate-Print loop (REPL)
 - Serial data plotter
 - Code editor with Python highlighting
-- Editor's REPL mode shortcuts
+- Editor's REPL mode keepboard shortcuts
 - History command recall
 - Auto completion
 - Auto change shortcuts in MacOS
 - Multiple file tabs
+- change unsaved indicator
 - 中文界面
 
 ## Workflow (a.k.a. How to use)
@@ -41,7 +42,7 @@ Or follow Twitter account [***River Wang***](https://twitter.com/River___Wang)
     - This file can be downloaded from our IDE by click on `Save as`
 - **Open the [CircuitPython online IDE](https://urfdvw.github.io/CircuitPython-online-IDE/). Then connect your CircuitPython supported board by click the `Connect` button**
 
-### Script Script mode
+### Script mode
 - Once plugin the CircuitPython supported board, the initial mode is 'Script mode' which will run the saved script file `code.py` or `main.py`.
 - To switch back to 'Script mode' from 'REPL' mode, Click on the `CTRL-D` button on the UI, whitch sends the `0x04` signal to the board. 
 - Click on the `Open` button on the UI to open the code file on the CircuitPython supported board.
@@ -131,7 +132,6 @@ System Related:
     - The shortcut of send and newline can be swapped by the button at the bottom.
 
 ## Planned Features
-- change unsaved indicator
 - 中文帮助
 
 ## References
