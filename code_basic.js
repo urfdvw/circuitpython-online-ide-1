@@ -76,7 +76,7 @@ butOpenFile.addEventListener('click', async () => {
     [fileHandle] = await window.showOpenFilePicker();
     const file = await fileHandle.getFile();
     const contents = await file.text();
-    editor.setValue(contents, -1);
+    editor.session.setValue(contents);
     file_diff = false;
     set_tab_name();
     if (fileHandle.name.endsWith('.py') | fileHandle.name.endsWith('.PY')) {
