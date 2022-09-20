@@ -43,9 +43,6 @@ async function connect() {
     // - Wait for the port to open.
     await port.open({ baudRate: 115200 });
 
-    // if connected, change the button name
-    document.getElementById("connect").innerHTML = connected_info;
-
     // setup the output stream.
     const encoder = new TextEncoderStream();
     outputDone = encoder.readable.pipeTo(port.writable);
@@ -61,8 +58,6 @@ async function connect() {
 }
 
 async function disconnect() {
-    // not used actually
-
     // Close the input stream (reader).
     if (reader) {
         await reader.cancel();
@@ -87,11 +82,14 @@ async function disconnect() {
 async function clickConnect() {
     // if connected, ignore the button action
     if (port) {
-        return;
+        await disconnect();
+        // if connected, change the button name
+        document.getElementById("connect").innerHTML = connect_info;
+    } else {
+        await connect();
+        // if connected, change the button name
+        document.getElementById("connect").innerHTML = connected_info;
     }
-
-    // CODELAB: Add connect code here.
-    await connect();
 }
 
 var serial_value_text = "";
