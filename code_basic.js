@@ -140,3 +140,12 @@ function save_code() {
 }
 
 var file_diff = false;
+
+window.addEventListener("beforeunload", function (e) {
+    // https://stackoverflow.com/a/7317311/7037749
+    var confirmationMessage = 'It looks like you have been editing something. '
+                            + 'If you leave before saving, your changes will be lost.';
+
+    (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+    return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+});
