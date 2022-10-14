@@ -61,6 +61,20 @@
         .tail {
             height: 20px;
         }
+
+        #workflow {
+            background: rgb(255, 255, 255);
+            color: black;
+            opacity: 0.9;
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: '';
+            text-align: center
+        }
     </style>
 
     <script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -68,7 +82,18 @@
     <script src='src/plotly-2.4.2.min.js'></script>
 </head>
 
-<body>
+<body>    
+    <div id="workflow">
+        <h1>CircuitPython Online IDE</h1>
+        <p>Select a version to continue.</p>
+        <button onclick="window.open('https://urfdvw.github.io/cpy-ol-ide-tests/#')">
+            <h2>Try the New Version</h2>
+        </button>
+        <br>
+        <button onClick='this.parentElement.style.display = "none"'>
+            <h4>Stay at the Current Version</h4>
+        </button>
+        <p>Spoiler: The new version is nicer and more powerful!</p>
     </div>
     <div class="row">
         <div class="column head">
