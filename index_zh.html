@@ -64,9 +64,9 @@
     </style>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ext-language_tools.js"></script>
-    <script src='https://cdn.plot.ly/plotly-2.4.2.min.js'></script>
+    <script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="src/ext-language_tools.js"></script>
+    <script src='src/plotly-2.4.2.min.js'></script>
 </head>
 
 <body>
@@ -125,6 +125,8 @@
             <span title="通过串口给单片机发送 `Ctrl-D` 信号。">
                 <button onclick="sendCTRLD()">CTRL-D</button>
             </span>
+            <code>mode: </code>
+            <code id="serial_state">state</code>
         </div>
     </div>
     <div class="row">
