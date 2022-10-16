@@ -51,7 +51,7 @@ async function open_folder(){
 }
 
 /*
-* main vs code
+* look for code.py
 */
 
 async function code_py(directoryHandle){
@@ -59,17 +59,9 @@ async function code_py(directoryHandle){
         var code_file = await directoryHandle.getFileHandle('code.py');
         console.log('code.py found')
     } catch {
-        try {
-            var main_file = await directoryHandle.getFileHandle('main.py');
-            var code_file = await directoryHandle.getFileHandle('code.py', { create: true });
-            const contents = await read_file_content(main_file);
-            await write_file(code_file, contents);
-            alert('main.py copied to code.py, please remove main.py manually.');
-        } catch {
-            var code_file = await directoryHandle.getFileHandle('code.py', { create: true });
-            await write_file(code_file, 'import board');
-            console.log('code.py created')
-        }
+        var code_file = await directoryHandle.getFileHandle('code.py', { create: true });
+        await write_file(code_file, 'import board');
+        console.log('code.py created')
     }
     return code_file;
 }
@@ -213,14 +205,10 @@ async function construct_tree(directoryHandle){
                 // skip hidden files
                 continue
             }
-            if (entry.name == 'main.py') {
-                // skip main.py
-                continue
-            }
-            if (entry.name == 'System Volume Information') {
-                // skip System Volume Information folder
-                continue
-            }
+            // if (entry.name == 'System Volume Information') {
+            //     // skip System Volume Information folder
+            //     continue
+            // }
             var file_node = new TreeNode(entry.name);
             dir_node.addChild(file_node);
             // console.log(dir.name, '>', entry.name);
