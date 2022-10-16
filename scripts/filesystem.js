@@ -92,6 +92,9 @@ async function new_file(dir_handle) {
         return
     }
     const name = prompt("Please enter a file name including the extension");
+    if (name === null || name === '') {
+        return
+    }
     try {
         await dir_handle.getFileHandle(name);
         alert(name + " already exists")
