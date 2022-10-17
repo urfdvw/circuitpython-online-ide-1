@@ -5,7 +5,7 @@
         content="A browser-based IDE for CircuitPython supported microcontrollers. No installation needed. Handy and powerful.">
     <meta name="keywords" content="CircuitPython, IDE, editor, education, DIY, Python, Serial">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-    
+
     <link rel="stylesheet" href="style/workflow.css">
 
     <link rel="stylesheet" href="style/layoutbase.css">
@@ -13,6 +13,7 @@
     <!-- <link rel="stylesheet" href="style/layouttopbutton.css"> -->
 
     <link rel="stylesheet" href="style/nav.css">
+    <link rel="stylesheet" id="nav_drop" href="style/navhide.css">
     <script async defer src="src/buttons.js"></script>
 
     <link rel="stylesheet" href="style/setting.css">
@@ -20,7 +21,7 @@
     <script src="scripts/tree.js"></script>
     <link rel="stylesheet" href="style/treejs.css" id="treejs_styles">
 
-    
+
     <script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/ext-language_tools.js"></script>
 
@@ -33,34 +34,37 @@
         <h3><a href="https://learn.adafruit.com/welcome-to-circuitpython/installing-circuitpython" target="_blank">
                 Step 0. Install CircuitPython
         </a></h3>
-        
+
         <button onClick='connect();'>
             <h3>Step 1. Connect Microcontroller</h3>
         </button>
         <br>
-        
+
         <button onClick='open_folder();'>
             <h3>Step 2. Open CIRCUITPY dirctory</h3>
         </button>
         <br>
-        
+
         <button onClick='check_conditions();'>
             <h3>Step 3. Start Coding</h3>
         </button>
         <br>
-        
+
         <a href="old_versions/V0.1/index.html" target="_blank">
             Previous Version
         </a>
     </div>
     <div id="flex-container">
-        <div id="topbox">
+        <div id="topbox" onpointerleave="console.log('left nav'); document.getElementById('nav_drop').href = 'style/navhide.css'">
             <nav>
                 <ul>
                     <li><a class="neotext">
                         <b>CircuitPython Online IDE</b>
                     </a></li>
-                    <li><a href="#">File</a>
+                    <li>
+                        <a href="#" onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'">
+                            File
+                        </a>
                         <ul>
                             <!-- <li><a href="#" onclick="open_folder();">Open Folder</a></li> -->
                             <li><a href="#" onclick="save_and_run();">Save and Run</a></li>
@@ -70,7 +74,10 @@
                             <li><a href="#" onclick="reload_folder_view();">Reload Folder View</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Serial</a>
+                    <li>
+                        <a href="#" onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'" >
+                            Serial
+                        </a>
                         <ul>
                             <!-- <li><a id="connect" onClick='connect()' href="#">Connect serial</a></li> -->
                             <li><a href="#" onclick="sendCTRLC()">Send Ctrl C</a></li>
@@ -79,7 +86,10 @@
                             <li><a href="#" onClick="serial_value_text=''; serial.setValue('')">Clear Console</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Plot</a>
+                    <li>
+                        <a href="#" onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'" >
+                            Plot
+                        </a>
                         <ul>
                             <li><a id="plot_button" onclick="plot_main()" href="#">Show Plot</a></li>
                             <li>
@@ -89,7 +99,10 @@
                             <li><a href="#" onclick="load_plot_example();">Load Example</a></li>
                         </ul>
                     </li>
-                    <li><a href="#">Help</a>
+                    <li>
+                        <a href="#" onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'" >
+                            Help
+                        </a>
                         <ul>
                             <li><a href="#">How to Use</a></li>
                             <!-- https://www.freecodecamp.org/news/how-to-use-html-to-open-link-in-new-tab/ -->
@@ -164,7 +177,7 @@
     <div id="setting">
         <H1>Settings</H1>
         <p>
-            Nickname of board: 
+            Nickname of board:
             <input id="name_setting">
         </p>
         <p>
@@ -182,7 +195,7 @@
             </select>
         </p>
         <p>
-            Font Size: 
+            Font Size:
             <input id="font_setting" type="number">
             pt
         </p>

@@ -33,12 +33,6 @@
 #nav ul li:last-child,nav ul li:last-child{
     border-right:none
 }
-#nav ul li:hover ul,nav ul li:hover ul{
-    top:99%;
-    left:0;
-    display:block;
-    position:absolute
-}
 #nav ul li a,nav ul li a{
     text-decoration:none;
     display:inline-block;
