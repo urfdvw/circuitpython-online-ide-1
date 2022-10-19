@@ -205,10 +205,10 @@ async function construct_tree(directoryHandle){
                 // skip hidden files
                 continue
             }
-            // if (entry.name == 'System Volume Information') {
-            //     // skip System Volume Information folder
-            //     continue
-            // }
+            if (entry.name == 'System Volume Information') {
+                // skip System Volume Information folder
+                continue
+            }
             var file_node = new TreeNode(entry.name);
             dir_node.addChild(file_node);
             // console.log(dir.name, '>', entry.name);
