@@ -7,9 +7,8 @@
 }
 
 #editorbox {
-    /* width: calc((100vw - 200pt) / 2); */
     width: 50%;
-    resize: horizontal;
+    /* resize: horizontal; */
     overflow: auto;
 }
 

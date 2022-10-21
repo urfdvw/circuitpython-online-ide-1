@@ -7,8 +7,8 @@
 }
 
 #editorbox {
-    height: 70vh;
-    resize: vertical;
+    height: 60%;
+    /* resize: vertical; */
     overflow: auto;
 }
 
