@@ -3,7 +3,6 @@ plotwin.content.id = 'plot';
 plotwin.hide();  
 plotwin.on("resize_stop", plot_refresh);
 plotwin.on("change_state", function(){
-plotwin.on("change_state", function(){
     setTimeout(plot_refresh, 200);
 })
 
@@ -99,5 +98,5 @@ for i in range(100):
     # dimensions separated by ',' in 'print()'
     print(t*math.cos(t), t*math.sin(t))
 # please check and uncheck the [x-axis] box to see the difference.
-`, 1)
+`, 1);
 }
