@@ -9,6 +9,11 @@ editor.session.setValue(`# Click on a file or a tab to start coding.
 `)
 const scratch_session = editor.getSession();
 
+editor.setOptions({
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true
+});
+
 // https://stackoverflow.com/a/42930077/7037749
 editor.commands.on("exec", function(e) { 
     if (current_ind === undefined) {
