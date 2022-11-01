@@ -38,7 +38,9 @@ new ResizeObserver(function (){
 new ResizeObserver(function () {
   // console.log('console resized');
   dynamic_frame.parentNode.scrollTop = dynamic_frame.parentNode.scrollHeight;
-  plot_refresh();
+  if (plotwin.isVisible()) {
+    plot_refresh();
+  }
 }).observe(dynamic_frame)
 
 console.log('general.js loaded')
