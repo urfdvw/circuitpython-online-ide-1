@@ -5,8 +5,7 @@ editor.session.setMode("ace/mode/python");
 editor.session.setTabSize(4);
 editor.session.setUseSoftTabs(true);
 editor.session.setUseWrapMode(true);
-editor.session.setValue(`# Click on a file or a tab to start coding.
-`)
+editor.session.setValue(`# Click on a file or a tab to start coding.`)
 const scratch_session = editor.getSession();
 
 editor.setOptions({
@@ -17,11 +16,8 @@ editor.setOptions({
 // https://stackoverflow.com/a/42930077/7037749
 editor.commands.on("exec", function(e) { 
     if (current_ind === undefined) {
-        var rowCol = editor.selection.getCursor();
-        if ((rowCol.row == 0)) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
+        e.preventDefault();
+        e.stopPropagation();
     }
 });
 
