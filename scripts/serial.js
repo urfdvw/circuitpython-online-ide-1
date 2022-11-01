@@ -153,15 +153,3 @@ function send_single_line(line) {
         console.log("Can not write, no connection.");
     }
 }
-
-
-function run_command() {
-    var line = command.getValue().trim();
-    if (command.session.getLength() == 1) {
-        send_single_line(line);
-    } else {
-        send_multiple_lines(line);
-    }
-    command.setValue("")
-}
-

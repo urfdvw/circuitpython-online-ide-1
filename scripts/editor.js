@@ -61,7 +61,6 @@ editor.commands.addCommand({
     },
 });
 
-
 editor.commands.addCommand({
     name: 'myCommand',
     bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
