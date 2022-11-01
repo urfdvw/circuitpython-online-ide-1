@@ -38,17 +38,4 @@ function serial_disp_loop() {
 }
 serial_disp_loop();
 
-/*
-* Extra functions
-*/
-
-function savelog() {
-    // only works out side html
-    download(
-        serial_value_text,
-        'log.txt',
-        'text'
-    )
-}
-
 console.log('serial.js loaded')
