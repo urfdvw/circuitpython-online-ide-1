@@ -1,3 +1,12 @@
+var plotwin = new Window("Plot");
+plotwin.content.id = 'plot';
+plotwin.hide();  
+plotwin.on("resize_stop", plot_refresh);
+plotwin.on("change_state", function(){
+plotwin.on("change_state", function(){
+    setTimeout(plot_refresh, 200);
+})
+
 function text_to_data(text) {
     lines = text.split('\n');
     for (var i = 0; i < lines.length; i++) {
@@ -68,17 +77,8 @@ function plot_refresh() {
 }
 
 function plot_main() {
-    if (document.getElementById("plot").style.display == "") {
-        document.getElementById("plot").style.display = "none";
-        document.getElementById("plot_button").innerHTML = "Show Plot";
-        return
-    }
-    if (document.getElementById("plot").style.display == "none") {
-        document.getElementById("plot").style.display = "";
-        document.getElementById("plot_button").innerHTML = "Hide Plot";
-        plot_refresh();
-        return
-    }
+    plotwin.show();
+    plot_refresh();
 }
 
 console.log("plot.js is loaded")
