@@ -28,7 +28,7 @@ function plot_refresh() {
     var data = [];
     var xlabel = 'index';
     try {
-        var plot_raw_list = serial_value_text.split('startplot:').slice(1,);
+        var plot_raw_list = serial.getValue().split('startplot:').slice(1,);
         var plot_raw_text = plot_raw_list.at(-1);
         var plot_raw_lines = text_to_data(plot_raw_text);
         var plot_labels = plot_raw_lines[0];
@@ -55,7 +55,9 @@ function plot_refresh() {
                 data.push(curve);
             }
         }
-    } catch { }
+    } catch (e) { 
+        console.error("Exception thrown", e.stack);
+    }
     var layout = {
         showlegend: true,
         xaxis: {

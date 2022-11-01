@@ -132,13 +132,13 @@ async function save_and_run() {
         console.log('no current file')
         return
     }
-    var serial_out_len = serial_value_text.length;
+    var serial_out_len = serial.getValue().length;
     await write_file(file_details[current_ind].handle, editor.getValue());
     console.log('file saved');
     setTimeout(function () {
         // wait for 1s, if nothing changed in the serial out, 
         // then send command to force run the saved script
-        if (serial_out_len == serial_value_text.length) {
+        if (serial_out_len == serial.getValue().length) {
             console.log('save did not trigger run, manually run instead');
             sendCTRLC();
             setTimeout(function () {
@@ -162,7 +162,7 @@ function save_code_as() {
 function save_log() {
     console.log('save_log called')
     download(
-        serial_value_text,
+        serial.getValue(),
         'log.txt'
     )
 }

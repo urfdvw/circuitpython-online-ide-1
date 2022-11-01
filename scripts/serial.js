@@ -69,15 +69,19 @@ async function clickConnect() {
     }
 }
 
-var serial_value_text = "";
+var serial_text_buffer = "";
 async function readLoop() {
     // Reads data from the input stream and displays it in the console.
     while (true) {
         const { value, done } = await reader.read();
         if (value) {
-            serial_value_text += value;
-            // removed the carriage return, for some reason CircuitPython does not need it
-            //log.innerHTML += value + '\n';
+            if (value.endsWith('\r')) {
+                serial_text_buffer += value;
+                // console.log('broken line ending');
+            } else {
+                serial.session.insert({row: 1000000, col: 1000000}, serial_text_buffer + value)
+                serial_text_buffer = ''
+            }
         }
         if (done) {
             console.log('[readLoop] DONE', done);
