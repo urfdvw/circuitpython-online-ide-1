@@ -75,12 +75,37 @@ async function readLoop() {
     while (true) {
         const { value, done } = await reader.read();
         if (value) {
-            if (value.endsWith('\r')) {
+            if (value.search('\x1B') != -1 || serial_text_buffer.search('\x1B') != -1) {
                 serial_text_buffer += value;
-                // console.log('broken line ending');
+                if (serial_text_buffer.split('\x1B]').length == serial_text_buffer.split('\x1B\\').length) {
+                    const start_ind = serial_text_buffer.lastIndexOf('\x1B]')
+                    const end_ind = serial_text_buffer.lastIndexOf('\x1B\\')
+                    if (start_ind > end_ind) {
+                        // un reasonable satuation, print and continue
+                        serial.session.insert({row: 1000000, col: 1000000}, serial_text_buffer);
+                        serial_text_buffer = '';
+                    } else {
+                        const by_starts = serial_text_buffer.split('\x1B]0;');
+                        const info = by_starts[by_starts.length-1].split('\x1B\\')[0];
+                        console.log(info);
+                        serial.session.insert({row: 1000000, col: 1000000}, serial_text_buffer.replace(
+                            /\x1B]0;.*\x1B\\/, ''
+                        ).replace(
+                            /\x1B]0;.*\x1B\\/, ''
+                        ).replace(
+                            /\x1B]0;.*\x1B\\/, ''
+                        )); // replace all has some trouble here
+                        serial_text_buffer = '';
+                    }
+                }
             } else {
-                serial.session.insert({row: 1000000, col: 1000000}, serial_text_buffer + value)
-                serial_text_buffer = ''
+                if (value.endsWith('\r')) {
+                serial_text_buffer += value;
+                    // console.log('broken line ending');
+                } else {
+                    serial.session.insert({row: 1000000, col: 1000000}, serial_text_buffer + value);
+                    serial_text_buffer = '';
+                }
             }
         }
         if (done) {
