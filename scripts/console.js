@@ -14,6 +14,7 @@ serial.setTheme("ace/theme/monokai");
 serial.setReadOnly(true); //for debug
 serial.session.setUseWrapMode(true);
 serial.renderer.setShowGutter(false);
+serial.setHighlightActiveLine(false)
 
 /**
 * Serial Prints related
