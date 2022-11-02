@@ -43,11 +43,6 @@ new ResizeObserver(function () {
     // only refresh plot when plot is visible
     plot_refresh();
   }
-  if (serial.getCursorPosition().row > 2000) {
-    // cut old data to prevent freeze
-    const temp = serial.getValue();
-    serial.setValue(temp.slice(parseInt(temp.length / 4 * 3), temp.length), 1);
-  }
 }).observe(dynamic_frame)
 
 console.log('general.js loaded')
