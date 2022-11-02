@@ -37,9 +37,16 @@ new ResizeObserver(function (){
 // auto scroll serial console when new line on the receiver
 new ResizeObserver(function () {
   // console.log('console resized');
+  // auto scroll to the buttom
   dynamic_frame.parentNode.scrollTop = dynamic_frame.parentNode.scrollHeight;
   if (plotwin.isVisible()) {
+    // only refresh plot when plot is visible
     plot_refresh();
+  }
+  if (serial.getCursorPosition().row > 2000) {
+    // cut old data to prevent freeze
+    const temp = serial.getValue();
+    serial.setValue(temp.slice(parseInt(temp.length / 4 * 3), temp.length), 1);
   }
 }).observe(dynamic_frame)
 

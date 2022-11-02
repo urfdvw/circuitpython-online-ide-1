@@ -88,6 +88,7 @@ async function readLoop() {
                         const by_starts = serial_text_buffer.split('\x1B]0;');
                         const info = by_starts[by_starts.length-1].split('\x1B\\')[0];
                         console.log(info);
+                        document.getElementById('title_bar').innerHTML = info;
                         serial.session.insert({row: 1000000, col: 1000000}, serial_text_buffer.replace(
                             /\x1B]0;.*\x1B\\/, ''
                         ).replace(

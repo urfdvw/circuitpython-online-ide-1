@@ -112,3 +112,7 @@ body {
     height: calc(100% - 25px - 2px);
     overflow-y: auto;
 }
+
+#title_bar {
+    background-color: #37485c;
+}
