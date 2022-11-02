@@ -77,7 +77,9 @@ async function readLoop() {
         if (value) {
             if (value.search('\x1B') != -1 || serial_text_buffer.search('\x1B') != -1) {
                 serial_text_buffer += value;
-                if (serial_text_buffer.split('\x1B]').length == serial_text_buffer.split('\x1B\\').length) {
+                if (value.endsWith('\x1B')) {
+                    console.log('broken line ending at ESC');
+                } else if (serial_text_buffer.split('\x1B]').length == serial_text_buffer.split('\x1B\\').length) {
                     const start_ind = serial_text_buffer.lastIndexOf('\x1B]')
                     const end_ind = serial_text_buffer.lastIndexOf('\x1B\\')
                     if (start_ind > end_ind) {
@@ -87,7 +89,7 @@ async function readLoop() {
                     } else {
                         const by_starts = serial_text_buffer.split('\x1B]0;');
                         const info = by_starts[by_starts.length-1].split('\x1B\\')[0];
-                        console.log(info);
+                        // console.log(info);
                         document.getElementById('title_bar').innerHTML = info;
                         serial.session.insert({row: 1000000, col: 1000000}, serial_text_buffer.replace(
                             /\x1B]0;.*\x1B\\/, ''
@@ -101,8 +103,8 @@ async function readLoop() {
                 }
             } else {
                 if (value.endsWith('\r')) {
-                serial_text_buffer += value;
-                    // console.log('broken line ending');
+                    serial_text_buffer += value;
+                    // console.log('broken line ending at \\r');
                 } else {
                     serial.session.insert({row: 1000000, col: 1000000}, serial_text_buffer + value);
                     serial_text_buffer = '';
