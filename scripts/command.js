@@ -67,7 +67,7 @@ function run_command() {
     } else {
         send_multiple_lines(line);
     }
-    command.setValue("")
+    command.session.setValue("")
 }
 
 /*
@@ -148,7 +148,8 @@ function hist_up() {
         if (cmd_ind < 0) {
             cmd_ind = 0
         }
-        command.setValue(cmd_hist[cmd_ind], 1)
+        command.session.setValue(cmd_hist[cmd_ind])
+        command.gotoLine(0, 0, true)
     } else {
         command.gotoLine(
             command.getSelectionRange().start.row,
@@ -162,12 +163,17 @@ function hist_down() {
     if (command.getSelectionRange().start.row == command.session.getLength() - 1) {
         if (cmd_ind == -1) {
         } else if (cmd_ind == cmd_hist.length - 1) {
-            command.setValue(temp_cmd, -1);
+            command.session.setValue(temp_cmd);
             cmd_ind = -1;
         } else {
             cmd_ind += 1
-            command.setValue(cmd_hist[cmd_ind], -1)
+            command.session.setValue(cmd_hist[cmd_ind])
         }
+        command.gotoLine(
+            Number.POSITIVE_INFINITY,
+            Number.POSITIVE_INFINITY,
+            true,
+        )
     } else {
         command.gotoLine(
             command.getSelectionRange().start.row + 2,
@@ -176,5 +182,7 @@ function hist_down() {
         )
     }
 }
+
+command.session.on('change', serial_fit)
 
 console.log('command.js loaded')

@@ -34,15 +34,4 @@ new ResizeObserver(function (){
   // console.log('console resized');
 }).observe(fixed_frame);
 
-// auto scroll serial console when new line on the receiver
-new ResizeObserver(function () {
-  // console.log('console resized');
-  // auto scroll to the buttom
-  dynamic_frame.parentNode.scrollTop = dynamic_frame.parentNode.scrollHeight;
-  if (plotwin.isVisible()) {
-    // only refresh plot when plot is visible
-    plot_refresh();
-  }
-}).observe(dynamic_frame)
-
 console.log('general.js loaded')
