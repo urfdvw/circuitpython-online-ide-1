@@ -401,6 +401,7 @@ async function read_setting_panel(directoryHandle) {
     editor.setOptions({fontSize: idesetting.font + 'pt'});
     serial.setOptions({fontSize: idesetting.font + 'pt'});
     command.setOptions({fontSize: idesetting.font + 'pt'});
+    serial_fit();
 }
 
 async function write_setting_panel() {
