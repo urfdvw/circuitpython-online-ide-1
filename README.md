@@ -175,7 +175,7 @@ System Related:
 - [Up] and [Down] recall history commands
 - [Enter] send command(s)
 - [Shift-Enter] newline
-    - The shortcut of send and newline can be swapped by the button at the bottom.
+    - The shortcut of send and newline can be swapped in settings.
 
 ## Planned Features
 - 中文界面和中文帮助
