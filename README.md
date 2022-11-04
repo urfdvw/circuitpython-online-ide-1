@@ -135,8 +135,7 @@ CircuitPython Online IDE plot example
 please check and uncheck the [x-axis] box to see the difference.
 """
 import math
-from time import sleep
-from time import monotonic
+from time import sleep, monotonic
 
 time_start = monotonic()
 # 'startplot:' is the start indicator
