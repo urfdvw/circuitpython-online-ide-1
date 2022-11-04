@@ -35,7 +35,7 @@ Useful features:
 - Settings saved on microcontroller (not browser cookies)
 
 ## Related Projects
-This project focuses on the USB workflow of CircuitPython, and will not support BLE or WIFI workflow in foreseen future. If you are interested in versitile workflows, check out [code.circuitpython.org](https://code.circuitpython.org/), which supports BLE, WIFI, and USB workflow.
+This project focuses on the USB workflow of CircuitPython, and will not support BLE or WIFI workflow in foreseen future. If you are interested in versitile workflows, check out [code.circuitpython.org](https://code.circuitpython.org/) and this corresponding [Adafruit tutorial](https://blog.adafruit.com/2022/09/07/new-guide-circuitpython-web-workflow-code-editor-quick-start-adafruitlearningsystem-adafruit-circuitpython-makermelissa/), which includes BLE, WIFI, and USB workflow.
 
 This project will not support MicroPython in foreseen future. If you are interested in coding MicroPython online, check out [tinkerdoodle](https://tinkerdoodle.cc/).
 
