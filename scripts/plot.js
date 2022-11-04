@@ -92,13 +92,13 @@ from time import sleep, monotonic
 
 time_start = monotonic()
 # 'startplot:' is the start indicator
-# column names separated by `,` in `print()`, no space in names.
+# column names separated by ',' in 'print()', no space in names.
 print('startplot:', 't*cos(t)', 't*sin(t)')
 for i in range(100):
     sleep(0.1)
     t = monotonic() - time_start
     # print the data for plotting
-    # column separated by `,` in `print()`
+    # column separated by ',' in 'print()'
     print(t*math.cos(t), t*math.sin(t))
 `, 1);
 }
