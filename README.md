@@ -134,7 +134,6 @@ Example of plot code
 CircuitPython Online IDE plot example
 please check and uncheck the [x-axis] box to see the difference.
 """
-#%% imports
 import math
 from time import sleep
 from time import monotonic as time
