@@ -9,9 +9,7 @@
 # CircuitPython online IDE
 Open the IDE: https://urfdvw.github.io/CircuitPython-online-IDE/
 
-- Twitter: [***River Wang***](https://twitter.com/River___Wang)
-- Youtube channel: [***CircuitPythonic***](https://youtube.com/playlist?list=PLlxgbFPR1ZNTaQ8KqnEwyLay1SagBHW1H)
-- Email: urfdvw@gmail.com
+*Follow me to get the latest update! Twitter: [***River Wang***](https://twitter.com/River___Wang), Youtube: [***CircuitPythonic***](https://youtube.com/playlist?list=PLlxgbFPR1ZNTaQ8KqnEwyLay1SagBHW1H), Email: urfdvw@gmail.com*
 
 ## Why
 The goal is to provide a CircuitPython IDE with **Zero-Installation**, that can be helpful for
@@ -21,7 +19,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Installation**, that can 
 
 ## Features
 This IDE Runs on any device with the Chrome browser, including **Chromebooks**, or Chromium-based browsers such as MS Edge.
-It includes essential tools for microcontroller projects, including
+It includes essential tools for CirtuitPython microcontroller projects, including
 - Code editor with multiple tabs
 - Serial Console for communication and Read-Evaluate-Print loop (REPL)
 - Serial data plotter
@@ -47,6 +45,7 @@ This project will not support android or IOS anytime. I encourage anyone coding 
 
 *This guide assumes that CircuitPython is already installed. About how to install CircuitPython to supported devices, please check [CircuitPython Website](https://circuitpython.org/downloads) and [Adafruit tutorial](https://learn.adafruit.com/welcome-to-circuitpython/installing-circuitpython?gclid=CjwKCAjwzY2bBhB6EiwAPpUpZqipaSOTImDgR6lO5Cr1JmEkQLak3-6qNPc-vx-Q_ybADLunLe2sRBoCDWkQAvD_BwE).*
 
+### Video Tutorials
 
 A quick introduction to CircuitPython Online IDE ⤵
 
@@ -200,3 +199,4 @@ This project relies on the following open-source projects
 Also, inspired by the following projects.
 - https://github.com/sensebox/circuitpython-web-ide
 - https://github.com/Mr-Coxall/CircuitPython-IDE
+- https://github.com/circuitpython/web-editor
