@@ -83,20 +83,24 @@ function plot_main() {
 console.log("plot.js is loaded")
 
 function load_plot_example () {
-command.setValue(`import math
+command.setValue(`"""
+CircuitPython Online IDE plot example
+please check and uncheck the [x-axis] box to see the difference.
+"""
+#%% imports
+import math
 from time import sleep
-from time import monotonic
+from time import monotonic as time
 
-time_start = monotonic()
-# the start indicator and labels
-# separated by ',' in 'print()'
+time_start = time()
+# 'startplot:' is the start indicator
+# column names separated by `,` in `print()`, no space in names.
 print('startplot:', 't*cos(t)', 't*sin(t)')
 for i in range(100):
     sleep(0.1)
-    t = monotonic() - time_start
+    t = time() - time_start
     # print the data for plotting
-    # dimensions separated by ',' in 'print()'
+    # column separated by `,` in `print()`
     print(t*math.cos(t), t*math.sin(t))
-# please check and uncheck the [x-axis] box to see the difference.
 `, 1);
 }
