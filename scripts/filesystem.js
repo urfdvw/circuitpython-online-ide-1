@@ -46,6 +46,7 @@ var directoryHandle; // move this in to the next function if necessary
 async function open_folder(){
     directoryHandle = await window.showDirectoryPicker();
     await read_setting_panel(directoryHandle);
+    await write_idesetting(directoryHandle); // this is just to trigger permission popup, necessary for creating new files
     var code_file = await code_py(directoryHandle);
     await construct_tree(directoryHandle);
 }
@@ -92,6 +93,7 @@ async function new_file(dir_handle) {
         alert(name + " already exists")
         return
     } catch {
+        console.log(name + ' does not exist, creating')
         await dir_handle.getFileHandle(name, { create: true });
     }
     await construct_tree(directoryHandle);
