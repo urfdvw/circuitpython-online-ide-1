@@ -30,44 +30,59 @@
 </head>
 <body>
     <div id="workflow">
-        <h1>CircuitPython Online IDE</h1>
-        <hr>
-        <h2>Workflow</h2>
-        <h3><a href="https://learn.adafruit.com/welcome-to-circuitpython/installing-circuitpython" target="_blank">
-                Step 0. Install CircuitPython
-        </a></h3>
-        <button onClick='connect();'>
-            <h3>Step 1. Connect Microcontroller</h3>
-        </button>
-        <br>
-        <button onClick='open_folder();'>
-            <h3>Step 2. Open CIRCUITPY dirctory</h3>
-        </button>
-        <br>
-        <button onClick='check_conditions();'>
-            <h3>Step 3. Start Coding</h3>
-        </button>
-        <br>
-        <hr>
-        <h2>Quick Tutorial (Please view in fullscreen)</h2>
-        <iframe width="260" height="90" src="https://www.youtube.com/embed/h6ocRsDYTAs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        <hr>
-        <h2>Other help infomation</h2>
-        <a href="old_versions/V0.1/index.html" target="_blank">
-            Previous Version
-        </a>
-        <br>
-        <a href="https://github.com/urfdvw/CircuitPython-online-IDE/tree/big-version-1" target="_blank">
-            GitHub Repository
-        </a>
-        <br>
-        <a href="https://github.com/urfdvw/CircuitPython-online-IDE/releases" target="_blank">
-            Download the IDE 
-        </a>
-        <br>
-        (This project is under rapid development. 
-        The Offline version should only be used when the internet connection is unstable.
-        Please use the online version whenever possible to get the leatest feature.)
+        <div id="workflowhead">
+            <h1>CircuitPython Online IDE</h1>
+        </div>
+        <div id="workflowbody">
+            <div id="workflowbodyleft">
+                <h2>Workflow</h2>
+                <h3><a href="https://learn.adafruit.com/welcome-to-circuitpython/installing-circuitpython" target="_blank">
+                        Step 0. Install CircuitPython
+                </a></h3>
+                <button onClick='connect();' class="workflowstep">
+                    <h3>Step 1. Connect Microcontroller</h3>
+                </button>
+                <br>
+                <button onClick='open_folder();' class="workflowstep">
+                    <h3>Step 2. Open CIRCUITPY dirctory</h3>
+                </button>
+                <br>
+                <button onClick='check_conditions();' class="workflowstep">
+                    <h3>Step 3. Start Coding</h3>
+                </button>
+            </div>
+            <div id="workflowbodyright">
+                <h2>Quick Tutorial</h2>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/h6ocRsDYTAs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <hr>
+                <h2>Other help infomation</h2>
+                <a href="https://github.com/urfdvw/CircuitPython-online-IDE/tree/big-version-1#workflow-aka-how-to-use" target="_blank">
+                    IDE Help infomation
+                </a>
+                <br>
+                <a href="old_versions/V0.1/index.html" target="_blank">
+                    Previous Version
+                </a>
+                <br>
+                <a href="https://github.com/urfdvw/CircuitPython-online-IDE/tree/big-version-1" target="_blank">
+                    GitHub Repository
+                </a>
+                <br>
+                <a href="https://github.com/urfdvw/CircuitPython-online-IDE/releases" target="_blank">
+                    Download the IDE and runs offline
+                </a>
+                <br>
+                (This project is under rapid development. 
+                The Offline version should only be used when the internet connection is unstable.
+                Please use the online version whenever possible to get the leatest feature.)
+            </div>
+        </div>
+        <div id="workflowtail">
+            This open-source project is developed and maintained by <a href="https://github.com/urfdvw" target='_blank'>River Wang</a>,
+            and published on GitHub Page under GPL 3 license. <br>
+            <a href="https://circuitpython.org/" target='_blank'>CircuitPython</a>, which is a python version that runs on microcontrollers,
+            is developed and maintained by <a href="https://www.adafruit.com/" target='_blank'>Adafruit</a>.
+        </div>
     </div>
     <div id="flex-container">
         <div id="topbox" onpointerleave="console.log('left nav'); document.getElementById('nav_drop').href = 'style/navhide.css'">
@@ -119,7 +134,7 @@
                             Help
                         </a>
                         <ul>
-                            <li><a href="#">How to Use</a></li>
+                            <li><a href="https://github.com/urfdvw/CircuitPython-online-IDE/tree/big-version-1#workflow-aka-how-to-use" target="_blank" rel="noopener noreferrer">How to Use</a></li>
                             <!-- https://www.freecodecamp.org/news/how-to-use-html-to-open-link-in-new-tab/ -->
                             <li><a href="https://circuitpython.org/" target="_blank" rel="noopener noreferrer">CircuitPyton.org</a></li>
                             <li><a href="https://learn.adafruit.com/welcome-to-circuitpython" target="_blank" rel="noopener noreferrer">Adaftuit Tutorials</a></li>
@@ -190,7 +205,7 @@
         </div>
     </div>
     <div id="setting">
-        <H1>Settings</H1>
+        <h2>Settings</h2>
         <p>
             Nickname of board:
             <input id="name_setting">
