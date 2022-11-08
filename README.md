@@ -148,6 +148,16 @@ for i in range(100):
     print(t*math.cos(t), t*math.sin(t))
 ```
 
+### Use IDE offline
+*This project is under rapid development. The Offline version should only be used when the internet connection is unstable. Please use the online version whenever possible to get the leatest feature.*
+
+1. Visit the [Release Page](https://github.com/urfdvw/CircuitPython-online-IDE/releases) of this project,
+and open the version with lable `latest`.
+2. Download the zip file named `CircuitPython.Online.IDE.v***` (not source code)
+3. Decompress the file
+4. Open the `index.html` file in the folder to use
+5. Check `readme.md` for help
+
 ## Keyboard Shortcuts
 *MacOS shortcuts in `()`*
 ### Editor
@@ -176,16 +186,6 @@ System Related:
 - [Enter] send command(s)
 - [Shift-Enter] newline
     - The shortcut of send and newline can be swapped in settings.
-
-### Use IDE offline
-*This project is under rapid development. The Offline version should only be used when the internet connection is unstable. Please use the online version whenever possible to get the leatest feature.*
-
-1. Visit the [Release Page](https://github.com/urfdvw/CircuitPython-online-IDE/releases) of this project,
-and open the version with lable `latest`.
-2. Download the zip file named `CircuitPython.Online.IDE.v***` (not source code)
-3. Decompress the file
-4. Open the `index.html` file in the folder to use
-5. Check `readme.md` for help
 
 ## Planned Features
 - 中文界面和中文帮助
