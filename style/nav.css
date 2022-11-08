@@ -1,0 +1,86 @@
+#nav,nav{
+    display:block;
+    clear:both;
+    /* font-size:123.6068%; */
+    text-rendering:optimizeLegibility;
+    letter-spacing:1px
+}
+#nav ul,nav ul{
+    float:left;
+    position:relative;
+    margin:0;
+    padding:0;
+    border:0;
+    list-style-type:none;
+    clear:both;
+    display:block;
+    font-family:"Myriad Web Pro","Helvetica Neue",Helvetica,Lucida,Verdana,sans-serif;
+    width:100%;
+    background:#37485c;
+    border-radius:0px;
+    /* box-shadow:0.12em 0.19em 0.25em #26313f */
+}
+#nav ul li,nav ul li{
+    float:left;
+    position:relative;
+    border-right:medium ridge #37485c;
+    margin:0;
+    padding:0
+}
+#nav ul li:first-child,nav ul li:first-child{
+    padding-left:1em
+}
+#nav ul li:last-child,nav ul li:last-child{
+    border-right:none
+}
+#nav ul li a,nav ul li a{
+    text-decoration:none;
+    display:inline-block;
+    padding:0.69em 1em;
+    color:#e1e7ed;
+    text-shadow:1px 2px 1px #26313f;
+    word-wrap:break-word;
+    text-transform:capitalize
+}
+#nav ul li a:hover,#nav ul li a:active,nav ul li a:hover,nav ul li a:active{
+    -webkit-transition:background 200ms ease-in 50ms;
+    background-color:#26313f;
+    color:#e1e7ed;
+    text-decoration:none
+}
+#nav ul li a:active,nav ul li a:active{
+    box-shadow:inset 0 0 0.7em #1b242d
+}
+#nav ul li ul,nav ul li ul{
+    display:none;
+    width:auto;
+    white-space: nowrap;
+    /* https://stackoverflow.com/a/4652666/7037749 */
+    z-index:98;
+    background-color:#2c3a4a
+}
+#nav ul li ul li,nav ul li ul li{
+    width:100%;
+    border:none;
+    clear:both
+}
+#nav ul li ul li:first-child,nav ul li ul li:first-child{
+    padding:0
+}
+#nav ul li ul li:hover,nav ul li ul li:hover{
+    width:100%;
+    -webkit-transition:background 200ms ease-in 50ms;
+    background:#26313f;
+    z-index:99
+}
+#nav ul li ul li:active,nav ul li ul li:active{
+    box-shadow:inset 0 0 0.7em #1b242d
+}
+#nav ul li ul li:last-child,nav ul li ul li:last-child{
+    border-bottom-left-radius:0px;
+    border-bottom-right-radius:0px
+}
+#nav ul li ul li a:hover,#nav ul li ul li a:active,nav ul li ul li a:hover,nav ul li ul li a:active{
+    background:none;
+    box-shadow:none
+}

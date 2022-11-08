@@ -1,0 +1,21 @@
+#workareabox{
+    display: flex;
+    flex-direction: row;
+    gap: 0px;;
+    padding: 0px;
+    flex: 1;
+}
+
+#editorbox {
+    width: 50%;
+    /* resize: horizontal; */
+    overflow: auto;
+}
+
+#consolebox {
+    /* https://stackoverflow.com/a/37751019/7037749 */
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    max-height: calc(100vh - 40px);
+}

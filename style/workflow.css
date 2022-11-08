@@ -1,0 +1,50 @@
+#workflow {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;;
+    padding: 0px;
+    height: 100vh;
+    width: 100vw;
+
+    background: rgb(255, 255, 255);
+    opacity: 0.9;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: '';
+}
+
+#workflowhead {
+    text-align: center;
+}
+
+#workflowbody {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+    display: flex;
+    flex-direction: row;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+#workflowbodyleft{
+    padding: 30px;
+    width: 500px;
+}
+
+.workflowstep{
+    text-align: left;
+    width: 100%;
+}
+
+#workflowbodyright{
+    padding: 30px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0;
+}
+
+#workflowtail {
+    text-align: center;
+}

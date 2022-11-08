@@ -1,0 +1,42 @@
+#cover {
+  background: #000;
+  opacity: 0.6;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 11;
+  display: none;
+}
+
+#setting {
+  padding: 10pt;
+  z-index: 12;
+  position: absolute;
+  top: 0;
+  /* change the right together with width */
+  right: -300pt;
+  color: #fff;
+  background: #37485c;
+  box-sizing: border-box;
+  width: 300pt;
+  min-height: 100%;
+  transition: 0.4s;
+}
+
+#show, #hide {
+  float: right;
+  cursor: pointer;
+}
+
+body.setting-open {
+  overflow-y: hidden;
+}
+body.setting-open #cover {
+  display: block;
+}
+
+body.setting-open #setting {
+  right: 0;
+}
