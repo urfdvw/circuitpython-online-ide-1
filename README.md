@@ -188,10 +188,14 @@ System Related:
     - The shortcut of send and newline can be swapped in settings.
 
 ## Planned Features
-- 中文界面和中文帮助
+From high priority to low
 - rename file
 - on microcontroller trash bin
-- adjustable layout
+- cleaner code
+- variable watcher
+- 中文界面和中文帮助
+- adjustable layout ()
+- unified widget framework
 
 ## References
 This project relies on the following frontend APIs
