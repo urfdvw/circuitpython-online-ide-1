@@ -27,7 +27,7 @@ The goal is to provide a CircuitPython IDE with **Zero-Setup**, that can be help
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/QL8hLER7wAg/0.jpg)](https://www.youtube.com/watch?v=QL8hLER7wAg)
 [](https://stackoverflow.com/a/16079387/7037749)
 
-For the latest updates about this IDE, please subscribe to the youtube channel called [***CircuitPythonic***](https://youtube.com/playlist?list=PLlxgbFPR1ZNTaQ8KqnEwyLay1SagBHW1H)
+For the latest updates about this IDE, please subscribe to the youtube channel called [***CircuitPythonic***](https://www.youtube.com/channel/UCeunCRTBkjHWynMl4I4le_A)
 
 Or follow Twitter account [***River Wang***](https://twitter.com/River___Wang) 
 
