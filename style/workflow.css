@@ -13,8 +13,6 @@
     left: 0;
     z-index: 100;
     display: '';
-
-    overflow: auto;
 }
 
 #workflowhead {
@@ -28,11 +26,13 @@
     display: flex;
     flex-direction: row;
     background: rgba(0, 0, 0, 0.1);
+
+    overflow: auto;
 }
 
 #workflowbodyleft{
     padding: 30px;
-    width: 500px;
+    width: 400px;
 }
 
 .workflowstep{
