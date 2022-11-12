@@ -1,9 +1,8 @@
 - [Why](#why)
 - [Features](#features)
-- [Related Projects](#related-projects)
 - [**Workflow (a.k.a. How to use)** 👈](#workflow-aka-how-to-use)
-- [Keyboard Shortcuts](#keyboard-shortcuts)
 - [Planned Features](#planned-features)
+- [Related Projects](#related-projects)
 - [References](#references)
 
 # CircuitPython online IDE
@@ -34,14 +33,15 @@ Useful features:
 - Board nickname
 - Settings saved on microcontroller (not browser cookies)
 
-## Related Projects
-This project focuses on the USB workflow of CircuitPython, and will not support BLE or WIFI workflow in foreseen future. If you are interested in versitile workflows, check out [code.circuitpython.org](https://code.circuitpython.org/) and this corresponding [Adafruit tutorial](https://blog.adafruit.com/2022/09/07/new-guide-circuitpython-web-workflow-code-editor-quick-start-adafruitlearningsystem-adafruit-circuitpython-makermelissa/), which includes BLE, WIFI, and USB workflow.
-
-This project will not support MicroPython in foreseen future. If you are interested in coding MicroPython online, check out [tinkerdoodle](https://tinkerdoodle.cc/).
-
-This project will not support android or IOS anytime. I encourage anyone coding on touch screens to migrate to keyboards to build keyboard muscle memories and shortcut vocabulary (and dialect). However, if you insist on doing so, check out these Adafruit tutorials [for android](https://learn.adafruit.com/using-the-android-circuitpython-editor) and [for ios](https://learn.adafruit.com/editing-circuitpython-on-ios-with-runestone/usage).
-
 ## Workflow (a.k.a. How to use)
+
+- [Video Tutorials](#video-tutorials)
+- [Getting started](#getting-started)
+- [Script mode](#script-mode)
+- [REPL mode](#repl-mode)
+- [Plot](#plot)
+- [Keyboard Shortcuts](#keyboard-shortcuts)
+- [Use IDE offline](#use-ide-offline)
 
 *This guide assumes that CircuitPython is already installed. About how to install CircuitPython to supported devices, please check [CircuitPython Website](https://circuitpython.org/downloads) and [Adafruit tutorial](https://learn.adafruit.com/welcome-to-circuitpython/installing-circuitpython?gclid=CjwKCAjwzY2bBhB6EiwAPpUpZqipaSOTImDgR6lO5Cr1JmEkQLak3-6qNPc-vx-Q_ybADLunLe2sRBoCDWkQAvD_BwE).*
 
@@ -148,22 +148,20 @@ for i in range(100):
     print(t*math.cos(t), t*math.sin(t))
 ```
 
-### Use IDE offline
-*This project is under rapid development. The Offline version should only be used when the internet connection is unstable. Please use the online version whenever possible to get the leatest feature.*
+### Keyboard Shortcuts
+For baisc Editor shortcuts,
+Please check [Ace Editor Default Keyboard Shortcuts](https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts).
+CircuitPython related shortcuts are listed below.
 
-1. Visit the [Release Page](https://github.com/urfdvw/CircuitPython-online-IDE/releases) of this project,
-and open the version with lable `latest`.
-2. Download the zip file named `CircuitPython.Online.IDE.v***` (not source code)
-3. Decompress the file
-4. Open the `index.html` file in the folder to use
-5. Check `readme.md` for help
-
-## Keyboard Shortcuts
 *MacOS shortcuts in `()`*
-### Editor
+
+#### **Editor**
+System Related:
 - [Ctrl-S] ([Cmd-S]): Save the file
     - If not in REPL mode. This will trigger reset and run the saved script
     - This is different from "Save and Run" which will trigger reset and run the script despite of REPL mode or not.
+- [Ctrl-Shift-C] ([Ctrl-C]) Send "ctrl-c" signal to the microcontroller
+- [Ctrl-Shift-D] ([Ctrl-D]) Send "ctrl-d" signal to the microcontroller
 
 REPL Mode Specific:
 - [Ctrl-Enter] ([Cmd-Enter]) RUN the current Cell
@@ -175,17 +173,23 @@ REPL Mode Specific:
 - [Alt-Up] and [Alt-Down] ([Option-Up] and [Option-Down]) RECALL Command Window history
 - [Alt-Shift-Enter] ([Option-Shift-Enter]) GRAB Command Window content to Editor
 
-System Related:
-- [Ctrl-Shift-C] ([Ctrl-C]) Send "ctrl-c" signal to the microcontroller
-- [Ctrl-Shift-D] ([Ctrl-D]) Send "ctrl-d" signal to the microcontroller
-
-### Command window
+#### **Command window**
 - [Ctrl-Shift-C] ([Ctrl-C]) Send "ctrl-c" signal to the microcontroller
 - [Ctrl-Shift-D] ([Ctrl-D]) Send "ctrl-d" signal to the microcontroller
 - [Up] and [Down] recall history commands
 - [Enter] send command(s)
 - [Shift-Enter] newline
     - The shortcut of send and newline can be swapped in settings.
+
+### Use IDE offline
+*This project is under rapid development. The Offline version should only be used when the internet connection is unstable. Please use the online version whenever possible to get the leatest feature.*
+
+1. Visit the [Release Page](https://github.com/urfdvw/CircuitPython-online-IDE/releases) of this project,
+and open the version with lable `latest`.
+2. Download the zip file named `CircuitPython.Online.IDE.v***` (not source code)
+3. Decompress the file
+4. Open the `index.html` file in the folder to use
+5. Check `readme.md` for help
 
 ## Planned Features
 From high priority to low
@@ -196,6 +200,13 @@ From high priority to low
 - 中文界面和中文帮助
 - adjustable layout ()
 - unified widget framework
+
+## Related Projects
+This project focuses on the USB workflow of CircuitPython, and will not support BLE or WIFI workflow in foreseen future. If you are interested in versitile workflows, check out [code.circuitpython.org](https://code.circuitpython.org/) and this corresponding [Adafruit tutorial](https://blog.adafruit.com/2022/09/07/new-guide-circuitpython-web-workflow-code-editor-quick-start-adafruitlearningsystem-adafruit-circuitpython-makermelissa/), which includes BLE, WIFI, and USB workflow.
+
+This project will not support MicroPython in foreseen future. If you are interested in coding MicroPython online, check out [tinkerdoodle](https://tinkerdoodle.cc/).
+
+This project will not support android or IOS anytime. I encourage anyone coding on touch screens to migrate to keyboards to build some muscle memories and shortcut vocabulary (and dialect). However, if you insist on doing so, check out these Adafruit tutorials [for android](https://learn.adafruit.com/using-the-android-circuitpython-editor) and [for ios](https://learn.adafruit.com/editing-circuitpython-on-ios-with-runestone/usage).
 
 ## References
 This project relies on the following frontend APIs
