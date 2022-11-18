@@ -8,7 +8,7 @@
 # CircuitPython online IDE
 Open the IDE: https://urfdvw.github.io/CircuitPython-online-IDE/
 
-*Follow me to get the latest update! Twitter: [***River Wang***](https://twitter.com/River___Wang), Youtube: [***CircuitPythonic***](https://www.youtube.com/channel/UCeunCRTBkjHWynMl4I4le_A), Email: urfdvw@gmail.com*
+*Follow me to get the latest update! Mastodon: [***@Riverwang@fosstodon.org***](https://fosstodon.org/@Riverwang), Twitter: [***River Wang***](https://twitter.com/River___Wang), Youtube: [***CircuitPythonic***](https://www.youtube.com/channel/UCeunCRTBkjHWynMl4I4le_A), Email: urfdvw@gmail.com*
 
 ## Why
 The goal is to provide a CircuitPython IDE with **Zero-Installation**, that can be helpful for
