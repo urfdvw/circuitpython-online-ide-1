@@ -138,7 +138,7 @@ async function save_and_run() {
     await write_file(file_details[current_ind].handle, editor.getValue());
     console.log('file saved');
     setTimeout(function () {
-        // wait for 1s, if nothing changed in the serial out, 
+        // wait for 1s, if nothing changed in the serial out,
         // then send command to force run the saved script
         if (serial_out_len == serial.getValue().length) {
             console.log('save did not trigger run, manually run instead');
@@ -202,7 +202,18 @@ async function construct_tree(directoryHandle){
             view = new TreeView(dir_node, "#foldercontainer");
         }
 
+        var layer = [];
         for await (const entry of dir.values()) {
+            layer.push(entry)
+        }
+
+        layer.sort(function(a, b) {
+            if (a.name < b.name) return -1;
+            if (a.name > b.name) return 1;
+            return 0;
+        });
+
+        for (const entry of layer) {
             if (entry.name.startsWith('.')) {
                 // skip hidden files
                 continue
@@ -374,7 +385,7 @@ async function read_init_setting(directoryHandle) {
     var idesetting = JSON.parse(JSON.stringify(settingdefault));
     idesetting.name = title;
     return idesetting
-} 
+}
 
 async function read_idesetting(directoryHandle) {
     const setting_file = await read_setting_file(directoryHandle);
