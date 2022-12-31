@@ -227,6 +227,7 @@ async function construct_tree(directoryHandle){
             // console.log(dir.name, '>', entry.name);
             if(entry.kind == 'directory') {
                 q.push(entry)
+                file_node.changeOption('forceParent', true)
                 treeq.push(file_node)
             } else {
                 if (entry.name.endsWith('.mpy')) {
