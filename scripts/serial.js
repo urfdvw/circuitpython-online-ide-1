@@ -145,20 +145,20 @@ async function readLoop() {
     while (true) {
         const { value, done } = await reader.read();
 
-        for (branch of title_brancher.push(value)) {
-            title_branch = branch[1];
-            if (title_branch) { // if updating title bar
-                if (last_title_branch) {
-                    document.getElementById('title_bar').innerHTML += branch[0];
-                } else { // if just into this mood
-                    document.getElementById('title_bar').innerHTML = branch[0];
+        for (const part of line_ending_matcher.push(value)) {
+            for (const branch of title_brancher.push(part[0])) {
+                title_branch = branch[1];
+                if (title_branch) { // if updating title bar
+                    if (last_title_branch) {
+                        document.getElementById('title_bar').innerHTML += branch[0];
+                    } else { // if just into this mood
+                        document.getElementById('title_bar').innerHTML = branch[0];
+                    }
+                } else {
+                    serial.session.insert({row: 1000000, col: 1000000}, branch[0]);
                 }
-            } else {
-                for (part of line_ending_matcher.push(branch[0])) {
-                    serial.session.insert({row: 1000000, col: 1000000}, part[0]);
-                }
+                last_title_branch = title_branch;
             }
-            last_title_branch = title_branch;
         }
         
         if (done) {
