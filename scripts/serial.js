@@ -66,6 +66,35 @@ class Brancher {
         return result
     }
 }
+
+class BranchProcessor {
+    constructor (brancher, switch_action, branch_action) {
+        this.brancher = brancher;
+        this.switch_action = switch_action;
+        this.branch_action = branch_action;
+        this.last_mood = false;
+    }
+    push (parts) {
+        var outlet = [];
+        for (const part of parts) {
+            for (const branch of this.brancher.push(part)) {
+                const mood = branch[1];
+                if (mood) {
+                    if (this.last_mood) {
+                        this.branch_action(branch[0]);
+                    } else { // if just into this mood
+                        this.switch_action();
+                        this.branch_action(branch[0]);
+                    }
+                } else {
+                    outlet.push(branch[0]);
+                }
+                this.last_mood = mood;
+            }
+        }
+        return outlet;
+    }
+}
 /*
 * Serial driver *******************************************************
 */
@@ -137,28 +166,40 @@ async function clickConnect() {
     }
 }
 
-var line_ending_matcher = new Matcher('\r\n');
-var title_brancher = new Brancher('\x1B]0;', '\x1B\\');
-var last_title_branch = false;
+let line_ending_matcher = new Matcher('\r\n');
+
+let title_processor = new BranchProcessor(
+    new Brancher('\x1B]0;', '\x1B\\'),
+    () => {document.getElementById('title_bar').innerHTML = ""},
+    (text) => {document.getElementById('title_bar').innerHTML += text} 
+);
+
+let log_processor = new BranchProcessor(
+    new Brancher('<log>', '</log>\r\n'),
+    () => {},
+    (text) => {console.log(text)} 
+);
+
+let processors = [
+    title_processor,
+    log_processor
+]
+
 async function readLoop() {
     // Reads data from the input stream and displays it in the console.
     while (true) {
         const { value, done } = await reader.read();
-
+        var parts = [];
         for (const part of line_ending_matcher.push(value)) {
-            for (const branch of title_brancher.push(part[0])) {
-                title_branch = branch[1];
-                if (title_branch) { // if updating title bar
-                    if (last_title_branch) {
-                        document.getElementById('title_bar').innerHTML += branch[0];
-                    } else { // if just into this mood
-                        document.getElementById('title_bar').innerHTML = branch[0];
-                    }
-                } else {
-                    serial.session.insert({row: 1000000, col: 1000000}, branch[0]);
-                }
-                last_title_branch = title_branch;
-            }
+            parts.push(part[0]);
+        }
+
+        for (let processor of processors){
+            parts = processor.push(parts);
+        }
+
+        for (const part of parts) {
+            serial.session.insert({row: 1000000, col: 1000000}, part);
         }
         
         if (done) {
