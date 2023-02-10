@@ -105,6 +105,7 @@ class BranchProcessor {
         return outlet;
     }
 }
+
 /*
 * Serial driver *******************************************************
 */
@@ -213,18 +214,31 @@ async function readLoop() {
     // Reads data from the input stream and displays it in the console.
     while (true) {
         const { value, done } = await reader.read();
+        console.log('DEBUG', 'serial in', [value])
         var parts = [];
         for (const part of line_ending_matcher.push(value)) {
             parts.push(part[0]);
         }
 
+        console.log('DEBUG', 'parts', parts);
+
         for (let processor of processors){
             parts = processor.push(parts);
+            console.log('DEBUG', 'parts', parts);
         }
 
         for (const part of parts) {
             serial.session.insert({row: 1000000, col: 1000000}, part);
         }
+
+        /* Weird issue with weird solution
+        if the following line is removed.
+        some competing issues happems
+        like if start from REPL
+        and run a cell
+        >>> will appear in the middle of the code block
+        */
+        serial.session.getValue(); 
         
         if (done) {
             console.log('[readLoop] DONE', done);
@@ -240,9 +254,15 @@ async function readLoop() {
 function send_cmd(s) {
     // send single byte command
     // s: str
-    const writer = outputStream.getWriter();
-    writer.write(s);
-    writer.releaseLock();
+    console.log('DEBUG', 'serial out', [s])
+    if (outputStream != null) {
+        const writer = outputStream.getWriter();
+        writer.write(s);
+        writer.releaseLock();
+    }
+    else {
+        console.log("send_cmd() failed, no connection.");
+    }
 }
 
 function sendCTRLD() {
@@ -272,15 +292,12 @@ function send_multiple_lines(lines) {
     lines = lines.join("")
 
     // send commands to device
-    if (outputStream != null) {
-        const writer = outputStream.getWriter();
-        // https://stackoverflow.com/a/60111488/7037749
-        writer.write('exec("""' + lines + '""")' + '\x0D')
-        writer.releaseLock();
+    if (serial.getValue().slice(-4, -1) !== ">>>") {
+        sendCTRLC();
     }
-    else {
-        console.log("Can not write, no connection.");
-    }
+    
+    send_cmd('exec("""' + lines + '""")' + '\x0D')
+    // https://stackoverflow.com/a/60111488/7037749
 }
 
 function send_single_line(line) {
@@ -291,12 +308,5 @@ function send_single_line(line) {
     cmd_ind = -1;
 
     // send the command to device
-    if (outputStream != null) {
-        const writer = outputStream.getWriter();
-        writer.write(line.trim() + '\x0D');
-        writer.releaseLock();
-    }
-    else {
-        console.log("Can not write, no connection.");
-    }
+    send_cmd(line.trim() + '\x0D');
 }
