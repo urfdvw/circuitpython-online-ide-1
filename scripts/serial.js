@@ -179,6 +179,8 @@ async function clickConnect() {
 
 let line_ending_matcher = new Matcher('\r\n');
 
+let echo_matcher = new Matcher('You shall not pass!');
+
 let title_processor = new BranchProcessor(
     '\x1B]0;',
     '\x1B\\',
@@ -220,6 +222,16 @@ async function readLoop() {
             parts.push(part[0]);
         }
 
+        for (const part of parts) {
+            for (const echo_part of echo_matcher.push(part)) {
+                if (echo_part[1]) {
+                    console.log('DEBUG', 'echo_matcher', echo_part);
+                    echo_matcher.target = "You shall not pass!"; // other wise will might be matched twice.
+                }
+            }
+            
+        }
+
         console.log('DEBUG', 'parts', parts);
 
         for (let processor of processors){
@@ -254,7 +266,11 @@ async function readLoop() {
 function send_cmd(s) {
     // send single byte command
     // s: str
-    console.log('DEBUG', 'serial out', [s])
+    console.log('DEBUG', 'serial out', [s]);
+    let target = s.slice(0, -1);
+    if (target.length > 0){
+        echo_matcher.target = target;
+    }
     if (outputStream != null) {
         const writer = outputStream.getWriter();
         writer.write(s);
