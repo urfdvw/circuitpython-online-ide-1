@@ -68,10 +68,17 @@ class Brancher {
 }
 
 class BranchProcessor {
-    constructor (brancher, switch_action, branch_action) {
-        this.brancher = brancher;
-        this.switch_action = switch_action;
+    constructor (
+        begin_str, 
+        end_str, 
+        branch_action = () => {},
+        on_action = () => {}, 
+        off_action = () => {}, 
+    ) {
+        this.brancher = new Brancher(begin_str, end_str);
         this.branch_action = branch_action;
+        this.on_action = on_action;
+        this.off_action = off_action;
         this.last_mood = false;
     }
     push (parts) {
@@ -83,10 +90,13 @@ class BranchProcessor {
                     if (this.last_mood) {
                         this.branch_action(branch[0]);
                     } else { // if just into this mood
-                        this.switch_action();
+                        this.on_action();
                         this.branch_action(branch[0]);
                     }
                 } else {
+                    if (this.last_mood) { // if just quit
+                        this.off_action();
+                    }
                     outlet.push(branch[0]);
                 }
                 this.last_mood = mood;
@@ -169,20 +179,34 @@ async function clickConnect() {
 let line_ending_matcher = new Matcher('\r\n');
 
 let title_processor = new BranchProcessor(
-    new Brancher('\x1B]0;', '\x1B\\'),
-    () => {document.getElementById('title_bar').innerHTML = ""},
-    (text) => {document.getElementById('title_bar').innerHTML += text} 
+    '\x1B]0;',
+    '\x1B\\',
+    (text) => {document.getElementById('title_bar').innerHTML += text},
+    () => {document.getElementById('title_bar').innerHTML = ""}
 );
 
 let log_processor = new BranchProcessor(
-    new Brancher('<log>', '</log>\r\n'),
-    () => {},
-    (text) => {console.log(text)} 
+    '<log>',
+    '</log>\r\n',
+    (text) => {console.log(text)}
+);
+
+let exec_processor = new BranchProcessor(
+    'exec("""',
+    '""")',
+    (text) => {
+        serial.session.insert(
+            {row: 1000000, col: 1000000},
+            text.split('\\n').join('\n')
+        )
+    },
+    () => {serial.session.insert({row: 1000000, col: 1000000}, '\n')}
 );
 
 let processors = [
     title_processor,
-    log_processor
+    exec_processor,
+    log_processor,
 ]
 
 async function readLoop() {
