@@ -1,6 +1,10 @@
-class Matcher {
+class TargetMatcher {
     constructor (target) {
-        this.target = target;
+        if (target === undefined){
+            this.clear_target();
+        } else {
+            this.target = target;
+        }
         this.segment = "";
     }
     push (segment) {
@@ -33,12 +37,15 @@ class Matcher {
         }
         return result;
     }
+    clear_target () {
+        this.target = 'You shall not pass! (∩๏‿‿๏)⊃━☆ﾟ.*';
+    }
 }
 
-class Brancher {
+class BracketMatcher {
     constructor (begin_str, end_str) {
-        this.begin_matcher = new Matcher(begin_str);
-        this.end_matcher = new Matcher(end_str);
+        this.begin_matcher = new TargetMatcher(begin_str);
+        this.end_matcher = new TargetMatcher(end_str);
         this.mood = false;
         this.matcher = this.begin_matcher;
     }
@@ -67,37 +74,36 @@ class Brancher {
     }
 }
 
-class BranchProcessor {
+class MatcherProcessor {
     constructor (
-        begin_str, 
-        end_str, 
-        branch_action = () => {},
-        on_action = () => {}, 
-        off_action = () => {}, 
+        matcher,
+        in_action = () => {},
+        enter_action = () => {}, 
+        exit_action = () => {}, 
     ) {
-        this.brancher = new Brancher(begin_str, end_str);
-        this.branch_action = branch_action;
-        this.on_action = on_action;
-        this.off_action = off_action;
+        this.matcher = matcher;
+        this.in_action = in_action;
+        this.enter_action = enter_action;
+        this.exit_action = exit_action;
         this.last_mood = false;
     }
     push (parts) {
         var outlet = [];
-        for (const part of parts) {
-            for (const branch of this.brancher.push(part)) {
-                const mood = branch[1];
+        for (const part_in of parts) {
+            for (const part_out of this.matcher.push(part_in)) {
+                const mood = part_out[1];
                 if (mood) {
                     if (this.last_mood) {
-                        this.branch_action(branch[0]);
+                        this.in_action(part_out[0]);
                     } else { // if just into this mood
-                        this.on_action();
-                        this.branch_action(branch[0]);
+                        this.enter_action();
+                        this.in_action(part_out[0]);
                     }
                 } else {
                     if (this.last_mood) { // if just quit
-                        this.off_action();
+                        this.exit_action();
                     }
-                    outlet.push(branch[0]);
+                    outlet.push(part_out[0]);
                 }
                 this.last_mood = mood;
             }
@@ -177,26 +183,24 @@ async function clickConnect() {
     }
 }
 
-let line_ending_matcher = new Matcher('\r\n');
+let line_ending_matcher = new TargetMatcher('\r\n');
 
-let echo_matcher = new Matcher('You shall not pass!');
+let echo_matcher = new TargetMatcher();
 
-let title_processor = new BranchProcessor(
-    '\x1B]0;',
-    '\x1B\\',
+let title_processor = new MatcherProcessor(
+    new BracketMatcher(
+        '\x1B]0;',
+        '\x1B\\',
+    ),
     (text) => {document.getElementById('title_bar').innerHTML += text},
     () => {document.getElementById('title_bar').innerHTML = ""}
 );
 
-let log_processor = new BranchProcessor(
-    '<log>',
-    '</log>\r\n',
-    (text) => {console.log(text)}
-);
-
-let exec_processor = new BranchProcessor(
-    'exec("""',
-    '""")',
+let exec_processor = new MatcherProcessor(
+    new BracketMatcher(
+        'exec("""',
+        '""")',
+    ),
     (text) => {
         serial.session.insert(
             {row: 1000000, col: 1000000},
@@ -209,7 +213,6 @@ let exec_processor = new BranchProcessor(
 let processors = [
     title_processor,
     exec_processor,
-    log_processor,
 ]
 
 async function readLoop() {
@@ -226,10 +229,9 @@ async function readLoop() {
             for (const echo_part of echo_matcher.push(part)) {
                 if (echo_part[1]) {
                     console.log('DEBUG', 'echo_matcher', echo_part);
-                    echo_matcher.target = "You shall not pass!"; // other wise will might be matched twice.
+                    echo_matcher.clear_target(); // other wise will might be matched twice.
                 }
             }
-            
         }
 
         console.log('DEBUG', 'parts', parts);
