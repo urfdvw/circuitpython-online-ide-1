@@ -1,6 +1,10 @@
-class Matcher {
+class TargetMatcher {
     constructor (target) {
-        this.target = target;
+        if (target === undefined){
+            this.clear_target();
+        } else {
+            this.target = target;
+        }
         this.segment = "";
     }
     push (segment) {
@@ -33,12 +37,15 @@ class Matcher {
         }
         return result;
     }
+    clear_target () {
+        this.target = 'You shall not pass! (∩๏‿‿๏)⊃━☆ﾟ.*';
+    }
 }
 
-class Brancher {
+class BracketMatcher {
     constructor (begin_str, end_str) {
-        this.begin_matcher = new Matcher(begin_str);
-        this.end_matcher = new Matcher(end_str);
+        this.begin_matcher = new TargetMatcher(begin_str);
+        this.end_matcher = new TargetMatcher(end_str);
         this.mood = false;
         this.matcher = this.begin_matcher;
     }
@@ -66,6 +73,50 @@ class Brancher {
         return result
     }
 }
+
+class MatcherProcessor {
+    constructor (
+        matcher,
+        in_action = () => {},
+        enter_action = () => {}, 
+        exit_action = () => {}
+    ) {
+        this.matcher = matcher;
+        this.in_action = in_action;
+        this.enter_action = enter_action;
+        this.exit_action = exit_action;
+
+        this.through = false;
+        this.last_mood = false;
+    }
+    push (parts) {
+        var outlet = [];
+        for (const part_in of parts) {
+            for (const part_out of this.matcher.push(part_in)) {
+                const mood = part_out[1];
+                if (mood) {
+                    if (this.last_mood) {
+                        this.in_action(part_out[0]);
+                    } else { // if just into this mood
+                        this.enter_action();
+                        this.in_action(part_out[0]);
+                    }
+                    if (this.through){
+                        outlet.push(part_out[0]);
+                    }
+                } else {
+                    if (this.last_mood) { // if just quit
+                        this.exit_action();
+                    }
+                    outlet.push(part_out[0]);
+                }
+                this.last_mood = mood;
+            }
+        }
+        return outlet;
+    }
+}
+
 /*
 * Serial driver *******************************************************
 */
@@ -137,29 +188,75 @@ async function clickConnect() {
     }
 }
 
-var line_ending_matcher = new Matcher('\r\n');
-var title_brancher = new Brancher('\x1B]0;', '\x1B\\');
-var last_title_branch = false;
+let line_ending_matcher = new TargetMatcher('\r\n');
+
+let title_processor = new MatcherProcessor(
+    new BracketMatcher(
+        '\x1B]0;',
+        '\x1B\\',
+    ),
+    (text) => {document.getElementById('title_bar').innerHTML += text},
+    () => {document.getElementById('title_bar').innerHTML = ""}
+);
+
+let exec_processor = new MatcherProcessor(
+    new BracketMatcher(
+        'exec("""',
+        '""")',
+    ),
+    (text) => {
+        serial.session.insert(
+            {row: 1000000, col: 1000000},
+            text.split('\\n').join('\n')
+        )
+    },
+    () => {serial.session.insert({row: 1000000, col: 1000000}, '\n')}
+);
+
+
+let echo_matcher = new TargetMatcher();
+let echo_processor = new MatcherProcessor(
+    echo_matcher,
+    (text) => {
+        console.log('DEBUG', 'echo_processor', [text]);
+        echo_matcher.clear_target(); // other wise will might be matched twice.
+    }
+)
+echo_processor.through = true;
+
 async function readLoop() {
     // Reads data from the input stream and displays it in the console.
     while (true) {
         const { value, done } = await reader.read();
-
+        console.log('DEBUG', 'serial in', [value])
+        var parts = [];
         for (const part of line_ending_matcher.push(value)) {
-            for (const branch of title_brancher.push(part[0])) {
-                title_branch = branch[1];
-                if (title_branch) { // if updating title bar
-                    if (last_title_branch) {
-                        document.getElementById('title_bar').innerHTML += branch[0];
-                    } else { // if just into this mood
-                        document.getElementById('title_bar').innerHTML = branch[0];
-                    }
-                } else {
-                    serial.session.insert({row: 1000000, col: 1000000}, branch[0]);
-                }
-                last_title_branch = title_branch;
-            }
+            parts.push(part[0]);
         }
+
+        console.log('DEBUG', 'parts', parts);
+
+        for (let processor of [
+            title_processor,
+            echo_processor,
+            exec_processor,
+        ]){
+            parts = processor.push(parts);
+            console.log('DEBUG', 'parts', parts);
+        }
+
+        for (const part of parts) {
+            serial.session.insert({row: 1000000, col: 1000000}, part);
+        }
+
+        /* Weird issue with weird solution
+        if the following line is removed.
+        some competing issues happems
+        like if start from REPL
+        and run a cell
+        >>> will appear in the middle of the code block
+        */
+        serial.session.getValue(); 
         
         if (done) {
             console.log('[readLoop] DONE', done);
@@ -175,9 +272,19 @@ async function readLoop() {
 function send_cmd(s) {
     // send single byte command
     // s: str
-    const writer = outputStream.getWriter();
-    writer.write(s);
-    writer.releaseLock();
+    console.log('DEBUG', 'serial out', [s]);
+    let target = s.slice(0, -1);
+    if (target.length > 0){
+        echo_matcher.target = target;
+    }
+    if (outputStream != null) {
+        const writer = outputStream.getWriter();
+        writer.write(s);
+        writer.releaseLock();
+    }
+    else {
+        console.log("send_cmd() failed, no connection.");
+    }
 }
 
 function sendCTRLD() {
@@ -207,15 +314,12 @@ function send_multiple_lines(lines) {
     lines = lines.join("")
 
     // send commands to device
-    if (outputStream != null) {
-        const writer = outputStream.getWriter();
-        // https://stackoverflow.com/a/60111488/7037749
-        writer.write('exec("""' + lines + '""")' + '\x0D')
-        writer.releaseLock();
+    if (serial.getValue().slice(-4, -1) !== ">>>") {
+        sendCTRLC();
     }
-    else {
-        console.log("Can not write, no connection.");
-    }
+    
+    send_cmd('exec("""' + lines + '""")' + '\x0D')
+    // https://stackoverflow.com/a/60111488/7037749
 }
 
 function send_single_line(line) {
@@ -226,12 +330,5 @@ function send_single_line(line) {
     cmd_ind = -1;
 
     // send the command to device
-    if (outputStream != null) {
-        const writer = outputStream.getWriter();
-        writer.write(line.trim() + '\x0D');
-        writer.releaseLock();
-    }
-    else {
-        console.log("Can not write, no connection.");
-    }
+    send_cmd(line.trim() + '\x0D');
 }

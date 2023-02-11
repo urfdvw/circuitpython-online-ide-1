@@ -211,7 +211,7 @@ function run_cell() {
     }
     var cell = editor.getValue().split('\n').slice(topline, bottonline).join('\n');
 
-    console.log(cell);
+    console.log('DEBUG', 'cell detected',cell);
 
     send_multiple_lines(cell);
 }

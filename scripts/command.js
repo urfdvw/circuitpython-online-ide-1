@@ -62,7 +62,7 @@ command.commands.addCommand({
 
 function run_command() {
     var line = command.getValue().trim();
-    if (command.session.getLength() == 1) {
+    if (line.split('\n').length == 1) {
         send_single_line(line);
     } else {
         send_multiple_lines(line);
