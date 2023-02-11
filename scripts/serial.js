@@ -79,12 +79,14 @@ class MatcherProcessor {
         matcher,
         in_action = () => {},
         enter_action = () => {}, 
-        exit_action = () => {}, 
+        exit_action = () => {}
     ) {
         this.matcher = matcher;
         this.in_action = in_action;
         this.enter_action = enter_action;
         this.exit_action = exit_action;
+
+        this.through = false;
         this.last_mood = false;
     }
     push (parts) {
@@ -98,6 +100,9 @@ class MatcherProcessor {
                     } else { // if just into this mood
                         this.enter_action();
                         this.in_action(part_out[0]);
+                    }
+                    if (this.through){
+                        outlet.push(part_out[0]);
                     }
                 } else {
                     if (this.last_mood) { // if just quit
@@ -185,8 +190,6 @@ async function clickConnect() {
 
 let line_ending_matcher = new TargetMatcher('\r\n');
 
-let echo_matcher = new TargetMatcher();
-
 let title_processor = new MatcherProcessor(
     new BracketMatcher(
         '\x1B]0;',
@@ -210,10 +213,16 @@ let exec_processor = new MatcherProcessor(
     () => {serial.session.insert({row: 1000000, col: 1000000}, '\n')}
 );
 
-let processors = [
-    title_processor,
-    exec_processor,
-]
+
+let echo_matcher = new TargetMatcher();
+let echo_processor = new MatcherProcessor(
+    echo_matcher,
+    (text) => {
+        console.log('DEBUG', 'echo_processor', [text]);
+        echo_matcher.clear_target(); // other wise will might be matched twice.
+    }
+)
+echo_processor.through = true;
 
 async function readLoop() {
     // Reads data from the input stream and displays it in the console.
@@ -225,18 +234,13 @@ async function readLoop() {
             parts.push(part[0]);
         }
 
-        for (const part of parts) {
-            for (const echo_part of echo_matcher.push(part)) {
-                if (echo_part[1]) {
-                    console.log('DEBUG', 'echo_matcher', echo_part);
-                    echo_matcher.clear_target(); // other wise will might be matched twice.
-                }
-            }
-        }
-
         console.log('DEBUG', 'parts', parts);
 
-        for (let processor of processors){
+        for (let processor of [
+            title_processor,
+            echo_processor,
+            exec_processor,
+        ]){
             parts = processor.push(parts);
             console.log('DEBUG', 'parts', parts);
         }
