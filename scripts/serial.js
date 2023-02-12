@@ -213,7 +213,6 @@ let exec_processor = new MatcherProcessor(
     () => {serial.session.insert({row: 1000000, col: 1000000}, '\n')}
 );
 
-
 let echo_matcher = new TargetMatcher();
 let echo_processor = new MatcherProcessor(
     echo_matcher,
@@ -221,7 +220,7 @@ let echo_processor = new MatcherProcessor(
         console.log('DEBUG', 'echo_processor', [text]);
         echo_matcher.clear_target(); // other wise will might be matched twice.
     }
-)
+);
 echo_processor.through = true;
 
 async function readLoop() {
