@@ -1,3 +1,23 @@
+class State {
+    constructor (val=0) {
+        this._val = val;
+        this._last = val;
+    }
+
+    set now(val) {
+        this._last = this._val;
+        this._val = val;
+    }
+
+    get now () {
+        return this._val;
+    }
+
+    get diff () {
+        return this._val - this._last;
+    }
+}
+
 class TargetMatcher {
     constructor (target) {
         if (target === undefined){
@@ -6,17 +26,22 @@ class TargetMatcher {
             this.target = target;
         }
         this.segment = "";
+        this.mood = new State()
     }
     push (segment) {
         let result = [];
         segment = this.segment + segment;
+        this.segment = '';
         // see if the tail contains partial target
         for (let i = segment.length - this.target.length; i < segment.length; i++) {
             if (i < 0) {
                 continue;
             }
             let tail = segment.slice(i);
-            if (tail == this.target.slice(0, tail.length)) {
+            if (tail === this.target) {
+                break
+            }
+            if (tail === this.target.slice(0, tail.length)) {
                 this.segment = tail;
                 segment = segment.slice(0, segment.length - tail.length);
                 break;
@@ -25,15 +50,16 @@ class TargetMatcher {
             }
         }
         let parts = segment.split(this.target);
-        // first output
-        let first_part = parts.shift();
-        if (first_part.length > 0) {
-            result.push([first_part, false]);
-        }
-        // the rest
-        for (const p of parts) {
-            result.push([this.target, true]);
-            result.push([p, false]);
+
+        for (let i = 0; i < parts.length; i++) {
+            if (i != 0) {
+                this.mood.now = 1;
+                result.push([this.target, this.mood.now, this.mood.diff]);
+            }
+            if (parts[i].length > 0) {
+                this.mood.now = 0;
+                result.push([parts[i], this.mood.now, this.mood.diff]);
+            }
         }
         return result;
     }
@@ -46,19 +72,26 @@ class BracketMatcher {
     constructor (begin_str, end_str) {
         this.begin_matcher = new TargetMatcher(begin_str);
         this.end_matcher = new TargetMatcher(end_str);
-        this.mood = false;
+        this.mood = new State();
         this.matcher = this.begin_matcher;
     }
     push (segment) {
-        let result = [];
+        let outlet = [];
         let parts = this.matcher.push(segment);
         while (parts.length > 0) {
-            const p = parts.shift();
-            if (!p[1]) {
-                result.push([p[0], this.mood])
+            // get current part
+            const current = parts.shift();
+            // skip if empty
+            if (current[0].length === 0) {
+                continue;
+            }
+            if (current[1] === 0) {
+                // if not matching, append to outlet
+                outlet.push([current[0], this.mood.now, this.mood.diff])
+                this.mood.now = this.mood.now; // update mood because it is used
             } else {
-                this.mood = !this.mood;
-                if (this.mood) {
+                this.mood.now = 1 - this.mood.now;
+                if (this.mood.now === 1) {
                     this.matcher = this.end_matcher;
                 } else {
                     this.matcher = this.begin_matcher;
@@ -67,10 +100,11 @@ class BracketMatcher {
                 for (const p of parts) {
                     rest.push(p[0]);
                 }
-                parts = this.matcher.push(rest.join(''));
+                const text = rest.join('');
+                parts = this.matcher.push(text);
             }
         }
-        return result
+        return outlet
     }
 }
 
@@ -78,44 +112,53 @@ class MatcherProcessor {
     constructor (
         matcher,
         in_action = () => {},
-        enter_action = () => {}, 
-        exit_action = () => {}
+        enter_action = () => {},
+        exit_action = () => {},
+        out_action = () => {},
     ) {
         this.matcher = matcher;
         this.in_action = in_action;
         this.enter_action = enter_action;
         this.exit_action = exit_action;
+        this.out_action = out_action;
 
         this.through = false;
-        this.last_mood = false;
+        this.segment = '';
+
+        this.branch = [];
     }
     push (parts) {
         var outlet = [];
+        this.branch = [];
         for (const part_in of parts) {
             for (const part_out of this.matcher.push(part_in)) {
+                const text = part_out[0];
                 const mood = part_out[1];
-                if (mood) {
-                    if (this.last_mood) {
-                        this.in_action(part_out[0]);
-                    } else { // if just into this mood
-                        this.enter_action();
-                        this.in_action(part_out[0]);
-                    }
-                    if (this.through){
-                        outlet.push(part_out[0]);
-                    }
-                } else {
-                    if (this.last_mood) { // if just quit
-                        this.exit_action();
-                    }
-                    outlet.push(part_out[0]);
+                const diff = part_out[2];
+                if (diff === 1) {
+                    this.enter_action(text);
                 }
-                this.last_mood = mood;
+                if (mood === 1) {
+                    this.in_action(text);
+                    if (this.through) {
+                        outlet.push(text);
+                    } else {
+                        this.branch.push(text);
+                    }
+                }
+                if (diff === -1) {
+                    this.exit_action(text);
+                }
+                if (mood === 0) {
+                    this.out_action(text);
+                    outlet.push(text);
+                }
             }
         }
         return outlet;
     }
 }
+
 
 /*
 * Serial driver *******************************************************
@@ -189,6 +232,10 @@ async function clickConnect() {
 }
 
 let line_ending_matcher = new TargetMatcher('\r\n');
+let line_ending_processor = new MatcherProcessor(
+    line_ending_matcher
+)
+line_ending_processor.through = true;
 
 let title_processor = new MatcherProcessor(
     new BracketMatcher(
@@ -217,7 +264,8 @@ let echo_matcher = new TargetMatcher();
 let echo_processor = new MatcherProcessor(
     echo_matcher,
     (text) => {
-        console.log('DEBUG', 'echo_processor', [text]);
+    () => {},
+    () => {
         echo_matcher.clear_target(); // other wise will might be matched twice.
     }
 );
