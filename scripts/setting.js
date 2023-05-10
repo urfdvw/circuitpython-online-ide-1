@@ -8,10 +8,18 @@ const settingdefault = {
 }
 
 async function read_init_setting() {
-    const bootOutHandle = await directoryHandle.getFileHandle('boot_out.txt');
-    const file = await bootOutHandle.getFile();
-    const contents = await file.text();
-    const title = contents.split('\r\n')[0].split('with ')[1];
+    var title = 'CircuitPy'
+    try {
+        const bootOutHandle = await directoryHandle.getFileHandle('boot_out.txt');
+        const file = await bootOutHandle.getFile();
+        const contents = await file.text();
+        title = contents.split('\r\n')[0].split('with ')[1].trim();
+    } catch {
+        console.log('boot_out.txt missing')
+    }
+    if (title.trim().length === 0) {
+        title = 'CircuitPy'
+    }
     var idesetting = JSON.parse(JSON.stringify(settingdefault));
     idesetting.name = title;
     return idesetting
