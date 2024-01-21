@@ -1,5 +1,5 @@
 class State {
-    constructor (val=0) {
+    constructor(val = 0) {
         this._val = val;
         this._last = val;
     }
@@ -9,29 +9,29 @@ class State {
         this._val = val;
     }
 
-    get now () {
+    get now() {
         return this._val;
     }
 
-    get diff () {
+    get diff() {
         return this._val - this._last;
     }
 }
 
 class TargetMatcher {
-    constructor (target) {
-        if (target === undefined){
+    constructor(target) {
+        if (target === undefined) {
             this.clear_target();
         } else {
             this.target = target;
         }
         this.segment = "";
-        this.mood = new State()
+        this.mood = new State();
     }
-    push (segment) {
+    push(segment) {
         let result = [];
         segment = this.segment + segment;
-        this.segment = '';
+        this.segment = "";
         // see if the tail contains partial target
         for (let i = segment.length - this.target.length; i < segment.length; i++) {
             if (i < 0) {
@@ -39,7 +39,7 @@ class TargetMatcher {
             }
             let tail = segment.slice(i);
             if (tail === this.target) {
-                break
+                break;
             }
             if (tail === this.target.slice(0, tail.length)) {
                 this.segment = tail;
@@ -63,19 +63,19 @@ class TargetMatcher {
         }
         return result;
     }
-    clear_target () {
-        this.target = 'You shall not pass! (∩๏‿‿๏)⊃━☆ﾟ.*';
+    clear_target() {
+        this.target = "You shall not pass! (∩๏‿‿๏)⊃━☆ﾟ.*";
     }
 }
 
 class BracketMatcher {
-    constructor (begin_str, end_str) {
+    constructor(begin_str, end_str) {
         this.begin_matcher = new TargetMatcher(begin_str);
         this.end_matcher = new TargetMatcher(end_str);
         this.mood = new State();
         this.matcher = this.begin_matcher;
     }
-    push (segment) {
+    push(segment) {
         let outlet = [];
         let parts = this.matcher.push(segment);
         while (parts.length > 0) {
@@ -87,7 +87,7 @@ class BracketMatcher {
             }
             if (current[1] === 0) {
                 // if not matching, append to outlet
-                outlet.push([current[0], this.mood.now, this.mood.diff])
+                outlet.push([current[0], this.mood.now, this.mood.diff]);
                 this.mood.now = this.mood.now; // update mood because it is used
             } else {
                 this.mood.now = 1 - this.mood.now;
@@ -100,22 +100,16 @@ class BracketMatcher {
                 for (const p of parts) {
                     rest.push(p[0]);
                 }
-                const text = rest.join('');
+                const text = rest.join("");
                 parts = this.matcher.push(text);
             }
         }
-        return outlet
+        return outlet;
     }
 }
 
 class MatcherProcessor {
-    constructor (
-        matcher,
-        in_action = () => {},
-        enter_action = () => {},
-        exit_action = () => {},
-        out_action = () => {},
-    ) {
+    constructor(matcher, in_action = () => {}, enter_action = () => {}, exit_action = () => {}, out_action = () => {}) {
         this.matcher = matcher;
         this.in_action = in_action;
         this.enter_action = enter_action;
@@ -123,11 +117,11 @@ class MatcherProcessor {
         this.out_action = out_action;
 
         this.through = false;
-        this.segment = '';
+        this.segment = "";
 
         this.branch = [];
     }
-    push (parts) {
+    push(parts) {
         var outlet = [];
         this.branch = [];
         for (const part_in of parts) {
@@ -159,33 +153,28 @@ class MatcherProcessor {
     }
 }
 
-let line_ending_matcher = new TargetMatcher('\r\n');
-let line_ending_processor = new MatcherProcessor(
-    line_ending_matcher
-)
+let line_ending_matcher = new TargetMatcher("\r\n");
+let line_ending_processor = new MatcherProcessor(line_ending_matcher);
 line_ending_processor.through = true;
 
 let title_processor = new MatcherProcessor(
-    new BracketMatcher(
-        '\x1B]0;',
-        '\x1B\\',
-    ),
-    (text) => {document.getElementById('title_bar').innerHTML += text},
-    () => {document.getElementById('title_bar').innerHTML = ""}
+    new BracketMatcher("\x1B]0;", "\x1B\\"),
+    (text) => {
+        document.getElementById("title_bar").innerHTML += text;
+    },
+    () => {
+        document.getElementById("title_bar").innerHTML = "";
+    }
 );
 
 let exec_processor = new MatcherProcessor(
-    new BracketMatcher(
-        'exec("""',
-        '""")',
-    ),
+    new BracketMatcher('exec("""', '""")'),
     (text) => {
-        serial.session.insert(
-            {row: 1000000, col: 1000000},
-            text.split('\\n').join('\n')
-        )
+        serial.session.insert({ row: 1000000, col: 1000000 }, text.split("\\n").join("\n"));
     },
-    () => {serial.session.insert({row: 1000000, col: 1000000}, '\n')}
+    () => {
+        serial.session.insert({ row: 1000000, col: 1000000 }, "\n");
+    }
 );
 
 let echo_matcher = new TargetMatcher();
@@ -198,7 +187,6 @@ let echo_processor = new MatcherProcessor(
 );
 echo_processor.through = true;
 
-
 function serial_processor(main_flow) {
     main_flow = line_ending_processor.push(main_flow);
     main_flow = title_processor.push(main_flow);
@@ -206,9 +194,8 @@ function serial_processor(main_flow) {
     main_flow = exec_processor.push(main_flow);
 
     for (const part of main_flow) {
-        serial.session.insert({row: 1000000, col: 1000000}, part);
+        serial.session.insert({ row: 1000000, col: 1000000 }, part);
     }
-
 }
 
-console.log('serial_processor.js loaded')
+console.log("serial_processor.js loaded");

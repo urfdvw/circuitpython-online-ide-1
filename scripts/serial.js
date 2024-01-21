@@ -1,6 +1,6 @@
 /*
-* Serial driver *******************************************************
-*/
+ * Serial driver *******************************************************
+ */
 
 let port;
 let reader;
@@ -38,7 +38,7 @@ async function disconnect() {
     // Close the input stream (reader).
     if (reader) {
         await reader.cancel();
-        await inputDone.catch(() => { });
+        await inputDone.catch(() => {});
         reader = null;
         inputDone = null;
     }
@@ -70,16 +70,16 @@ async function clickConnect() {
     }
 }
 
-let serial_parts = []
+let serial_parts = [];
 async function readLoop() {
     // Reads data from the input stream and displays it in the console.
     while (true) {
         const { value, done } = await reader.read();
-        console.log('DEBUG', 'serial in', [value])
-        serial_parts.push(value); 
-        
+        console.log("DEBUG", "serial in", [value]);
+        serial_parts.push(value);
+
         if (done) {
-            console.log('[readLoop] DONE', done);
+            console.log("[readLoop] DONE", done);
             reader.releaseLock();
             break;
         }
@@ -96,23 +96,22 @@ function start_readLoop() {
 }
 
 /*
-* Serial Send
-*/
+ * Serial Send
+ */
 
 function send_cmd(s) {
     // send single byte command
     // s: str
-    console.log('DEBUG', 'serial out', [s]);
+    console.log("DEBUG", "serial out", [s]);
     let target = s.slice(0, -1);
-    if (target.length > 0){
+    if (target.length > 0) {
         echo_matcher.target = target;
     }
     if (outputStream != null) {
         const writer = outputStream.getWriter();
         writer.write(s);
         writer.releaseLock();
-    }
-    else {
+    } else {
         console.log("send_cmd() failed, no connection.");
     }
 }
@@ -134,21 +133,21 @@ function send_multiple_lines(lines) {
     cmd_ind = -1;
 
     // dealing with linebreaks and '\n' in text
-    lines = lines.split('\\').join('\\\\').split('\n').join('\\n')
+    lines = lines.split("\\").join("\\\\").split("\n").join("\\n");
 
     // remove comments by """
-    lines = lines.split('"""')
+    lines = lines.split('"""');
     for (var i = 0; i < lines.length; i++) {
         lines.splice(i + 1, 1);
     }
-    lines = lines.join("")
+    lines = lines.join("");
 
     // send commands to device
     if (serial.getValue().slice(-4, -1) !== ">>>") {
         sendCTRLC();
     }
-    
-    send_cmd('exec("""' + lines + '""")' + '\x0D')
+
+    send_cmd('exec("""' + lines + '""")' + "\x0D");
     // https://stackoverflow.com/a/60111488/7037749
 }
 
@@ -160,5 +159,5 @@ function send_single_line(line) {
     cmd_ind = -1;
 
     // send the command to device
-    send_cmd(line.trim() + '\x0D');
+    send_cmd(line.trim() + "\x0D");
 }

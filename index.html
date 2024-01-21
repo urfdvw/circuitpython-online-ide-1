@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <head>
     <title>CircuitPython Online IDE</title>
-    <meta name="description"
-        content="A browser-based IDE for CircuitPython supported microcontrollers. No installation needed. Handy and powerful.">
-    <meta name="keywords" content="CircuitPython, IDE, editor, education, DIY, Python, Serial">
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <meta
+        name="description"
+        content="A browser-based IDE for CircuitPython supported microcontrollers. No installation needed. Handy and powerful."
+    />
+    <meta name="keywords" content="CircuitPython, IDE, editor, education, DIY, Python, Serial" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 
-    <link rel="stylesheet" href="style/workflow.css">
+    <link rel="stylesheet" href="style/workflow.css" />
 
-    <link rel="stylesheet" href="style/layoutbase.css">
-    <link rel="stylesheet" id="layout_style" href="style/layoutsidebyside.css">
+    <link rel="stylesheet" href="style/layoutbase.css" />
+    <link rel="stylesheet" id="layout_style" href="style/layoutsidebyside.css" />
 
-    <link rel="stylesheet" href="style/nav.css">
-    <link rel="stylesheet" id="nav_drop" href="style/navhide.css">
+    <link rel="stylesheet" href="style/nav.css" />
+    <link rel="stylesheet" id="nav_drop" href="style/navhide.css" />
     <script async defer src="src/buttons.js"></script>
 
-    <link rel="stylesheet" href="style/setting.css">
+    <link rel="stylesheet" href="style/setting.css" />
 
     <script src="scripts/tree.js"></script>
-    <link rel="stylesheet" href="style/treejs.css" id="treejs_styles">
+    <link rel="stylesheet" href="style/treejs.css" id="treejs_styles" />
 
     <script src="src/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="src/ext-language_tools.js"></script>
@@ -26,7 +28,7 @@
     <script src="src/window.js"></script>
     <link rel="stylesheet" href="style/window.css" />
 
-    <script src='src/plotly-2.4.2.min.js'></script>
+    <script src="src/plotly-2.4.2.min.js"></script>
 </head>
 <body>
     <div id="workflow">
@@ -36,88 +38,107 @@
                 <a href="https://urfdvw.github.io/CircuitPython-online-IDE2/" target="_blank">
                     New Version 2.0 alpha is now launched. Try it out now!
                 </a>
-            </h3> 
+            </h3>
         </div>
         <div id="workflowbody">
             <div id="workflowbodyleft">
                 <h2>Workflow</h2>
-                <h3><a href="https://learn.adafruit.com/welcome-to-circuitpython/installing-circuitpython" target="_blank">
+                <h3>
+                    <a
+                        href="https://learn.adafruit.com/welcome-to-circuitpython/installing-circuitpython"
+                        target="_blank"
+                    >
                         Step 0. Install CircuitPython
-                </a></h3>
-                <button onClick='connect();' class="workflowstep">
+                    </a>
+                </h3>
+                <button onClick="connect();" class="workflowstep">
                     <h3>Step 1. Connect Microcontroller</h3>
                 </button>
-                <br>
-                <button onClick='open_folder();' class="workflowstep">
+                <br />
+                <button onClick="open_folder();" class="workflowstep">
                     <h3>Step 2. Open CIRCUITPY dirctory</h3>
                 </button>
-                <br>
-                <button onClick='check_conditions();' class="workflowstep">
+                <br />
+                <button onClick="check_conditions();" class="workflowstep">
                     <h3>Step 3. Start Coding</h3>
                 </button>
-                <hr>
+                <hr />
                 <h2>Contact</h2>
                 Email: urfdvw@gmail.com
-                <br>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdupiJIRViFwPpuQC1hMp8gRvhxACLoAjgepm_-IRZumwK7Cg/viewform?usp=sf_link" target="_blank">
+                <br />
+                <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSdupiJIRViFwPpuQC1hMp8gRvhxACLoAjgepm_-IRZumwK7Cg/viewform?usp=sf_link"
+                    target="_blank"
+                >
                     Feedback Survey
-                </a> 
-                <br>
-                <a rel="me" href="https://fosstodon.org/@Riverwang" target="_blank">
-                    Mastodon
                 </a>
-                <br>
-                <a href="https://twitter.com/River___Wang" target="_blank">
-                    Twitter
-                </a> 
-                <br>
-                <a href="https://www.youtube.com/channel/UCeunCRTBkjHWynMl4I4le_A" target="_blank">
-                    YouTube Channel
-                </a> 
+                <br />
+                <a rel="me" href="https://fosstodon.org/@Riverwang" target="_blank"> Mastodon </a>
+                <br />
+                <a href="https://twitter.com/River___Wang" target="_blank"> Twitter </a>
+                <br />
+                <a href="https://www.youtube.com/channel/UCeunCRTBkjHWynMl4I4le_A" target="_blank"> YouTube Channel </a>
             </div>
             <div id="workflowbodyright">
                 <h2>Quick Tutorial</h2>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/h6ocRsDYTAs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                <hr>
+                <iframe
+                    width="560"
+                    height="315"
+                    src="https://www.youtube.com/embed/h6ocRsDYTAs"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                ></iframe>
+                <hr />
                 <h2>Help</h2>
                 This IDE supports <b>Chrome</b> or <b>Chromium</b>-based <b>desktop</b> browsers.
-                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility" target="_blank">
+                <a
+                    href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility"
+                    target="_blank"
+                >
                     (Why?)
                 </a>
-                <br>
+                <br />
                 <a href="https://github.com/urfdvw/CircuitPython-online-IDE/#workflow-aka-how-to-use" target="_blank">
                     IDE Help infomation
                 </a>
-                <br>
-                <a href="old_versions/V0.1/index.html" target="_blank">
-                    Previous Version
-                </a>
-                <br>
-                <a href="https://github.com/urfdvw/CircuitPython-online-IDE/" target="_blank">
-                    GitHub Repository
-                </a>
-                <br>
+                <br />
+                <a href="old_versions/V0.1/index.html" target="_blank"> Previous Version </a>
+                <br />
+                <a href="https://github.com/urfdvw/CircuitPython-online-IDE/" target="_blank"> GitHub Repository </a>
+                <br />
                 <a href="https://github.com/urfdvw/CircuitPython-online-IDE/releases" target="_blank">
                     Download the IDE and run offline
                 </a>
             </div>
         </div>
         <div id="workflowtail">
-            This open-source project is developed and maintained by <a href="https://github.com/urfdvw" target='_blank'>River Wang</a>,
-            and published on GitHub Page under GPL 3 license. <br>
-            <a href="https://circuitpython.org/" target='_blank'>CircuitPython</a>, which is a python version that runs on microcontrollers,
-            is developed and maintained by <a href="https://www.adafruit.com/" target='_blank'>Adafruit</a>.
+            This open-source project is developed and maintained by
+            <a href="https://github.com/urfdvw" target="_blank">River Wang</a>, and published on GitHub Page under GPL 3
+            license. <br />
+            <a href="https://circuitpython.org/" target="_blank">CircuitPython</a>, which is a python version that runs
+            on microcontrollers, is developed and maintained by
+            <a href="https://www.adafruit.com/" target="_blank">Adafruit</a>.
         </div>
     </div>
     <div id="flex-container">
-        <div id="topbox" onpointerleave="console.log('left nav'); document.getElementById('nav_drop').href = 'style/navhide.css'">
+        <div
+            id="topbox"
+            onpointerleave="console.log('left nav'); document.getElementById('nav_drop').href = 'style/navhide.css'"
+        >
             <nav>
                 <ul>
-                    <li><a class="neotext">
-                        <b>CircuitPython Online IDE</b>
-                    </a></li>
                     <li>
-                        <a href="#" onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'">
+                        <a class="neotext">
+                            <b>CircuitPython Online IDE</b>
+                        </a>
+                    </li>
+                    <li>
+                        <a
+                            href="#"
+                            onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'"
+                        >
                             File
                         </a>
                         <ul>
@@ -130,7 +151,10 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'" >
+                        <a
+                            href="#"
+                            onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'"
+                        >
                             Serial
                         </a>
                         <ul>
@@ -142,38 +166,82 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'" >
+                        <a
+                            href="#"
+                            onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'"
+                        >
                             Plot
                         </a>
                         <ul>
                             <li><a id="plot_button" onclick="plot_main()" href="#">Show Plot</a></li>
                             <li>
-                                <a href="#" onclick="document.getElementById('x-axis').checked = !document.getElementById('x-axis').checked;plot_refresh();">Use 1st Col as X-Axis</a>
-                                <input type="checkbox" id="x-axis" onchange="plot_refresh()">
+                                <a
+                                    href="#"
+                                    onclick="document.getElementById('x-axis').checked = !document.getElementById('x-axis').checked;plot_refresh();"
+                                    >Use 1st Col as X-Axis</a
+                                >
+                                <input type="checkbox" id="x-axis" onchange="plot_refresh()" />
                             </li>
                             <li><a href="#" onclick="load_plot_example();">Load Example</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="#" onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'" >
+                        <a
+                            href="#"
+                            onclick="console.log('clicked nav'); document.getElementById('nav_drop').href = 'style/navshow.css'"
+                        >
                             Help
                         </a>
                         <ul>
-                            <li><a href="https://github.com/urfdvw/CircuitPython-online-IDE/#workflow-aka-how-to-use" target="_blank" rel="noopener noreferrer">How to Use</a></li>
+                            <li>
+                                <a
+                                    href="https://github.com/urfdvw/CircuitPython-online-IDE/#workflow-aka-how-to-use"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >How to Use</a
+                                >
+                            </li>
                             <!-- https://www.freecodecamp.org/news/how-to-use-html-to-open-link-in-new-tab/ -->
-                            <li><a href="https://circuitpython.org/" target="_blank" rel="noopener noreferrer">CircuitPyton.org</a></li>
-                            <li><a href="https://learn.adafruit.com/welcome-to-circuitpython" target="_blank" rel="noopener noreferrer">Adaftuit Tutorials</a></li>
+                            <li>
+                                <a href="https://circuitpython.org/" target="_blank" rel="noopener noreferrer"
+                                    >CircuitPyton.org</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://learn.adafruit.com/welcome-to-circuitpython"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >Adaftuit Tutorials</a
+                                >
+                            </li>
                             <li><a href="#">About</a></li>
-                            <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSdupiJIRViFwPpuQC1hMp8gRvhxACLoAjgepm_-IRZumwK7Cg/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer">Feedback</a></li>
+                            <li>
+                                <a
+                                    href="https://docs.google.com/forms/d/e/1FAIpQLSdupiJIRViFwPpuQC1hMp8gRvhxACLoAjgepm_-IRZumwK7Cg/viewform?usp=sf_link"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >Feedback</a
+                                >
+                            </li>
                             <span title="Download this IDE to use locally">
-                                <li><a href="https://github.com/urfdvw/CircuitPython-online-IDE/releases/" target="_blank" rel="noopener noreferrer">Download IDE</a></li>
+                                <li>
+                                    <a
+                                        href="https://github.com/urfdvw/CircuitPython-online-IDE/releases/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        >Download IDE</a
+                                    >
+                                </li>
                             </span>
                             <li>
-                                <a class="github-button"
-                                href="https://github.com/urfdvw/CircuitPython-online-IDE"
-                                data-size="large"
-                                data-show-count="true"
-                                aria-label="Star urfdvw/CircuitPython-online-IDE on GitHub">
+                                <a
+                                    class="github-button"
+                                    href="https://github.com/urfdvw/CircuitPython-online-IDE"
+                                    data-size="large"
+                                    data-show-count="true"
+                                    aria-label="Star urfdvw/CircuitPython-online-IDE on GitHub"
+                                >
                                     IDE GitHub repo
                                 </a>
                             </li>
@@ -188,14 +256,20 @@
                 <div id="foldercontainer"></div>
             </div>
             <div id="divider">
-                <a id="dividertext" href="#" onclick="ToggleFolderDisplay();" >Hide Folder</a>
+                <a id="dividertext" href="#" onclick="ToggleFolderDisplay();">Hide Folder</a>
             </div>
             <div id="workareabox">
                 <div id="editorbox">
                     <div class="toolbar" id="tabs">
                         Editor &nbsp;
                         <span title="Save and Run">
-                            <img src="arts/SaveAndRun.png" onclick="save_and_run();" alt="SaveAndRun" style="width:25px;height: 25px;"> &nbsp;
+                            <img
+                                src="arts/SaveAndRun.png"
+                                onclick="save_and_run();"
+                                alt="SaveAndRun"
+                                style="width: 25px; height: 25px"
+                            />
+                            &nbsp;
                         </span>
                     </div>
                     <div id="editor"></div>
@@ -210,16 +284,18 @@
                             <button onclick="sendCTRLD()">CTRL-D</button>
                         </span>
                     </div>
-                    <div id='fixed_frame'>
-                        <div id='dynamic_frame'>
+                    <div id="fixed_frame">
+                        <div id="dynamic_frame">
                             <div id="serial_R">
                                 <div id="serial"></div>
                             </div>
                             <code id="title_bar"></code>
-                            <div id="serial_T" style="border: 1px solid grey; position:relative">
+                            <div id="serial_T" style="border: 1px solid grey; position: relative">
                                 <div id="command"></div>
-                                <button onclick="run_command(command);"
-                                    style="position: absolute; bottom: 0; right: 0; z-index: 1">
+                                <button
+                                    onclick="run_command(command);"
+                                    style="position: absolute; bottom: 0; right: 0; z-index: 1"
+                                >
                                     Send
                                 </button>
                             </div>
@@ -233,7 +309,7 @@
         <h2>Settings</h2>
         <p>
             Nickname of board:
-            <input id="name_setting">
+            <input id="name_setting" />
         </p>
         <p>
             Layout:
@@ -251,7 +327,7 @@
         </p>
         <p>
             Font Size:
-            <input id="font_setting" type="number">
+            <input id="font_setting" type="number" />
             pt
         </p>
     </div>

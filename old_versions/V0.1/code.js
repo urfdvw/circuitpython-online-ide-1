@@ -6,12 +6,12 @@ async function save_and_run() {
     // over ride
     var serial_out_len = serial_value_text.length;
     await writeFile(fileHandle, editor.getValue());
-    console.log('file saved');
+    console.log("file saved");
     setTimeout(function () {
-        // wait for 1s, if nothing changed in the serial out, 
+        // wait for 1s, if nothing changed in the serial out,
         // then send command to force run the saved script
         if (serial_out_len == serial_value_text.length) {
-            console.log('save did not trigger run, manually run instead');
+            console.log("save did not trigger run, manually run instead");
             sendCTRLC();
             setTimeout(function () {
                 sendCTRLD();
@@ -61,7 +61,7 @@ async function disconnect() {
     // Close the input stream (reader).
     if (reader) {
         await reader.cancel();
-        await inputDone.catch(() => { });
+        await inputDone.catch(() => {});
         reader = null;
         inputDone = null;
     }
@@ -103,7 +103,7 @@ async function readLoop() {
             //log.innerHTML += value + '\n';
         }
         if (done) {
-            console.log('[readLoop] DONE', done);
+            console.log("[readLoop] DONE", done);
             reader.releaseLock();
             break;
         }
@@ -113,33 +113,29 @@ async function readLoop() {
 // serial state observer
 
 new ResizeObserver(function () {
-    var repl_indicator = serial_value_text.lastIndexOf('\n>>>');
+    var repl_indicator = serial_value_text.lastIndexOf("\n>>>");
     var script_indicator = Math.max(
-        serial_value_text.lastIndexOf('code.py output:'),
-        serial_value_text.lastIndexOf('main.py output:'),
-    )
-    var wait_indicator = serial_value_text.lastIndexOf('Press any key to enter the REPL. Use CTRL-D to reload.')
-    var latest_indicator = Math.max(
-        repl_indicator,
-        script_indicator,
-        wait_indicator
-    )
+        serial_value_text.lastIndexOf("code.py output:"),
+        serial_value_text.lastIndexOf("main.py output:")
+    );
+    var wait_indicator = serial_value_text.lastIndexOf("Press any key to enter the REPL. Use CTRL-D to reload.");
+    var latest_indicator = Math.max(repl_indicator, script_indicator, wait_indicator);
 
     if (latest_indicator == latest_indicator) {
-        document.getElementById('serial_state').innerHTML = 'REPL';
+        document.getElementById("serial_state").innerHTML = "REPL";
     }
     if (script_indicator == latest_indicator) {
-        document.getElementById('serial_state').innerHTML = 'Script';
+        document.getElementById("serial_state").innerHTML = "Script";
     }
     if (wait_indicator == latest_indicator) {
-        document.getElementById('serial_state').innerHTML = 'Waiting';
+        document.getElementById("serial_state").innerHTML = "Waiting";
     }
-}).observe(out_frame)
+}).observe(out_frame);
 
-// auto scroll 
+// auto scroll
 new ResizeObserver(function () {
     out_frame.parentNode.scrollTop = out_frame.parentNode.scrollHeight;
-}).observe(out_frame)
+}).observe(out_frame);
 
 /**
  * command related functions ****************************************************
@@ -179,23 +175,22 @@ function send_multiple_lines(lines) {
     cmd_ind = -1;
 
     // dealing with linebreaks and '\n' in text
-    lines = lines.split('\\').join('\\\\').split('\n').join('\\n')
+    lines = lines.split("\\").join("\\\\").split("\n").join("\\n");
 
     // remove comments by """
-    lines = lines.split('"""')
+    lines = lines.split('"""');
     for (var i = 0; i < lines.length; i++) {
         lines.splice(i + 1, 1);
     }
-    lines = lines.join("")
+    lines = lines.join("");
 
     // send commands to device
     if (outputStream != null) {
         const writer = outputStream.getWriter();
         // https://stackoverflow.com/a/60111488/7037749
-        writer.write('exec("""' + lines + '""")' + '\x0D')
+        writer.write('exec("""' + lines + '""")' + "\x0D");
         writer.releaseLock();
-    }
-    else {
+    } else {
         console.log("Can not write, no connection.");
     }
 }
@@ -210,21 +205,16 @@ function send_single_line(line) {
     // send the command to device
     if (outputStream != null) {
         const writer = outputStream.getWriter();
-        writer.write(line.trim() + '\x0D');
+        writer.write(line.trim() + "\x0D");
         writer.releaseLock();
-    }
-    else {
+    } else {
         console.log("Can not write, no connection.");
     }
 }
 
 function savelog() {
     // only works out side html
-    download(
-        serial_value_text,
-        'log.txt',
-        'text'
-    )
+    download(serial_value_text, "log.txt", "text");
 }
 
 /**
@@ -237,7 +227,7 @@ ace.require("ace/ext/language_tools");
 var serial = ace.edit("serial");
 serial.setOptions({
     // https://stackoverflow.com/a/13579233/7037749
-    maxLines: Infinity
+    maxLines: Infinity,
 });
 serial.setTheme("ace/theme/monokai");
 serial.setReadOnly(true);
@@ -247,11 +237,11 @@ serial.renderer.setShowGutter(false);
 // serial console commands
 var command = ace.edit("command");
 command.setOptions({
-    maxLines: Infinity
+    maxLines: Infinity,
 });
-command.container.style.lineHeight = 2
-command.renderer.updateFontSize()
-command.session.setMode("ace/mode/python")
+command.container.style.lineHeight = 2;
+command.renderer.updateFontSize();
+command.session.setMode("ace/mode/python");
 command.session.setUseWrapMode(true);
 command.session.setTabSize(4);
 command.session.setUseSoftTabs(true);
@@ -264,37 +254,37 @@ command.setOptions({
 });
 
 command.commands.addCommand({
-    name: 'sendCTRLC',
-    bindKey: { win: 'Shift-Ctrl-C', mac: 'Ctrl-C' },
+    name: "sendCTRLC",
+    bindKey: { win: "Shift-Ctrl-C", mac: "Ctrl-C" },
     exec: function (command) {
-        console.log('sendCTRLC')
+        console.log("sendCTRLC");
         sendCTRLC(command);
     },
 });
 
 command.commands.addCommand({
-    name: 'sendCTRLD',
-    bindKey: { win: 'Shift-Ctrl-D', mac: 'Ctrl-D' },
+    name: "sendCTRLD",
+    bindKey: { win: "Shift-Ctrl-D", mac: "Ctrl-D" },
     exec: function (command) {
-        console.log('sendCTRLD')
+        console.log("sendCTRLD");
         sendCTRLD(command);
     },
 });
 
 command.commands.addCommand({
-    name: 'hist_up',
-    bindKey: { win: 'Up', mac: 'Up' },
+    name: "hist_up",
+    bindKey: { win: "Up", mac: "Up" },
     exec: function (editor) {
-        console.log('hist_up')
+        console.log("hist_up");
         hist_up(editor);
     },
 });
 
 command.commands.addCommand({
-    name: 'hist_down',
-    bindKey: { win: 'Down', mac: 'Down' },
+    name: "hist_down",
+    bindKey: { win: "Down", mac: "Down" },
     exec: function (editor) {
-        console.log('hist_down')
+        console.log("hist_down");
         hist_down(editor);
     },
 });
@@ -304,35 +294,35 @@ var enter_to_send = true;
 function set_send_key() {
     if (enter_to_send) {
         command.commands.addCommand({
-            name: 'newlineAndIndent',
-            bindKey: { win: 'Shift-Enter', mac: 'Shift-Enter' },
+            name: "newlineAndIndent",
+            bindKey: { win: "Shift-Enter", mac: "Shift-Enter" },
             exec: function (command) {
-                console.log('newlineAndIndent')
+                console.log("newlineAndIndent");
                 command.insert("\n");
             },
         });
         command.commands.addCommand({
-            name: 'run_command',
-            bindKey: { win: 'Enter', mac: 'Enter' },
+            name: "run_command",
+            bindKey: { win: "Enter", mac: "Enter" },
             exec: function (command) {
-                console.log('run_command')
+                console.log("run_command");
                 run_command(command);
             },
         });
     } else {
         command.commands.addCommand({
-            name: 'newlineAndIndent',
-            bindKey: { win: 'Enter', mac: 'Enter' },
+            name: "newlineAndIndent",
+            bindKey: { win: "Enter", mac: "Enter" },
             exec: function (command) {
-                console.log('newlineAndIndent')
+                console.log("newlineAndIndent");
                 command.insert("\n");
             },
         });
         command.commands.addCommand({
-            name: 'run_command',
-            bindKey: { win: 'Shift-Enter', mac: 'Shift-Enter' },
+            name: "run_command",
+            bindKey: { win: "Shift-Enter", mac: "Shift-Enter" },
             exec: function (command) {
-                console.log('run_command')
+                console.log("run_command");
                 run_command(command);
             },
         });
@@ -342,10 +332,10 @@ set_send_key();
 
 function change_send_key() {
     if (enter_to_send) {
-        document.getElementById('send_setting').innerHTML = shift_enter_to_send_info;
+        document.getElementById("send_setting").innerHTML = shift_enter_to_send_info;
         enter_to_send = false;
     } else {
-        document.getElementById('send_setting').innerHTML = enter_to_send_info;
+        document.getElementById("send_setting").innerHTML = enter_to_send_info;
         enter_to_send = true;
     }
     set_send_key();
@@ -354,93 +344,93 @@ function change_send_key() {
 // editor
 
 editor.commands.addCommand({
-    name: 'run_current',
-    bindKey: { win: 'Shift-Enter', mac: 'Shift-Enter' },
+    name: "run_current",
+    bindKey: { win: "Shift-Enter", mac: "Shift-Enter" },
     exec: function (editor) {
-        console.log('run_current')
+        console.log("run_current");
         run_current(editor);
     },
 });
 
 editor.commands.addCommand({
-    name: 'run_cell',
-    bindKey: { win: 'Ctrl-Enter', mac: 'Cmd-Enter' },
+    name: "run_cell",
+    bindKey: { win: "Ctrl-Enter", mac: "Cmd-Enter" },
     exec: function (editor) {
-        console.log('run_cell')
+        console.log("run_cell");
         run_cell(editor);
     },
 });
 
 editor.commands.addCommand({
-    name: 'run_current_and_del',
-    bindKey: { win: 'Alt-Enter', mac: 'Alt-Enter' },
+    name: "run_current_and_del",
+    bindKey: { win: "Alt-Enter", mac: "Alt-Enter" },
     exec: function (editor) {
-        console.log('run_current_and_del')
+        console.log("run_current_and_del");
         run_current_and_del(editor);
     },
 });
 
 editor.commands.addCommand({
-    name: 'append_command_to_editor',
-    bindKey: { win: 'Shift-Alt-Enter', mac: 'Shift-Alt-Enter' },
+    name: "append_command_to_editor",
+    bindKey: { win: "Shift-Alt-Enter", mac: "Shift-Alt-Enter" },
     exec: function (editor) {
-        console.log('append_command_to_editor')
+        console.log("append_command_to_editor");
         append_command_to_editor(editor);
     },
 });
 
 var chromeOS = /(CrOS)/.test(navigator.userAgent);
-var hist_up_key = '';
-var hist_down_key = '';
+var hist_up_key = "";
+var hist_down_key = "";
 if (chromeOS) {
-    hist_up_key = 'Alt-,';
-    hist_down_key = 'Alt-.';
+    hist_up_key = "Alt-,";
+    hist_down_key = "Alt-.";
 } else {
-    hist_up_key = 'Alt-Up';
-    hist_down_key = 'Alt-Down';
+    hist_up_key = "Alt-Up";
+    hist_down_key = "Alt-Down";
 }
 
 editor.commands.addCommand({
-    name: 'hist_up',
-    bindKey: { win: hist_up_key, mac: 'Alt-Up' },
+    name: "hist_up",
+    bindKey: { win: hist_up_key, mac: "Alt-Up" },
     exec: function (editor) {
-        console.log('hist_up')
+        console.log("hist_up");
         hist_up(editor);
     },
 });
 
 editor.commands.addCommand({
-    name: 'hist_down',
-    bindKey: { win: hist_down_key, mac: 'Alt-Down' },
+    name: "hist_down",
+    bindKey: { win: hist_down_key, mac: "Alt-Down" },
     exec: function (editor) {
-        console.log('hist_down')
+        console.log("hist_down");
         hist_down(editor);
     },
 });
 
 editor.commands.addCommand({
-    name: 'sendCTRLC',
-    bindKey: { win: 'Shift-Ctrl-C', mac: 'Ctrl-C' },
+    name: "sendCTRLC",
+    bindKey: { win: "Shift-Ctrl-C", mac: "Ctrl-C" },
     exec: function (editor) {
-        console.log('sendCTRLC')
+        console.log("sendCTRLC");
         sendCTRLC(editor);
     },
 });
 
 editor.commands.addCommand({
-    name: 'sendCTRLD',
-    bindKey: { win: 'Shift-Ctrl-D', mac: 'Ctrl-D' },
+    name: "sendCTRLD",
+    bindKey: { win: "Shift-Ctrl-D", mac: "Ctrl-D" },
     exec: function (editor) {
-        console.log('sendCTRLD')
+        console.log("sendCTRLD");
         sendCTRLD(editor);
     },
 });
 
 editor.commands.addCommand({
-    name: 'NoRefresh',
-    bindKey: { win: 'Ctrl-R', mac: 'Cmd-R' },
+    name: "NoRefresh",
+    bindKey: { win: "Ctrl-R", mac: "Cmd-R" },
     exec: function (editor) {
-        console.log('NoRefresh')
+        console.log("NoRefresh");
     },
 });
 
@@ -448,11 +438,11 @@ editor.commands.addCommand({
  * Serial Prints related
  */
 
-var serial_disp_text = serial_value_text.slice(end = -10000);
+var serial_disp_text = serial_value_text.slice((end = -10000));
 function serial_disp_loop() {
     var rand = Math.round(Math.random() * 10) + 90;
     receiving_timer = setTimeout(function () {
-        var serial_disp_text_now = serial_value_text.slice(end = -10000);
+        var serial_disp_text_now = serial_value_text.slice((end = -10000));
         if (serial_disp_text_now != serial_disp_text) {
             serial_disp_text = serial_disp_text_now;
             // https://stackoverflow.com/a/18629202/7037749
@@ -467,7 +457,6 @@ function serial_disp_loop() {
 }
 serial_disp_loop();
 
-
 function run_current_and_del() {
     run_current_raw(true);
 }
@@ -479,37 +468,29 @@ function run_current() {
 function run_current_raw(del) {
     var currline = editor.getSelectionRange().start.row;
     var selected = editor.getSelectedText();
-    if (selected) { // if any sellection
-        send_multiple_lines(selected)
+    if (selected) {
+        // if any sellection
+        send_multiple_lines(selected);
         if (del) {
-            editor.insert('')
+            editor.insert("");
         }
     } else {
         var line_text = editor.session.getLine(currline);
-        send_single_line(line_text)
+        send_single_line(line_text);
         if (del) {
-            editor.session.replace(new ace.Range(
-                currline, 0, currline + 1, -1
-            ), "\n");
-            editor.gotoLine(currline + 1,
-                editor.session.getLine(currline).length,
-                true);
+            editor.session.replace(new ace.Range(currline, 0, currline + 1, -1), "\n");
+            editor.gotoLine(currline + 1, editor.session.getLine(currline).length, true);
         } else {
             if (currline == editor.session.getLength() - 1) {
-                editor.gotoLine(currline + 1,
-                    editor.session.getLine(currline).length,
-                    true);
-                editor.insert('\n')
+                editor.gotoLine(currline + 1, editor.session.getLine(currline).length, true);
+                editor.insert("\n");
             } else {
-                editor.gotoLine(currline + 2,
-                    editor.session.getLine(currline + 1).length,
-                    true);
+                editor.gotoLine(currline + 2, editor.session.getLine(currline + 1).length, true);
             }
         }
-        command.setValue('')
+        command.setValue("");
     }
 }
-
 
 function run_cell() {
     var current_line = editor.getSelectionRange().start.row;
@@ -518,24 +499,24 @@ function run_cell() {
         if (topline == 0) {
             break;
         }
-        if (editor.session.getLine(topline).startsWith('#%%')) {
+        if (editor.session.getLine(topline).startsWith("#%%")) {
             break;
         }
         topline -= 1;
     }
     var bottonline = current_line; // not included
     while (true) {
-        bottonline += 1
+        bottonline += 1;
         if (bottonline == editor.session.getLength()) {
             editor.gotoLine(editor.session.getLength(), 0, true);
             break;
         }
-        if (editor.session.getLine(bottonline).startsWith('#%%')) {
+        if (editor.session.getLine(bottonline).startsWith("#%%")) {
             editor.gotoLine(bottonline + 1, 0, true);
             break;
         }
     }
-    var cell = editor.getValue().split('\n').slice(topline, bottonline).join('\n');
+    var cell = editor.getValue().split("\n").slice(topline, bottonline).join("\n");
 
     console.log(cell);
 
@@ -543,8 +524,8 @@ function run_cell() {
 }
 
 function append_command_to_editor() {
-    editor.insert(command.getValue())
-    command.setValue("")
+    editor.insert(command.getValue());
+    command.setValue("");
 }
 
 function run_command() {
@@ -554,28 +535,24 @@ function run_command() {
     } else {
         send_multiple_lines(line);
     }
-    command.setValue("")
+    command.setValue("");
 }
 
-var temp_cmd = '';
+var temp_cmd = "";
 function hist_up() {
     if (command.getSelectionRange().start.row == 0) {
         if (cmd_ind == -1) {
-            cmd_ind = cmd_hist.length - 1
+            cmd_ind = cmd_hist.length - 1;
             temp_cmd = command.getValue();
         } else {
             cmd_ind -= 1;
         }
         if (cmd_ind < 0) {
-            cmd_ind = 0
+            cmd_ind = 0;
         }
-        command.setValue(cmd_hist[cmd_ind], 1)
+        command.setValue(cmd_hist[cmd_ind], 1);
     } else {
-        command.gotoLine(
-            command.getSelectionRange().start.row,
-            command.getSelectionRange().start.column,
-            true,
-        )
+        command.gotoLine(command.getSelectionRange().start.row, command.getSelectionRange().start.column, true);
     }
 }
 
@@ -586,15 +563,11 @@ function hist_down() {
             command.setValue(temp_cmd, -1);
             cmd_ind = -1;
         } else {
-            cmd_ind += 1
-            command.setValue(cmd_hist[cmd_ind], -1)
+            cmd_ind += 1;
+            command.setValue(cmd_hist[cmd_ind], -1);
         }
     } else {
-        command.gotoLine(
-            command.getSelectionRange().start.row + 2,
-            command.getSelectionRange().start.column,
-            true,
-        )
+        command.gotoLine(command.getSelectionRange().start.row + 2, command.getSelectionRange().start.column, true);
     }
 }
 
@@ -603,19 +576,23 @@ function hist_down() {
  */
 
 // a handle of the new window that othe functions can operate
-var tablist = []
+var tablist = [];
 
 // auto close child window on mother window close
-window.addEventListener("beforeunload", function (e) {
-    // Do something
-    for (var i = 0; i < tablist.length; i++) {
-        tablist[i].close()
-    }
-}, false);
+window.addEventListener(
+    "beforeunload",
+    function (e) {
+        // Do something
+        for (var i = 0; i < tablist.length; i++) {
+            tablist[i].close();
+        }
+    },
+    false
+);
 
 // create new window and set style
 function new_tab() {
-    tablist.push(window.open('tab.html'))
+    tablist.push(window.open("tab.html"));
 }
 
 /**
@@ -623,9 +600,9 @@ function new_tab() {
  */
 
 function text_to_data(text) {
-    lines = text.split('\n');
+    lines = text.split("\n");
     for (var i = 0; i < lines.length; i++) {
-        lines[i] = lines[i].trim().split(' ');
+        lines[i] = lines[i].trim().split(" ");
     }
     return lines;
 }
@@ -634,7 +611,7 @@ function plot_lines_find_end(lines) {
     var start = 1; // first line is title
     var end = lines.length - 1;
     while (start + 1 < end) {
-        var mid = parseInt((start + end) / 2)
+        var mid = parseInt((start + end) / 2);
         if (isNaN(parseFloat(lines[mid][0]))) {
             end = mid;
         } else {
@@ -645,58 +622,58 @@ function plot_lines_find_end(lines) {
 }
 
 function transpose(array) {
-    return array[0].map((_, colIndex) => array.map(row => parseFloat(row[colIndex])));
+    return array[0].map((_, colIndex) => array.map((row) => parseFloat(row[colIndex])));
 }
 
 function plot_refresh() {
     var data = [];
-    var xlabel = 'index';
+    var xlabel = "index";
     try {
-        var plot_raw_list = serial_value_text.split('startplot:').slice(1,);
+        var plot_raw_list = serial_value_text.split("startplot:").slice(1);
         var plot_raw_text = plot_raw_list.at(-1);
         var plot_raw_lines = text_to_data(plot_raw_text);
         var plot_labels = plot_raw_lines[0];
         var plot_data_lines = plot_raw_lines.slice(1, plot_lines_find_end(plot_raw_lines) + 1);
         var plot_data = transpose(plot_data_lines);
 
-        if (document.getElementById("x-axis").checked & plot_labels.length > 1) {
+        if (document.getElementById("x-axis").checked & (plot_labels.length > 1)) {
             xlabel = plot_labels[0];
             for (var i = 1; i < plot_labels.length; i++) {
                 var curve = {};
-                curve['x'] = plot_data[0];
-                curve['y'] = plot_data[i];
-                curve['name'] = plot_labels[i];
-                curve['type'] = 'scatter';
+                curve["x"] = plot_data[0];
+                curve["y"] = plot_data[i];
+                curve["name"] = plot_labels[i];
+                curve["type"] = "scatter";
                 data.push(curve);
             }
         } else {
             for (var i = 0; i < plot_labels.length; i++) {
                 var curve = {};
-                curve['x'] = i;
-                curve['y'] = plot_data[i];
-                curve['name'] = plot_labels[i];
-                curve['type'] = 'scatter';
+                curve["x"] = i;
+                curve["y"] = plot_data[i];
+                curve["name"] = plot_labels[i];
+                curve["type"] = "scatter";
                 data.push(curve);
             }
         }
-    } catch { }
+    } catch {}
     var layout = {
         showlegend: true,
         xaxis: {
             title: xlabel,
-        }
+        },
     };
-    Plotly.newPlot('plot', data, layout);
+    Plotly.newPlot("plot", data, layout);
 }
 
 function plot_main() {
     if (document.getElementById("plot").style.display == "") {
-        document.getElementById("plot").style.display = "none"
-        return
+        document.getElementById("plot").style.display = "none";
+        return;
     }
     if (document.getElementById("plot").style.display == "none") {
-        document.getElementById("plot").style.display = ""
+        document.getElementById("plot").style.display = "";
         plot_refresh();
-        return
+        return;
     }
 }
