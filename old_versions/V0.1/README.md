@@ -1,3 +1,10 @@
+# NOTICE: New Version Available!
+Please check out CircuitPython Online IDE 2.0!
+- GitHub Repo: https://github.com/urfdvw/CircuitPython-online-IDE2
+- IDE Link: https://urfdvw.github.io/CircuitPython-online-IDE2/
+
+Development on this version has been discontinued. No substantive updates will be made to this repository in the future, apart from cleanup activities.
+
 # CircuitPython online IDE
 Open the IDE: https://urfdvw.github.io/CircuitPython-online-IDE/
 
