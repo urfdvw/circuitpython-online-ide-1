@@ -1,7 +1,7 @@
 # NOTICE: New Version Available!
 Please check out CircuitPython Online IDE 2.0!
-- GitHub Repo: https://github.com/urfdvw/CircuitPython-online-IDE2
-- IDE Link: https://urfdvw.github.io/CircuitPython-online-IDE2/
+- GitHub Repo: https://github.com/urfdvw/circuitpython-online-ide-2
+- IDE Link: https://urfdvw.github.io/circuitpython-online-ide-2/
 
 Development on this version has been discontinued. No substantive updates will be made to this repository in the future, apart from cleanup activities.
 
@@ -13,7 +13,7 @@ Development on this version has been discontinued. No substantive updates will b
 - [References](#references)
 
 # CircuitPython online IDE
-Open the IDE: https://urfdvw.github.io/CircuitPython-online-IDE/
+Open the IDE: https://urfdvw.github.io/circuitpython-online-ide-1/
 
 *Follow me to get the latest update! Mastodon: [***@Riverwang@fosstodon.org***](https://fosstodon.org/@Riverwang), Twitter: [***River Wang***](https://twitter.com/River___Wang), Youtube: [***CircuitPythonic***](https://www.youtube.com/channel/UCeunCRTBkjHWynMl4I4le_A), Email: urfdvw@gmail.com*
 
@@ -66,7 +66,7 @@ A quick introduction to CircuitPython Online IDE ⤵
         - To exist boot mode, try:
             - clicking the `reset` button on the board
             - Plug and unplug the board
-- **Open the [CircuitPython online IDE](https://urfdvw.github.io/CircuitPython-online-IDE/).** in supported browser (Chrome, Edge ...)
+- **Open the [CircuitPython online IDE](https://urfdvw.github.io/circuitpython-online-ide-1/).** in supported browser (Chrome, Edge ...)
 - Click on `Step 1`, in the popup list, select your microcontroller, then click on connect
 - Click on `Step 2`, in the popup file explorer, navigate to the root of your microcontroller directory, then click on 'open folder'.
     - Click on the blue buttons to allow the asked permissions.
@@ -191,7 +191,7 @@ REPL Mode Specific:
 ### Use IDE offline
 *This project is under rapid development. The Offline version should only be used when the internet connection is unstable. Please use the online version whenever possible to get the leatest feature.*
 
-1. Visit the [Release Page](https://github.com/urfdvw/CircuitPython-online-IDE/releases) of this project,
+1. Visit the [Release Page](https://github.com/urfdvw/circuitpython-online-ide-1/releases) of this project,
 and open the version with lable `latest`.
 2. Download the zip file named `CircuitPython.Online.IDE.v***` (not source code)
 3. Decompress the file
